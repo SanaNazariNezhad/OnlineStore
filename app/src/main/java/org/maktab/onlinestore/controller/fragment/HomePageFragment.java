@@ -1,4 +1,4 @@
-package org.maktab.onlinestore;
+package org.maktab.onlinestore.controller.fragment;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.maktab.onlinestore.R;
 
 public class HomePageFragment extends Fragment {
 

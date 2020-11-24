@@ -1,10 +1,12 @@
-package org.maktab.onlinestore;
+package org.maktab.onlinestore.controller.activity;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
+import org.maktab.onlinestore.R;
 
 
 public abstract class SingleFragmentActivity extends AppCompatActivity {
