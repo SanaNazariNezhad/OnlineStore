@@ -15,14 +15,16 @@ public class NetworkParams {
     public static final String CONSUMER_KEY = "ck_671aacd21cdac7c8fafc30c6fa0bf09eba15b074";
     public static final String CONSUMER_SECRET = "cs_75d98b6177540214b3fb44fee036cf935f025616";
 
+    public static final String NEXT_PAGE = "next";
     public static final Map<String, String> BASE_OPTIONS = new HashMap<String, String>() {{
         put("consumer_key", CONSUMER_KEY);
         put("consumer_secret", CONSUMER_SECRET);
     }};
 
-    public static Map<String, String> getProducts() {
+    public static Map<String, String> getProducts(String page) {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
+        products.put("page", page);
 
         return products;
     }

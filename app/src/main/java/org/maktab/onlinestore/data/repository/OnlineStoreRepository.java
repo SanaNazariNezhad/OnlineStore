@@ -22,21 +22,35 @@ public class OnlineStoreRepository {
     private static final String TAG = "PhotoRepository";
 
     private final APIService mAPIService;
-    private final MutableLiveData<List<Product>> mProductItemsLiveData = new MutableLiveData<>();
+    private String mPage;
+    private MutableLiveData<List<Product>> mProductItemsLiveData = new MutableLiveData<>();
 
 
     public MutableLiveData<List<Product>> getProductItemsLiveData() {
         return mProductItemsLiveData;
     }
 
+    public void setProductItemsLiveData(MutableLiveData<List<Product>> productItemsLiveData) {
+        mProductItemsLiveData = productItemsLiveData;
+    }
+
+    public String getPage() {
+        return mPage;
+    }
+
+    public void setPage(String page) {
+        mPage = page;
+    }
+
     public OnlineStoreRepository() {
         Retrofit retrofit = RetrofitInstance.getInstance().getRetrofit();
         mAPIService = retrofit.create(APIService.class);
+        mPage = "1";
     }
 
     //this method must run on background thread.
-    public List<Product> fetchProductItems() {
-        Call<List<Product>> call = mAPIService.listItems(NetworkParams.getProducts());
+    public List<Product> fetchProductItems(String page) {
+        Call<List<Product>> call = mAPIService.listItems(NetworkParams.getProducts(page));
         try {
             Response<List<Product>> response = call.execute();
             return response.body();
@@ -47,9 +61,9 @@ public class OnlineStoreRepository {
     }
 
     //this method can be run in any thread.
-    public void fetchProductItemsAsync() {
+    public void fetchProductItemsAsync(String page) {
         Call<List<Product>> call =
-                mAPIService.listItems(NetworkParams.getProducts());
+                mAPIService.listItems(NetworkParams.getProducts(page));
 
         call.enqueue(new Callback<List<Product>>() {
 

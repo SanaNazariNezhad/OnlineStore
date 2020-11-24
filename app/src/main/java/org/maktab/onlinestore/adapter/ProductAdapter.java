@@ -1,6 +1,7 @@
 package org.maktab.onlinestore.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
 
     private List<Product> mProducts;
     private Context mContext;
+    private OnBottomReachedListener mOnBottomReachedListener;
 
     public List<Product> getProducts() {
         return mProducts;
@@ -28,6 +30,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
 
     public void setProducts(List<Product> products) {
         mProducts = products;
+    }
+
+    public void setOnBottomReachedListener(OnBottomReachedListener onBottomReachedListener){
+
+        mOnBottomReachedListener = onBottomReachedListener;
     }
 
     public ProductAdapter(Context context, List<Product> products) {
@@ -55,7 +62,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
     public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
 
         Product product = mProducts.get(position);
-        holder.bindCrime(product);
+        /*if (position == (mProducts.size() - 1)){
+
+            mOnBottomReachedListener.onBottomReached(position);
+
+        }*/
+        holder.bindProduct(product);
     }
 
     class ProductHolder extends RecyclerView.ViewHolder {
@@ -67,16 +79,21 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             super(itemView);
             mImageView = itemView.findViewById(R.id.image_most_visited);
             mTextView = itemView.findViewById(R.id.textView_name_most_visited);
+            mTextView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            mTextView.setSingleLine(true);
+            mTextView.setSelected(true);
+            mTextView.setMarqueeRepeatLimit(-1);
 
         }
 
-        public void bindCrime(Product product) {
+        public void bindProduct(Product product) {
+
             mTextView.setText(product.getTitle());
-            /*Glide.with(itemView)
+            Glide.with(itemView)
                     .load(product.getImages().get(0).getSrc())
                     .centerCrop()
                     .placeholder(R.mipmap.ic_launcher)
-                    .into(mImageView);*/
+                    .into(mImageView);
         }
     }
 }
