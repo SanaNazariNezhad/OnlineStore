@@ -1,6 +1,7 @@
 package org.maktab.onlinestore.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import org.maktab.onlinestore.controller.activity.ProductDetailActivity;
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.data.model.Product;
 
@@ -74,6 +76,7 @@ public class LatestProductAdapter extends RecyclerView.Adapter<LatestProductAdap
 
         private ImageView mImageView;
         private TextView mTextView;
+        private Product mProduct;
 
         public ProductHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,9 +87,18 @@ public class LatestProductAdapter extends RecyclerView.Adapter<LatestProductAdap
             mTextView.setSelected(true);
             mTextView.setMarqueeRepeatLimit(-1);
 
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = ProductDetailActivity.newIntent(mContext,mProduct.getId());
+                    mContext.startActivity(intent);
+                }
+            });
+
         }
 
         public void bindProduct(Product product) {
+            mProduct = product;
 
             mTextView.setText(product.getPrice());
             Glide.with(itemView)

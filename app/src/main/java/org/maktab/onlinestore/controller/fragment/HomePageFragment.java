@@ -103,7 +103,6 @@ public class HomePageFragment extends Fragment {
     }
 
     private void initView() {
-        //Todo... create adapter for each recyclerView
         mRecyclerViewHighestScore.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
         mRecyclerViewMostVisited
                 .setLayoutManager(mLinearLayoutManager);

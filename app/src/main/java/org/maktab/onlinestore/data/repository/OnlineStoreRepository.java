@@ -8,8 +8,9 @@ import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.model.ProductCategory;
 import org.maktab.onlinestore.data.remote.retrofit.APIService;
 import org.maktab.onlinestore.data.remote.NetworkParams;
-import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceProduct;
+import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceListOfProduct;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceCategory;
+import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceProduct;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,6 +24,7 @@ public class OnlineStoreRepository {
 
     private static final String TAG = "PhotoRepository";
 
+    private final APIService mAPIServiceListOfProduct;
     private final APIService mAPIServiceProduct;
     private final APIService mAPIServiceCategory;
     private String mPage;
@@ -31,6 +33,7 @@ public class OnlineStoreRepository {
     private MutableLiveData<List<Product>> mLatestProductsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mHighestScoreProductsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<ProductCategory>> mCategoryItemsLiveData = new MutableLiveData<>();
+    private MutableLiveData<Product> mProductLiveData = new MutableLiveData<>();
 
 
     public MutableLiveData<List<Product>> getProductItemsLiveData() {
@@ -53,6 +56,10 @@ public class OnlineStoreRepository {
         return mHighestScoreProductsLiveData;
     }
 
+    public MutableLiveData<Product> getProductLiveData() {
+        return mProductLiveData;
+    }
+
     public void setProductItemsLiveData(MutableLiveData<List<Product>> productItemsLiveData) {
         mProductItemsLiveData = productItemsLiveData;
     }
@@ -66,17 +73,20 @@ public class OnlineStoreRepository {
     }
 
     public OnlineStoreRepository() {
-        Retrofit retrofit = RetrofitInstanceProduct.getInstance().getRetrofit();
-        mAPIServiceProduct = retrofit.create(APIService.class);
+        Retrofit retrofitListOfProduct = RetrofitInstanceListOfProduct.getInstance().getRetrofit();
+        mAPIServiceListOfProduct = retrofitListOfProduct.create(APIService.class);
 
         Retrofit retrofitCategory = RetrofitInstanceCategory.getInstance().getRetrofit();
         mAPIServiceCategory = retrofitCategory.create(APIService.class);
+
+        Retrofit retrofitProduct = RetrofitInstanceProduct.getInstance().getRetrofit();
+        mAPIServiceProduct = retrofitProduct.create(APIService.class);
         mPage = "1";
     }
 
     //this method must run on background thread.
     public List<Product> fetchProductItems(String page) {
-        Call<List<Product>> call = mAPIServiceProduct.products(NetworkParams.getProducts(page));
+        Call<List<Product>> call = mAPIServiceListOfProduct.products(NetworkParams.getProducts(page));
         try {
             Response<List<Product>> response = call.execute();
             return response.body();
@@ -89,7 +99,7 @@ public class OnlineStoreRepository {
     //this method can be run in any thread.
     public void fetchProductItemsAsync(String page) {
         Call<List<Product>> call =
-                mAPIServiceProduct.products(NetworkParams.getProducts(page));
+                mAPIServiceListOfProduct.products(NetworkParams.getProducts(page));
 
         call.enqueue(new Callback<List<Product>>() {
 
@@ -112,7 +122,7 @@ public class OnlineStoreRepository {
 
     public void fetchMostVisitedProductItemsAsync() {
         Call<List<Product>> call =
-                mAPIServiceProduct.products(NetworkParams.getMostVisitedProducts());
+                mAPIServiceListOfProduct.products(NetworkParams.getMostVisitedProducts());
 
         call.enqueue(new Callback<List<Product>>() {
 
@@ -135,7 +145,7 @@ public class OnlineStoreRepository {
 
     public void fetchLatestProductItemsAsync() {
         Call<List<Product>> call =
-                mAPIServiceProduct.products(NetworkParams.getLatestProducts());
+                mAPIServiceListOfProduct.products(NetworkParams.getLatestProducts());
 
         call.enqueue(new Callback<List<Product>>() {
 
@@ -158,7 +168,7 @@ public class OnlineStoreRepository {
 
     public void fetchHighestScoreProductItemsAsync() {
         Call<List<Product>> call =
-                mAPIServiceProduct.products(NetworkParams.getHighestScoreProducts());
+                mAPIServiceListOfProduct.products(NetworkParams.getHighestScoreProducts());
 
         call.enqueue(new Callback<List<Product>>() {
 
@@ -197,6 +207,29 @@ public class OnlineStoreRepository {
             //this run on main thread
             @Override
             public void onFailure(Call<List<ProductCategory>> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        });
+    }
+
+    public void fetchProductItemAsync(int id) {
+        Call<Product> call =
+                mAPIServiceProduct.getProduct(id,NetworkParams.getProducts("1"));
+
+        call.enqueue(new Callback<Product>() {
+
+            //this run on main thread
+            @Override
+            public void onResponse(Call<Product> call, Response<Product> response) {
+                Product item = response.body();
+
+                //update adapter of recyclerview
+                mProductLiveData.postValue(item);
+            }
+
+            //this run on main thread
+            @Override
+            public void onFailure(Call<Product> call, Throwable t) {
                 Log.e(TAG, t.getMessage(), t);
             }
         });

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.QueryMap;
 
 public interface APIService {
@@ -17,4 +18,7 @@ public interface APIService {
 
     @GET("products/categories")
     Call<List<ProductCategory>> categories(@QueryMap Map<String, String> options);
+
+    @GET("products/{id}")
+    Call<Product> getProduct(@Path("id") int id,@QueryMap Map<String, String> options);
 }

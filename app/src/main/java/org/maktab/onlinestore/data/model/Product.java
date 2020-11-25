@@ -150,8 +150,11 @@ public class Product {
         mImages = images;
     }
 
+    public Product() {
+    }
+
     public Product(String title, int id, String price, String regular_price, String sale_price
-            , String weight,String length, String width, String height, String description,
+            , String weight, String length, String width, String height, String description,
                    String short_description, String average_rating, int rating_count, List<Images> images) {
         mTitle = title;
         mId = id;
