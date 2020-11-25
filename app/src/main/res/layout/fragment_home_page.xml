@@ -11,7 +11,9 @@
             android:id="@+id/recycler_highest_score"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:background="#fedbd0"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_most_visited"
@@ -23,6 +25,7 @@
         android:id="@+id/recycler_latest"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:background="#feeAE6"/>
 
 </LinearLayout>

@@ -29,6 +29,10 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.navigation:navigation-fragment:2.3.1'
+    implementation 'androidx.navigation:navigation-ui:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
     def retrofit_version = '2.9.0'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'

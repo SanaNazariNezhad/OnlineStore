@@ -11,12 +11,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OnlineStore">
-        <activity android:name=".controller.activity.HomePageActivity">
+        <activity
+            android:name=".controller.activity.HomeActivity"
+            android:label="@string/title_activity_home"
+            android:theme="@style/Theme.OnlineStore.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
     </application>
 
