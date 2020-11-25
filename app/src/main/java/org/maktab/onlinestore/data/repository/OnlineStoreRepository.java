@@ -5,9 +5,11 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import org.maktab.onlinestore.data.model.Product;
+import org.maktab.onlinestore.data.model.ProductCategory;
 import org.maktab.onlinestore.data.remote.retrofit.APIService;
 import org.maktab.onlinestore.data.remote.NetworkParams;
-import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstance;
+import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceProduct;
+import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceCategory;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,13 +23,19 @@ public class OnlineStoreRepository {
 
     private static final String TAG = "PhotoRepository";
 
-    private final APIService mAPIService;
+    private final APIService mAPIServiceProduct;
+    private final APIService mAPIServiceCategory;
     private String mPage;
     private MutableLiveData<List<Product>> mProductItemsLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<ProductCategory>> mCategoryItemsLiveData = new MutableLiveData<>();
 
 
     public MutableLiveData<List<Product>> getProductItemsLiveData() {
         return mProductItemsLiveData;
+    }
+
+    public MutableLiveData<List<ProductCategory>> getCategoryItemsLiveData() {
+        return mCategoryItemsLiveData;
     }
 
     public void setProductItemsLiveData(MutableLiveData<List<Product>> productItemsLiveData) {
@@ -43,14 +51,17 @@ public class OnlineStoreRepository {
     }
 
     public OnlineStoreRepository() {
-        Retrofit retrofit = RetrofitInstance.getInstance().getRetrofit();
-        mAPIService = retrofit.create(APIService.class);
+        Retrofit retrofit = RetrofitInstanceProduct.getInstance().getRetrofit();
+        mAPIServiceProduct = retrofit.create(APIService.class);
+
+        Retrofit retrofitCategory = RetrofitInstanceCategory.getInstance().getRetrofit();
+        mAPIServiceCategory = retrofitCategory.create(APIService.class);
         mPage = "1";
     }
 
     //this method must run on background thread.
     public List<Product> fetchProductItems(String page) {
-        Call<List<Product>> call = mAPIService.listItems(NetworkParams.getProducts(page));
+        Call<List<Product>> call = mAPIServiceProduct.products(NetworkParams.getProducts(page));
         try {
             Response<List<Product>> response = call.execute();
             return response.body();
@@ -63,7 +74,7 @@ public class OnlineStoreRepository {
     //this method can be run in any thread.
     public void fetchProductItemsAsync(String page) {
         Call<List<Product>> call =
-                mAPIService.listItems(NetworkParams.getProducts(page));
+                mAPIServiceProduct.products(NetworkParams.getProducts(page));
 
         call.enqueue(new Callback<List<Product>>() {
 
@@ -79,6 +90,29 @@ public class OnlineStoreRepository {
             //this run on main thread
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        });
+    }
+
+    public void fetchCategoryItemsAsync(String page) {
+        Call<List<ProductCategory>> call =
+                mAPIServiceCategory.categories(NetworkParams.getProducts(page));
+
+        call.enqueue(new Callback<List<ProductCategory>>() {
+
+            //this run on main thread
+            @Override
+            public void onResponse(Call<List<ProductCategory>> call, Response<List<ProductCategory>> response) {
+                List<ProductCategory> items = response.body();
+
+                //update adapter of recyclerview
+                mCategoryItemsLiveData.postValue(items);
+            }
+
+            //this run on main thread
+            @Override
+            public void onFailure(Call<List<ProductCategory>> call, Throwable t) {
                 Log.e(TAG, t.getMessage(), t);
             }
         });
