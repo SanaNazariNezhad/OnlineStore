@@ -27,6 +27,9 @@ public class OnlineStoreRepository {
     private final APIService mAPIServiceCategory;
     private String mPage;
     private MutableLiveData<List<Product>> mProductItemsLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mMostVisitedProductsLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mLatestProductsLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mHighestScoreProductsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<ProductCategory>> mCategoryItemsLiveData = new MutableLiveData<>();
 
 
@@ -36,6 +39,18 @@ public class OnlineStoreRepository {
 
     public MutableLiveData<List<ProductCategory>> getCategoryItemsLiveData() {
         return mCategoryItemsLiveData;
+    }
+
+    public MutableLiveData<List<Product>> getMostVisitedProductsLiveData() {
+        return mMostVisitedProductsLiveData;
+    }
+
+    public MutableLiveData<List<Product>> getLatestProductsLiveData() {
+        return mLatestProductsLiveData;
+    }
+
+    public MutableLiveData<List<Product>> getHighestScoreProductsLiveData() {
+        return mHighestScoreProductsLiveData;
     }
 
     public void setProductItemsLiveData(MutableLiveData<List<Product>> productItemsLiveData) {
@@ -85,6 +100,75 @@ public class OnlineStoreRepository {
 
                 //update adapter of recyclerview
                 mProductItemsLiveData.postValue(items);
+            }
+
+            //this run on main thread
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        });
+    }
+
+    public void fetchMostVisitedProductItemsAsync() {
+        Call<List<Product>> call =
+                mAPIServiceProduct.products(NetworkParams.getMostVisitedProducts());
+
+        call.enqueue(new Callback<List<Product>>() {
+
+            //this run on main thread
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                List<Product> items = response.body();
+
+                //update adapter of recyclerview
+                mMostVisitedProductsLiveData.postValue(items);
+            }
+
+            //this run on main thread
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        });
+    }
+
+    public void fetchLatestProductItemsAsync() {
+        Call<List<Product>> call =
+                mAPIServiceProduct.products(NetworkParams.getLatestProducts());
+
+        call.enqueue(new Callback<List<Product>>() {
+
+            //this run on main thread
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                List<Product> items = response.body();
+
+                //update adapter of recyclerview
+                mLatestProductsLiveData.postValue(items);
+            }
+
+            //this run on main thread
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        });
+    }
+
+    public void fetchHighestScoreProductItemsAsync() {
+        Call<List<Product>> call =
+                mAPIServiceProduct.products(NetworkParams.getHighestScoreProducts());
+
+        call.enqueue(new Callback<List<Product>>() {
+
+            //this run on main thread
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                List<Product> items = response.body();
+
+                //update adapter of recyclerview
+                mHighestScoreProductsLiveData.postValue(items);
             }
 
             //this run on main thread

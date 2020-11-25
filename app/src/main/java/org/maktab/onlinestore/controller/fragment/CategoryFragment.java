@@ -14,8 +14,6 @@ import android.view.ViewGroup;
 
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.CategoryAdapter;
-import org.maktab.onlinestore.adapter.ProductAdapter;
-import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.model.ProductCategory;
 import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
 

@@ -3,29 +3,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:background="@color/background"
+    android:gravity="center"
     android:orientation="vertical"
     tools:context=".controller.fragment.HomePageFragment">
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_highest_score"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:background="#fedbd0"/>
+    <TextView
+        android:id="@+id/textView_highest_score_product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textColor="@color/black"
+        android:text="@string/the_highest_score_products" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_most_visited"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_highest_score"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/textView_latest_product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textColor="@color/purple_700"
+        android:text="@string/the_latest_products" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_latest"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#feeAE6"/>
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/textView_most_visited_product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textColor="@color/black"
+        android:text="@string/the_most_visited_products" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_most_visited"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
 </LinearLayout>

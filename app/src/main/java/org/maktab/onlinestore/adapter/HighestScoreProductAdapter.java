@@ -18,7 +18,7 @@ import org.maktab.onlinestore.data.model.Product;
 
 import java.util.List;
 
-public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductHolder> {
+public class HighestScoreProductAdapter extends RecyclerView.Adapter<HighestScoreProductAdapter.ProductHolder> {
 
     private List<Product> mProducts;
     private Context mContext;
@@ -37,7 +37,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
         mOnBottomReachedListener = onBottomReachedListener;
     }
 
-    public ProductAdapter(Context context, List<Product> products) {
+    public HighestScoreProductAdapter(Context context, List<Product> products) {
         mContext = context;
         mProducts = products;
     }
@@ -52,7 +52,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
     public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-        View view = layoutInflater.inflate(R.layout.item_most_visited,parent,false);
+        View view = layoutInflater.inflate(R.layout.item_highest_score,parent,false);
 
         ProductHolder productHolder = new ProductHolder(view);
         return productHolder;
@@ -77,18 +77,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
 
         public ProductHolder(@NonNull View itemView) {
             super(itemView);
-            mImageView = itemView.findViewById(R.id.image_most_visited);
-            mTextView = itemView.findViewById(R.id.textView_name_most_visited);
-            mTextView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            mImageView = itemView.findViewById(R.id.image_highest_score);
+//            mTextView = itemView.findViewById(R.id.textView_name_highest_score);
+            /*mTextView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
             mTextView.setSingleLine(true);
             mTextView.setSelected(true);
-            mTextView.setMarqueeRepeatLimit(-1);
+            mTextView.setMarqueeRepeatLimit(-1);*/
 
         }
 
         public void bindProduct(Product product) {
 
-            mTextView.setText(product.getTitle());
+//            mTextView.setText(product.getTitle());
             Glide.with(itemView)
                     .load(product.getImages().get(0).getSrc())
                     .centerCrop()
