@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import org.maktab.onlinestore.R;
+import org.maktab.onlinestore.SubCategoriesActivity;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.model.ProductCategory;
 
@@ -58,11 +59,6 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public void onBindViewHolder(@NonNull CategoryHolder holder, int position) {
 
         ProductCategory category = mCategoryList.get(position);
-        /*if (position == (mProducts.size() - 1)){
-
-            mOnBottomReachedListener.onBottomReached(position);
-
-        }*/
         holder.bindProduct(category);
     }
 
@@ -70,16 +66,23 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
         private ImageView mImageView;
         private TextView mTextView;
+        private ProductCategory mProductCategory;
 
         public CategoryHolder(@NonNull View itemView) {
             super(itemView);
             mImageView = itemView.findViewById(R.id.image_category);
             mTextView = itemView.findViewById(R.id.text_category);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mContext.startActivity(SubCategoriesActivity.newIntent(mContext,mProductCategory.getId()));
+                }
+            });
 
         }
 
         public void bindProduct(ProductCategory category) {
-
+            mProductCategory = category;
             mTextView.setText(category.getName());
             Glide.with(itemView)
                     .load(category.getImage())

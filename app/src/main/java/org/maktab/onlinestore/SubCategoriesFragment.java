@@ -1,4 +1,4 @@
-package org.maktab.onlinestore.controller.fragment;
+package org.maktab.onlinestore;
 
 import android.os.Bundle;
 
@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.CategoryAdapter;
 import org.maktab.onlinestore.data.model.ProductCategory;
 import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
@@ -20,20 +19,24 @@ import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryFragment extends Fragment {
+public class SubCategoriesFragment extends Fragment {
+
+    public static final String BUNDLE_PARENT_ID = "Bundle_Parent_id";
+    private int mParentId;
     private OnlineStoreRepository mRepository;
     private CategoryAdapter mCategoryAdapter;
     private RecyclerView mRecyclerView;
     private List<ProductCategory> mCategoryList;
     private LiveData<List<ProductCategory>> mCategoryItemsLiveData;
 
-    public CategoryFragment() {
+    public SubCategoriesFragment() {
         // Required empty public constructor
     }
 
-    public static CategoryFragment newInstance() {
-        CategoryFragment fragment = new CategoryFragment();
+    public static SubCategoriesFragment newInstance(int id) {
+        SubCategoriesFragment fragment = new SubCategoriesFragment();
         Bundle args = new Bundle();
+        args.putInt(BUNDLE_PARENT_ID,id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -41,11 +44,10 @@ public class CategoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        mParentId = getArguments().getInt(BUNDLE_PARENT_ID);
         mCategoryList = new ArrayList<>();
         mRepository = new OnlineStoreRepository();
-        mRepository.fetchCategoryItemsAsync();
-//        mRepository.fetchCategoryItemsAsync("2");
+        mRepository.fetchSubCategoryItemsAsync(String.valueOf(mParentId));
         mCategoryItemsLiveData = mRepository.getCategoryItemsLiveData();
         setObserver();
     }
@@ -54,8 +56,10 @@ public class CategoryFragment extends Fragment {
         mCategoryItemsLiveData.observe(this, new Observer<List<ProductCategory>>() {
             @Override
             public void onChanged(List<ProductCategory> categories) {
-                mCategoryList.addAll(categories);
-                setAdapter(mCategoryList);
+                if (categories != null) {
+                    mCategoryList.addAll(categories);
+                    setAdapter(mCategoryList);
+                }
             }
         });
     }
@@ -69,17 +73,18 @@ public class CategoryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_category, container, false);
+        View view = inflater.inflate(R.layout.fragment_sub_categories, container, false);
         findView(view);
         initView();
-        return view;
+        return  view;
+    }
+
+    private void findView(View view) {
+        mRecyclerView = view.findViewById(R.id.recycler_sub_category);
     }
 
     private void initView() {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    private void findView(View view) {
-        mRecyclerView = view.findViewById(R.id.recycler_category);
-    }
 }

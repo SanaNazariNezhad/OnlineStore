@@ -189,9 +189,32 @@ public class OnlineStoreRepository {
         });
     }
 
-    public void fetchCategoryItemsAsync(String page) {
+    public void fetchCategoryItemsAsync() {
         Call<List<ProductCategory>> call =
-                mAPIServiceCategory.categories(NetworkParams.getProducts(page));
+                mAPIServiceCategory.categories(NetworkParams.getCategories());
+
+        call.enqueue(new Callback<List<ProductCategory>>() {
+
+            //this run on main thread
+            @Override
+            public void onResponse(Call<List<ProductCategory>> call, Response<List<ProductCategory>> response) {
+                List<ProductCategory> items = response.body();
+
+                //update adapter of recyclerview
+                mCategoryItemsLiveData.postValue(items);
+            }
+
+            //this run on main thread
+            @Override
+            public void onFailure(Call<List<ProductCategory>> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        });
+    }
+
+    public void fetchSubCategoryItemsAsync(String id) {
+        Call<List<ProductCategory>> call =
+                mAPIServiceCategory.categories(NetworkParams.subCategories(id));
 
         call.enqueue(new Callback<List<ProductCategory>>() {
 
