@@ -13,6 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.maktab.onlinestore.adapter.CategoryAdapter;
+import org.maktab.onlinestore.adapter.ProductAdapter;
+import org.maktab.onlinestore.adapter.SubCategoryAdapter;
+import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.model.ProductCategory;
 import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
 
@@ -24,10 +27,13 @@ public class SubCategoriesFragment extends Fragment {
     public static final String BUNDLE_PARENT_ID = "Bundle_Parent_id";
     private int mParentId;
     private OnlineStoreRepository mRepository;
-    private CategoryAdapter mCategoryAdapter;
+    private SubCategoryAdapter mCategoryAdapter;
+    private ProductAdapter mProductAdapter;
     private RecyclerView mRecyclerView;
-    private List<ProductCategory> mCategoryList;
+    private List<ProductCategory> mSubCategoryList;
     private LiveData<List<ProductCategory>> mCategoryItemsLiveData;
+    private LiveData<List<Product>> mProductsLiveData;
+    private boolean checkParent;
 
     public SubCategoriesFragment() {
         // Required empty public constructor
@@ -36,7 +42,7 @@ public class SubCategoriesFragment extends Fragment {
     public static SubCategoriesFragment newInstance(int id) {
         SubCategoriesFragment fragment = new SubCategoriesFragment();
         Bundle args = new Bundle();
-        args.putInt(BUNDLE_PARENT_ID,id);
+        args.putInt(BUNDLE_PARENT_ID, id);
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,7 +51,7 @@ public class SubCategoriesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mParentId = getArguments().getInt(BUNDLE_PARENT_ID);
-        mCategoryList = new ArrayList<>();
+        mSubCategoryList = new ArrayList<>();
         mRepository = new OnlineStoreRepository();
         mRepository.fetchSubCategoryItemsAsync(String.valueOf(mParentId));
         mCategoryItemsLiveData = mRepository.getCategoryItemsLiveData();
@@ -56,17 +62,37 @@ public class SubCategoriesFragment extends Fragment {
         mCategoryItemsLiveData.observe(this, new Observer<List<ProductCategory>>() {
             @Override
             public void onChanged(List<ProductCategory> categories) {
-                if (categories != null) {
-                    mCategoryList.addAll(categories);
-                    setAdapter(mCategoryList);
+                if (categories.size() != 0) {
+//                    mSubCategoryList.addAll(categories);
+                    setSubCategoryAdapter(categories);
+                } else {
+                    mRepository.fetchProductItemsWithParentIdAsync(String.valueOf(mParentId));
+                    mProductsLiveData = mRepository.getProductWithParentIdLiveData();
+                    setObserverForProduct();
                 }
             }
         });
     }
 
-    private void setAdapter(List<ProductCategory> categories) {
-        mCategoryAdapter = new CategoryAdapter(getActivity(), categories);
+    private void setObserverForProduct() {
+        mProductsLiveData.observe(this, new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> productList) {
+
+                setProductAdapter(productList);
+
+            }
+        });
+    }
+
+    private void setSubCategoryAdapter(List<ProductCategory> categories) {
+        mCategoryAdapter = new SubCategoryAdapter(getActivity(), categories);
         mRecyclerView.setAdapter(mCategoryAdapter);
+    }
+
+    private void setProductAdapter(List<Product> productList) {
+        mProductAdapter = new ProductAdapter(productList,getActivity());
+        mRecyclerView.setAdapter(mProductAdapter);
     }
 
     @Override
@@ -76,7 +102,7 @@ public class SubCategoriesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_sub_categories, container, false);
         findView(view);
         initView();
-        return  view;
+        return view;
     }
 
     private void findView(View view) {

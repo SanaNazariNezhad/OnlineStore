@@ -16,6 +16,9 @@ public interface APIService {
     @GET("products")
     Call<List<Product>> products(@QueryMap Map<String, String> options);
 
+    @GET("products")
+    Call<List<Product>> getProductsWithParentId(@QueryMap Map<String, String> options);
+
     @GET("products/categories")
     Call<List<ProductCategory>> categories(@QueryMap Map<String, String> options);
 

@@ -23,6 +23,7 @@ public class NetworkParams {
     public static final String AVERAGE_RATING_DESC = "average_rating&DESC";
     public static final String CREATED_AT_DESC = "created_at&DESC";
     public static final String  PARENT_CATEGORY = "0";
+    public static final String PARENT_OF_CATEGORY = "parent";
 
     public static Map<String, String> getMostVisitedProducts() {
         Map<String, String> products = new HashMap<>();
@@ -56,10 +57,18 @@ public class NetworkParams {
         return products;
     }
 
+    public static Map<String, String> getProductsWithParentId(String parentId) {
+        Map<String, String> products = new HashMap<>();
+        products.putAll(BASE_OPTIONS);
+        products.put("filter[category]",parentId);
+
+        return products;
+    }
+
     public static Map<String, String> getCategories() {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
-        products.put("parent", PARENT_CATEGORY);
+        products.put(PARENT_OF_CATEGORY, PARENT_CATEGORY);
 
         return products;
     }
@@ -67,7 +76,7 @@ public class NetworkParams {
     public static Map<String, String> subCategories(String parentId) {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
-        products.put("parent", parentId);
+        products.put(PARENT_OF_CATEGORY, parentId);
 
         return products;
     }

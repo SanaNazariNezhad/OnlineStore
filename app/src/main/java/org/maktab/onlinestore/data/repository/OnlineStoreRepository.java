@@ -29,12 +29,16 @@ public class OnlineStoreRepository {
     private final APIService mAPIServiceCategory;
     private String mPage;
     private MutableLiveData<List<Product>> mProductItemsLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mProductWithParentIdLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mMostVisitedProductsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mLatestProductsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mHighestScoreProductsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<ProductCategory>> mCategoryItemsLiveData = new MutableLiveData<>();
     private MutableLiveData<Product> mProductLiveData = new MutableLiveData<>();
 
+    public MutableLiveData<List<Product>> getProductWithParentIdLiveData() {
+        return mProductWithParentIdLiveData;
+    }
 
     public MutableLiveData<List<Product>> getProductItemsLiveData() {
         return mProductItemsLiveData;
@@ -179,6 +183,29 @@ public class OnlineStoreRepository {
 
                 //update adapter of recyclerview
                 mHighestScoreProductsLiveData.postValue(items);
+            }
+
+            //this run on main thread
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        });
+    }
+
+    public void fetchProductItemsWithParentIdAsync(String id) {
+        Call<List<Product>> call =
+                mAPIServiceListOfProduct.products(NetworkParams.getProductsWithParentId(id));
+
+        call.enqueue(new Callback<List<Product>>() {
+
+            //this run on main thread
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                List<Product> items = response.body();
+
+                //update adapter of recyclerview
+                mProductWithParentIdLiveData.postValue(items);
             }
 
             //this run on main thread
