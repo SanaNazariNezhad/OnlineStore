@@ -19,16 +19,17 @@ public class NetworkParams {
         put("consumer_key", CONSUMER_KEY);
         put("consumer_secret", CONSUMER_SECRET);
     }};
-    public static final String RATING_COUNT_DESC = "rating_count&DESC";
-    public static final String AVERAGE_RATING_DESC = "average_rating&DESC";
-    public static final String CREATED_AT_DESC = "created_at&DESC";
+    public static final String RATING_COUNT_DESC = "DESC&rating_count";
+    public static final String AVERAGE_RATING_DESC = "DESC&average_rating";
+    public static final String CREATED_AT_DESC = "DESC&created_at";
     public static final String  PARENT_CATEGORY = "0";
     public static final String PARENT_OF_CATEGORY = "parent";
+    public static final String FILTER_ORDER = "filter[order]";
 
     public static Map<String, String> getMostVisitedProducts() {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
-        products.put("filter[orderby]", RATING_COUNT_DESC);
+        products.put(FILTER_ORDER, RATING_COUNT_DESC);
 
         return products;
     }
@@ -36,7 +37,7 @@ public class NetworkParams {
     public static Map<String, String> getHighestScoreProducts() {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
-        products.put("filter[orderby]", AVERAGE_RATING_DESC);
+        products.put(FILTER_ORDER, AVERAGE_RATING_DESC);
 
         return products;
     }
@@ -44,7 +45,7 @@ public class NetworkParams {
     public static Map<String, String> getLatestProducts() {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
-        products.put("filter[orderby]", CREATED_AT_DESC);
+        products.put(FILTER_ORDER, CREATED_AT_DESC);
 
         return products;
     }

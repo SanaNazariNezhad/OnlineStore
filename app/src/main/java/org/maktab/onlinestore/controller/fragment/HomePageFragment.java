@@ -57,13 +57,11 @@ public class HomePageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
+
         mRepository = new OnlineStoreRepository();
         mRepository.fetchMostVisitedProductItemsAsync();
         mRepository.fetchLatestProductItemsAsync();
         mRepository.fetchHighestScoreProductItemsAsync();
-
         mMostVisitedProductItemsLiveData = mRepository.getMostVisitedProductsLiveData();
         mLatestProductItemsLiveData = mRepository.getLatestProductsLiveData();
         mHighestScoreProductItemsLiveData = mRepository.getHighestScoreProductsLiveData();

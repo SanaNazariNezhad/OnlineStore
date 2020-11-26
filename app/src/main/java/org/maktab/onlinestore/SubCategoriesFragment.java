@@ -25,6 +25,7 @@ import java.util.List;
 public class SubCategoriesFragment extends Fragment {
 
     public static final String BUNDLE_PARENT_ID = "Bundle_Parent_id";
+    public static final String BUNDLE_PARENT_NAME = "bundle_parent_name";
     private int mParentId;
     private OnlineStoreRepository mRepository;
     private SubCategoryAdapter mCategoryAdapter;
@@ -33,16 +34,17 @@ public class SubCategoriesFragment extends Fragment {
     private List<ProductCategory> mSubCategoryList;
     private LiveData<List<ProductCategory>> mCategoryItemsLiveData;
     private LiveData<List<Product>> mProductsLiveData;
-    private boolean checkParent;
+    private String mParentName;
 
     public SubCategoriesFragment() {
         // Required empty public constructor
     }
 
-    public static SubCategoriesFragment newInstance(int id) {
+    public static SubCategoriesFragment newInstance(int id, String parentName) {
         SubCategoriesFragment fragment = new SubCategoriesFragment();
         Bundle args = new Bundle();
         args.putInt(BUNDLE_PARENT_ID, id);
+        args.putString(BUNDLE_PARENT_NAME, parentName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,6 +53,7 @@ public class SubCategoriesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mParentId = getArguments().getInt(BUNDLE_PARENT_ID);
+        mParentName = getArguments().getString(BUNDLE_PARENT_NAME);
         mSubCategoryList = new ArrayList<>();
         mRepository = new OnlineStoreRepository();
         mRepository.fetchSubCategoryItemsAsync(String.valueOf(mParentId));
@@ -66,7 +69,7 @@ public class SubCategoriesFragment extends Fragment {
 //                    mSubCategoryList.addAll(categories);
                     setSubCategoryAdapter(categories);
                 } else {
-                    mRepository.fetchProductItemsWithParentIdAsync(String.valueOf(mParentId));
+                    mRepository.fetchProductItemsWithParentIdAsync(String.valueOf(mParentName));
                     mProductsLiveData = mRepository.getProductWithParentIdLiveData();
                     setObserverForProduct();
                 }
@@ -91,7 +94,7 @@ public class SubCategoriesFragment extends Fragment {
     }
 
     private void setProductAdapter(List<Product> productList) {
-        mProductAdapter = new ProductAdapter(productList,getActivity());
+        mProductAdapter = new ProductAdapter(productList, getActivity());
         mRecyclerView.setAdapter(mProductAdapter);
     }
 
