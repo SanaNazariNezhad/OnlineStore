@@ -10,59 +10,83 @@
     tools:context=".controller.fragment.HomePageFragment">
 
 
-    <TextView
-        android:id="@+id/textView_highest_score_product"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:padding="8dp"
-        android:textColor="@color/black"
-        android:text="@string/the_highest_score_products" />
+        android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_highest_score"
-        android:layout_width="match_parent"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginEnd="36dp"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_weight="1" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView_latest_product"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:padding="8dp"
-        android:textColor="@color/purple_700"
-        android:text="@string/the_latest_products" />
+            <TextView
+                android:id="@+id/textView_highest_score_product"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="58dp"
+                android:padding="4dp"
+                android:text="@string/the_highest_score_products"
+                android:textColor="@color/black" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_latest"
-        android:layout_width="match_parent"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_highest_score"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="62dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="62dp"/>
 
-        android:background="@drawable/recycler_layout"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/recycler_layout"
+                android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView_most_visited_product"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
-        android:padding="8dp"
-        android:textColor="@color/black"
-        android:text="@string/the_most_visited_products" />
+                <TextView
+                    android:id="@+id/textView_latest_product"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="58dp"
+                    android:padding="8dp"
+                    android:text="@string/the_latest_products"
+                    android:textColor="@color/purple_700" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_most_visited"
-        android:layout_width="match_parent"
-        android:background="@drawable/recycler_layout_srcond"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_latest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="62dp"
+                    android:layout_marginEnd="62dp"/>
+            </LinearLayout>
 
-        android:layout_marginBottom="20dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/recycler_layout"
+            android:orientation="vertical">
 
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+            <TextView
+                android:id="@+id/textView_most_visited_product"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="58dp"
+                android:padding="8dp"
+                android:textColor="@color/black"
+                android:text="@string/the_most_visited_products" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_most_visited"
+                android:layout_width="match_parent"
+                android:layout_marginEnd="62dp"
+                android:layout_marginStart="62dp"
+                android:background="@drawable/recycler_layout_second"
+                android:layout_marginBottom="36dp"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

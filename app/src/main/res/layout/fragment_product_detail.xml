@@ -4,34 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@drawable/detail_background"
     tools:context=".controller.fragment.ProductDetailFragment">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_product_detail"
-        android:layout_width="match_parent"
-        android:layout_height="150dp" />
-
-    <TextView
-        android:id="@+id/text_product_name"
-        android:layout_margin="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Title" />
-
-    <TextView
-        android:layout_margin="8dp"
-        android:id="@+id/textView4"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:textStyle="bold|italic"
-        android:text="@string/product_features" />
-
     <ScrollView
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"
+        android:layout_marginLeft="36dp"
+        android:layout_marginRight="36dp"
         android:layout_marginBottom="24dp"
+        android:layout_marginTop="24dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -40,10 +20,38 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" >
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_product_detail"
+                android:layout_width="match_parent"
+                android:layout_marginStart="24dp"
+                android:layout_marginEnd="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_height="150dp" />
+
+            <TextView
+                android:id="@+id/text_product_name"
+                android:padding="8dp"
+                android:layout_marginStart="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Title" />
+
+            <TextView
+                android:padding="8dp"
+                android:id="@+id/textView4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Large"
+                android:textStyle="bold|italic"
+                android:text="@string/product_features" />
+
             <TextView
                 android:id="@+id/textView_product_detail"
                 style="@style/TextAppearance.AppCompat.Body1"
+                android:textStyle="bold"
                 android:layout_width="match_parent"
+                android:background="@drawable/image_layout"
+                android:padding="16dp"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
     </ScrollView>
