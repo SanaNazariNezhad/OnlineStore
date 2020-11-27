@@ -58,7 +58,7 @@ public class HomePageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mRepository = new OnlineStoreRepository();
+        mRepository = OnlineStoreRepository.getInstance();
         mRepository.fetchMostVisitedProductItemsAsync();
         mRepository.fetchLatestProductItemsAsync();
         mRepository.fetchHighestScoreProductItemsAsync();

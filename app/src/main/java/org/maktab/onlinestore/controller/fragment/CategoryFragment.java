@@ -43,7 +43,7 @@ public class CategoryFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         mCategoryList = new ArrayList<>();
-        mRepository = new OnlineStoreRepository();
+        mRepository = OnlineStoreRepository.getInstance();
         mRepository.fetchCategoryItemsAsync();
 //        mRepository.fetchCategoryItemsAsync("2");
         mCategoryItemsLiveData = mRepository.getCategoryItemsLiveData();

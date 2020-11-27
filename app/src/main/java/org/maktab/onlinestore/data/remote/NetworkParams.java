@@ -20,7 +20,7 @@ public class NetworkParams {
         put("consumer_secret", CONSUMER_SECRET);
     }};
     public static final String RATING_COUNT_DESC = "DESC&rating_count";
-    public static final String AVERAGE_RATING_DESC = "DESC&average_rating";
+    public static final String AVERAGE_RATING_DESC = "rating";
     public static final String CREATED_AT_DESC = "DESC&created_at";
     public static final String  PARENT_CATEGORY = "0";
     public static final String PARENT_OF_CATEGORY = "parent";
@@ -37,7 +37,7 @@ public class NetworkParams {
     public static Map<String, String> getHighestScoreProducts() {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
-        products.put(FILTER_ORDER, AVERAGE_RATING_DESC);
+        products.put("filter[orderby_meta_key]", AVERAGE_RATING_DESC);
 
         return products;
     }

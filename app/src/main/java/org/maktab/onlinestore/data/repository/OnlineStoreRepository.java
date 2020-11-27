@@ -35,6 +35,24 @@ public class OnlineStoreRepository {
     private MutableLiveData<List<Product>> mHighestScoreProductsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<ProductCategory>> mCategoryItemsLiveData = new MutableLiveData<>();
     private MutableLiveData<Product> mProductLiveData = new MutableLiveData<>();
+    private static boolean connection;
+
+    private static OnlineStoreRepository sInstance;
+
+    public static OnlineStoreRepository getInstance() {
+        if (sInstance == null)
+            sInstance = new OnlineStoreRepository();
+
+        return sInstance;
+    }
+
+    public boolean isConnection() {
+        return connection;
+    }
+
+    public void setConnection(boolean connection) {
+        this.connection = connection;
+    }
 
     public MutableLiveData<List<Product>> getProductWithParentIdLiveData() {
         return mProductWithParentIdLiveData;
@@ -76,7 +94,7 @@ public class OnlineStoreRepository {
         mPage = page;
     }
 
-    public OnlineStoreRepository() {
+    private OnlineStoreRepository() {
         Retrofit retrofitListOfProduct = RetrofitInstanceListOfProduct.getInstance().getRetrofit();
         mAPIServiceListOfProduct = retrofitListOfProduct.create(APIService.class);
 

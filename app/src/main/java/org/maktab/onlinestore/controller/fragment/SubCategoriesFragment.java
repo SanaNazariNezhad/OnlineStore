@@ -1,4 +1,4 @@
-package org.maktab.onlinestore;
+package org.maktab.onlinestore.controller.fragment;
 
 import android.os.Bundle;
 
@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.maktab.onlinestore.adapter.CategoryAdapter;
+import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.ProductAdapter;
 import org.maktab.onlinestore.adapter.SubCategoryAdapter;
 import org.maktab.onlinestore.data.model.Product;
@@ -55,7 +55,7 @@ public class SubCategoriesFragment extends Fragment {
         mParentId = getArguments().getInt(BUNDLE_PARENT_ID);
         mParentName = getArguments().getString(BUNDLE_PARENT_NAME);
         mSubCategoryList = new ArrayList<>();
-        mRepository = new OnlineStoreRepository();
+        mRepository = OnlineStoreRepository.getInstance();
         mRepository.fetchSubCategoryItemsAsync(String.valueOf(mParentId));
         mCategoryItemsLiveData = mRepository.getCategoryItemsLiveData();
         setObserver();

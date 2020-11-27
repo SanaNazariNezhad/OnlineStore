@@ -17,4 +17,6 @@
     <string name="the_most_visited_products">The Most Visited Products:</string>
     <string name="the_latest_products">The Latest Products:</string>
     <string name="product_features">Product Features:</string>
+    <string name="internet_connection_error">Internet connection error</string>
+    <string name="try_again">Try again</string>
 </resources>

@@ -22,8 +22,8 @@ public interface APIService {
     @GET("products/categories")
     Call<List<ProductCategory>> categories(@QueryMap Map<String, String> options);
 
-    @GET("products/categories")
-    Call<List<ProductCategory>> subCategories(@QueryMap Map<String, String> options);
+/*    @GET("products/categories")
+    Call<List<ProductCategory>> subCategories(@QueryMap Map<String, String> options);*/
 
     @GET("products/{id}")
     Call<Product> getProduct(@Path("id") int id,@QueryMap Map<String, String> options);

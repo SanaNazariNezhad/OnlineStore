@@ -1,5 +1,9 @@
 package org.maktab.onlinestore.controller.activity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
@@ -16,11 +20,19 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import org.maktab.onlinestore.DisconnectActivity;
 import org.maktab.onlinestore.R;
+import org.maktab.onlinestore.receiver.ConnectionReceiver;
 
 public class HomeActivity extends AppCompatActivity {
 
+    public static Intent newIntent(Context context){
+        return new Intent(context, HomeActivity.class);
+    }
+
+
     private AppBarConfiguration mAppBarConfiguration;
+    private ConnectionReceiver mConnectionReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +40,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mConnectionReceiver = new ConnectionReceiver();
        /* FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,5 +74,22 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        registerReceiver(mConnectionReceiver, filter);
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        unregisterReceiver(mConnectionReceiver);
     }
 }

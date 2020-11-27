@@ -52,7 +52,7 @@ public class ProductDetailFragment extends Fragment {
             mProductId = getArguments().getInt(BUNDLE_KEY_PRODUCT_ID);
         }
 
-        mRepository = new OnlineStoreRepository();
+        mRepository = OnlineStoreRepository.getInstance();
         mRepository.fetchProductItemAsync(mProductId);
         mProductLiveData = mRepository.getProductLiveData();
         setObserver();
