@@ -1,8 +1,15 @@
 package org.maktab.onlinestore.controller.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Menu;
+import android.widget.RelativeLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -16,11 +23,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import org.maktab.onlinestore.ConnectionService;
 import org.maktab.onlinestore.R;
 
 public class HomeActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
+    public static final String checkConnection = "Check Connection";
+    private IntentFilter mIntentFilter;
+    private RelativeLayout mRelativeLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +50,7 @@ public class HomeActivity extends AppCompatActivity {
         });*/
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        mRelativeLayout = findViewById(R.id.disconnect_layout);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -47,6 +60,17 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction(checkConnection);
+        Intent serviceIntent = new Intent(this, ConnectionService.class);
+        startService(serviceIntent);
+
+        if (isOnline(getApplicationContext())) {
+            Set_Visibility_ON();
+        } else {
+            Set_Visibility_OFF();
+        }
     }
 
     @Override
@@ -61,5 +85,57 @@ public class HomeActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public BroadcastReceiver MyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (intent.getAction().equals(checkConnection)) {
+                if (intent.getStringExtra("online_status").equals("true")) {
+                    Set_Visibility_ON();
+                } else {
+                    Set_Visibility_OFF();
+                }
+            }
+        }
+    };
+
+    public boolean isOnline(Context context) {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if (networkInfo != null && networkInfo.isConnectedOrConnecting())
+            return true;
+        else
+            return false;
+    }
+
+    public void Set_Visibility_ON() {
+        mRelativeLayout.setVisibility(View.GONE);
+    }
+
+    public void Set_Visibility_OFF() {
+        mRelativeLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        registerReceiver(MyReceiver, mIntentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(MyReceiver);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(MyReceiver, mIntentFilter);
     }
 }

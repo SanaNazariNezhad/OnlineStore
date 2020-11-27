@@ -4,12 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/sub_category"
-    tools:context=".controller.fragment.CategoryFragment">
+    tools:context=".controller.fragment.CategoryFragment"
+    android:orientation="vertical">
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="50dp"
         android:id="@+id/recycler_sub_category"/>
+
+    <RelativeLayout
+        android:id="@+id/disconnect_layout_sub_category"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/internet_connection">
+
+        <Button
+            android:id="@+id/button_connection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.ActionButton.Overflow"
+            android:textColor="@color/black"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="75dp"
+            android:text="Try again" />
+
+    </RelativeLayout>
 
 </LinearLayout>
