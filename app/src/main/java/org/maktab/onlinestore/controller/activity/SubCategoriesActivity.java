@@ -1,13 +1,11 @@
-package org.maktab.onlinestore;
+package org.maktab.onlinestore.controller.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 
-import org.maktab.onlinestore.controller.activity.SingleFragmentActivity;
+import org.maktab.onlinestore.controller.fragment.SubCategoriesFragment;
 
 public class SubCategoriesActivity extends SingleFragmentActivity {
 

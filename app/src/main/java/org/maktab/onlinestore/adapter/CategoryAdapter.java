@@ -1,7 +1,6 @@
 package org.maktab.onlinestore.adapter;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import org.maktab.onlinestore.R;
-import org.maktab.onlinestore.SubCategoriesActivity;
-import org.maktab.onlinestore.data.model.Product;
+import org.maktab.onlinestore.controller.activity.SubCategoriesActivity;
 import org.maktab.onlinestore.data.model.ProductCategory;
 
 import java.util.List;
