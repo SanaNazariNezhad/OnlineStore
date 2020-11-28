@@ -36,7 +36,7 @@
         android:layout_alignTop="@id/cardView_most_visited"
         android:layout_alignBottom="@id/cardView_most_visited"
         style="@style/TextAppearance.AppCompat.Menu"
-        android:textColor="#000000"
+        android:textColor="@color/black"
         android:gravity="center"
         android:text="TextView" />
 

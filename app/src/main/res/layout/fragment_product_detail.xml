@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/detail_background"
     tools:context=".controller.fragment.ProductDetailFragment">
 
     <ScrollView
@@ -31,9 +30,10 @@
             <TextView
                 android:id="@+id/text_product_name"
                 android:padding="8dp"
-                android:layout_marginStart="24dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:textColor="#ffffff"
+                android:background="@drawable/recycler_layout_detail_title"
                 style="@style/TextAppearance.AppCompat.Title" />
 
             <TextView
@@ -50,7 +50,7 @@
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:textStyle="bold"
                 android:layout_width="match_parent"
-                android:background="@drawable/image_layout"
+                android:background="@drawable/recycler_layout_detail"
                 android:padding="16dp"
                 android:layout_height="wrap_content"/>
         </LinearLayout>
