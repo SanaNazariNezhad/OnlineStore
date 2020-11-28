@@ -20,7 +20,7 @@ public class NetworkParams {
         put("consumer_secret", CONSUMER_SECRET);
     }};
     public static final String RATING_COUNT = "crating_count";
-    public static final String AVERAGE_RATING = "average_rating";
+    public static final String AVERAGE_RATING = "rating";
     public static final String CREATED_AT = "created_at";
     public static final String DESC = "DESC";
     public static final String FIELDS = "fields";
@@ -63,10 +63,10 @@ public class NetworkParams {
         return products;
     }
 
-    public static Map<String, String> getProductsWithParentId(String parentId) {
+    public static Map<String, String> getProductsWithParentId(String parentName) {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
-        products.put("filter[category]",parentId);
+        products.put("filter[category]",parentName);
 
         return products;
     }
