@@ -16,7 +16,7 @@
         android:layout_height="50dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:src="@drawable/ic_image" />
 
     <TextView
         android:id="@+id/text_category"

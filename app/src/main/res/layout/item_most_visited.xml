@@ -24,7 +24,7 @@
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:src="@drawable/ic_launcher_background" />
+            android:src="@drawable/ic_image" />
 
     </androidx.cardview.widget.CardView>
 
