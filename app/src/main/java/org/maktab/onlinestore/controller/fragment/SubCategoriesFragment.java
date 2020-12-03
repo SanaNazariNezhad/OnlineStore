@@ -69,7 +69,7 @@ public class SubCategoriesFragment extends Fragment {
 //                    mSubCategoryList.addAll(categories);
                     setSubCategoryAdapter(categories);
                 } else {
-                    mRepository.fetchProductItemsWithParentIdAsync(mParentName);
+                    mRepository.fetchProductItemsWithParentIdAsync(String.valueOf(mParentId));
                     mProductsLiveData = mRepository.getProductWithParentIdLiveData();
                     setObserverForProduct();
                 }
