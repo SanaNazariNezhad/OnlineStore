@@ -86,19 +86,22 @@ public class HomePageFragment extends Fragment {
         mMostVisitedProductItemsLiveData.observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> products) {
-                setAdapterMostVisited(products);
+                mProductViewModel.setProductListMostVisited(products);
+                setAdapterMostVisited();
             }
         });
         mLatestProductItemsLiveData.observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> products) {
-                setAdapterLatest(products);
+                mProductViewModel.setProductListLatest(products);
+                setAdapterLatest();
             }
         });
         mHighestScoreProductItemsLiveData.observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> products) {
-                setAdapterHighestScore(products);
+                mProductViewModel.setProductListHighestScore(products);
+                setAdapterHighestScore();
             }
         });
     }
@@ -122,8 +125,8 @@ public class HomePageFragment extends Fragment {
                         3));
     }
 
-    private void setAdapterMostVisited(List<Product> products) {
-        mMostVisitedProductAdapter = new MostVisitedProductAdapter(getActivity(),products);
+    private void setAdapterMostVisited() {
+        mMostVisitedProductAdapter = new MostVisitedProductAdapter(this,getActivity(),mProductViewModel);
         mHomePageBinding.recyclerMostVisited.setAdapter(mMostVisitedProductAdapter);
         /*mProductAdapter.setOnBottomReachedListener(new OnBottomReachedListener() {
             @Override
@@ -158,13 +161,13 @@ public class HomePageFragment extends Fragment {
         });*/
     }
 
-    private void setAdapterLatest(List<Product> products) {
-        mLatestProductAdapter = new LatestProductAdapter(getActivity(), products);
+    private void setAdapterLatest() {
+        mLatestProductAdapter = new LatestProductAdapter(this,getActivity(),mProductViewModel);
         mHomePageBinding.recyclerLatest.setAdapter(mLatestProductAdapter);
     }
 
-    private void setAdapterHighestScore(List<Product> products) {
-        mHighestScoreProductAdapter = new HighestScoreProductAdapter(getActivity(), products);
+    private void setAdapterHighestScore() {
+        mHighestScoreProductAdapter = new HighestScoreProductAdapter(this,getActivity(),mProductViewModel);
         mHomePageBinding.recyclerHighestScore.setAdapter(mHighestScoreProductAdapter);
     }
 }

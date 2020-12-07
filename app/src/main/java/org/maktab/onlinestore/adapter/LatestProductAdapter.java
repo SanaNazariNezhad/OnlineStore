@@ -10,60 +10,62 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
+import org.maktab.onlinestore.databinding.ItemHighestScoreBinding;
+import org.maktab.onlinestore.databinding.ItemLatestBinding;
 import org.maktab.onlinestore.view.activity.ProductDetailActivity;
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.data.model.Product;
+import org.maktab.onlinestore.viewmodel.ProductViewModel;
 
 import java.util.List;
 
 public class LatestProductAdapter extends RecyclerView.Adapter<LatestProductAdapter.ProductHolder> {
 
-    private List<Product> mProducts;
-    private Context mContext;
+    private final ProductViewModel mProductViewModel;
+    private final LifecycleOwner mOwner;
     private OnBottomReachedListener mOnBottomReachedListener;
-
-    public List<Product> getProducts() {
-        return mProducts;
-    }
-
-    public void setProducts(List<Product> products) {
-        mProducts = products;
-    }
 
     public void setOnBottomReachedListener(OnBottomReachedListener onBottomReachedListener){
 
         mOnBottomReachedListener = onBottomReachedListener;
     }
 
-    public LatestProductAdapter(Context context, List<Product> products) {
-        mContext = context;
-        mProducts = products;
+    public LatestProductAdapter(LifecycleOwner owner,Context context,ProductViewModel productViewModel) {
+        mOwner = owner;
+        mProductViewModel = productViewModel;
+        mProductViewModel.setContext(context);
     }
 
     @Override
     public int getItemCount() {
-        return mProducts.size();
+        return mProductViewModel.getProductListLatest().size();
     }
 
     @NonNull
     @Override
     public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-        View view = layoutInflater.inflate(R.layout.item_latest,parent,false);
+        LayoutInflater inflater = LayoutInflater.from(mProductViewModel.getApplication());
+        ItemLatestBinding itemLatestBinding = DataBindingUtil.inflate(
+                inflater,
+                R.layout.item_latest,
+                parent,
+                false);
 
-        ProductHolder productHolder = new ProductHolder(view);
+        ProductHolder productHolder = new ProductHolder(itemLatestBinding);
         return productHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
 
-        Product product = mProducts.get(position);
+        Product product = mProductViewModel.getProductListLatest().get(position);
         /*if (position == (mProducts.size() - 1)){
 
             mOnBottomReachedListener.onBottomReached(position);
@@ -74,38 +76,32 @@ public class LatestProductAdapter extends RecyclerView.Adapter<LatestProductAdap
 
     class ProductHolder extends RecyclerView.ViewHolder {
 
-        private ImageView mImageView;
-        private TextView mTextView;
-        private Product mProduct;
+        private final ItemLatestBinding mItemLatestBinding;
 
-        public ProductHolder(@NonNull View itemView) {
-            super(itemView);
-            mImageView = itemView.findViewById(R.id.image_latest);
-            mTextView = itemView.findViewById(R.id.textView_name_latest);
-            mTextView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
-            mTextView.setSingleLine(true);
-            mTextView.setSelected(true);
-            mTextView.setMarqueeRepeatLimit(-1);
+        public ProductHolder(ItemLatestBinding itemLatestBinding) {
+            super(itemLatestBinding.getRoot());
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = ProductDetailActivity.newIntent(mContext,mProduct.getId());
-                    mContext.startActivity(intent);
-                }
-            });
+            mItemLatestBinding = itemLatestBinding;
+
+            mItemLatestBinding.textViewNameLatest.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            mItemLatestBinding.textViewNameLatest.setSingleLine(true);
+            mItemLatestBinding.textViewNameLatest.setSelected(true);
+            mItemLatestBinding.textViewNameLatest.setMarqueeRepeatLimit(-1);
+
+            mItemLatestBinding.setProductViewModel(mProductViewModel);
+            mItemLatestBinding.setLifecycleOwner(mOwner);
 
         }
 
         public void bindProduct(Product product) {
-            mProduct = product;
+            mItemLatestBinding.setProductId(product.getId());
 
-            mTextView.setText(product.getPrice());
+            mItemLatestBinding.textViewNameLatest.setText(product.getPrice());
             Glide.with(itemView)
                     .load(product.getImages().get(0).getSrc())
                     .centerCrop()
                     .placeholder(R.mipmap.ic_launcher)
-                    .into(mImageView);
+                    .into(mItemLatestBinding.imageLatest);
         }
     }
 }
