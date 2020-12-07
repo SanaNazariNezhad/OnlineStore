@@ -3,6 +3,8 @@ package org.maktab.onlinestore.view.activity;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
+import androidx.databinding.ViewDataBinding;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
@@ -11,12 +13,14 @@ import org.maktab.onlinestore.R;
 
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 
+    public ViewDataBinding mBinding;
+
     public abstract Fragment createFragment();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_fragment);
+        mBinding = DataBindingUtil.setContentView(this,R.layout.activity_fragment);
 
         FragmentManager fragmentManager = getSupportFragmentManager();
 

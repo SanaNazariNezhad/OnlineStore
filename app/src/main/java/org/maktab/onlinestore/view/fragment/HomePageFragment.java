@@ -2,13 +2,14 @@ package org.maktab.onlinestore.view.fragment;
 
 import android.os.Bundle;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,27 +20,24 @@ import org.maktab.onlinestore.adapter.HighestScoreProductAdapter;
 import org.maktab.onlinestore.adapter.LatestProductAdapter;
 import org.maktab.onlinestore.adapter.MostVisitedProductAdapter;
 import org.maktab.onlinestore.data.model.Product;
-import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
+import org.maktab.onlinestore.databinding.FragmentHomePageBinding;
+import org.maktab.onlinestore.viewmodel.ProductViewModel;
 
 import java.util.List;
 
 public class HomePageFragment extends Fragment {
-    private RecyclerView mRecyclerViewLatest;
-    private RecyclerView mRecyclerViewHighestScore;
-    private RecyclerView mRecyclerViewMostVisited;
-    private OnlineStoreRepository mRepository;
+
     private HighestScoreProductAdapter mHighestScoreProductAdapter;
     private MostVisitedProductAdapter mMostVisitedProductAdapter;
     private LatestProductAdapter mLatestProductAdapter;
-    private List<Product> mProductList;
+    private ProductViewModel mProductViewModel;
     private LiveData<List<Product>> mMostVisitedProductItemsLiveData;
     private LiveData<List<Product>> mLatestProductItemsLiveData;
     private LiveData<List<Product>> mHighestScoreProductItemsLiveData;
+    private FragmentHomePageBinding mHomePageBinding;
     private int loading = 1;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
-    private LinearLayoutManager mLinearLayoutManager;
 
-    
 
     public HomePageFragment() {
         // Required empty public constructor
@@ -48,7 +46,6 @@ public class HomePageFragment extends Fragment {
     public static HomePageFragment newInstance() {
         HomePageFragment fragment = new HomePageFragment();
         Bundle args = new Bundle();
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,14 +54,32 @@ public class HomePageFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mRepository = new OnlineStoreRepository();
-        mRepository.fetchMostVisitedProductItemsAsync();
-        mRepository.fetchLatestProductItemsAsync();
-        mRepository.fetchHighestScoreProductItemsAsync();
-        mMostVisitedProductItemsLiveData = mRepository.getMostVisitedProductsLiveData();
-        mLatestProductItemsLiveData = mRepository.getLatestProductsLiveData();
-        mHighestScoreProductItemsLiveData = mRepository.getHighestScoreProductsLiveData();
+        getProductsFromProductViewModel();
         setObserver();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+
+        mHomePageBinding = DataBindingUtil.inflate(inflater,
+                R.layout.fragment_home_page,
+                container,
+                false);
+
+        initView();
+        return mHomePageBinding.getRoot();
+    }
+
+    private void getProductsFromProductViewModel() {
+        mProductViewModel = new ViewModelProvider(this).get(ProductViewModel.class);
+        mProductViewModel.getMostVisitedProductItems();
+        mProductViewModel.getLatestProductItems();
+        mProductViewModel.getHighestScoreProductItems();
+        mMostVisitedProductItemsLiveData = mProductViewModel.getLiveDateMostVisitedProducts();
+        mLatestProductItemsLiveData = mProductViewModel.getLiveDateLatestProducts();
+        mHighestScoreProductItemsLiveData = mProductViewModel.getLiveDateHighestScoreProducts();
     }
 
     private void setObserver() {
@@ -88,28 +103,28 @@ public class HomePageFragment extends Fragment {
         });
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home_page, container, false);
-
-        findViews(view);
-        initView();
-        return view;
-    }
-
     private void initView() {
-        mRecyclerViewHighestScore.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false));
-        mRecyclerViewMostVisited
-                .setLayoutManager(mLinearLayoutManager);
-        mRecyclerViewMostVisited.addItemDecoration(new DividerItemDecoration(getContext(), DividerItemDecoration.HORIZONTAL));
-        mRecyclerViewLatest.setLayoutManager(new GridLayoutManager(getContext(),3));
+        mHomePageBinding.recyclerHighestScore
+                .setLayoutManager(new LinearLayoutManager(getContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false));
+
+        mHomePageBinding.recyclerMostVisited
+                .setLayoutManager(new LinearLayoutManager(getContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false));
+        mHomePageBinding.recyclerMostVisited
+                .addItemDecoration(new DividerItemDecoration(getContext(),
+                        DividerItemDecoration.HORIZONTAL));
+
+        mHomePageBinding.recyclerLatest
+                .setLayoutManager(new GridLayoutManager(getContext(),
+                        3));
     }
 
     private void setAdapterMostVisited(List<Product> products) {
         mMostVisitedProductAdapter = new MostVisitedProductAdapter(getActivity(),products);
-        mRecyclerViewMostVisited.setAdapter(mMostVisitedProductAdapter);
+        mHomePageBinding.recyclerMostVisited.setAdapter(mMostVisitedProductAdapter);
         /*mProductAdapter.setOnBottomReachedListener(new OnBottomReachedListener() {
             @Override
             public void onBottomReached(int position) {
@@ -118,8 +133,6 @@ public class HomePageFragment extends Fragment {
                 mRepository.fetchProductItemsAsync(mRepository.getPage());
             }
         });*/
-
-
        /* mRecyclerViewMostVisited.addOnScrollListener(new RecyclerView.OnScrollListener()
         {
             @Override
@@ -147,18 +160,11 @@ public class HomePageFragment extends Fragment {
 
     private void setAdapterLatest(List<Product> products) {
         mLatestProductAdapter = new LatestProductAdapter(getActivity(), products);
-        mRecyclerViewLatest.setAdapter(mLatestProductAdapter);
+        mHomePageBinding.recyclerLatest.setAdapter(mLatestProductAdapter);
     }
 
     private void setAdapterHighestScore(List<Product> products) {
         mHighestScoreProductAdapter = new HighestScoreProductAdapter(getActivity(), products);
-        mRecyclerViewHighestScore.setAdapter(mHighestScoreProductAdapter);
-    }
-
-    private void findViews(View view) {
-        mRecyclerViewLatest = view.findViewById(R.id.recycler_latest);
-        mRecyclerViewHighestScore = view.findViewById(R.id.recycler_highest_score);
-        mRecyclerViewMostVisited = view.findViewById(R.id.recycler_most_visited);
-        mLinearLayoutManager = new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL,false);
+        mHomePageBinding.recyclerHighestScore.setAdapter(mHighestScoreProductAdapter);
     }
 }

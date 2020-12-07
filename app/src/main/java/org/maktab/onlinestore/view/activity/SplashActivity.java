@@ -1,6 +1,7 @@
 package org.maktab.onlinestore.view.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,30 +15,29 @@ import android.widget.RelativeLayout;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.maktab.onlinestore.R;
+import org.maktab.onlinestore.databinding.ActivitySplashBinding;
 
 public class SplashActivity extends AppCompatActivity {
 
+    private ActivitySplashBinding mSplashBinding;
+
     private Context mContext = this;
-    private RelativeLayout mRelativeLayout;
-    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
-        mRelativeLayout = findViewById(R.id.splash_layout);
-        mProgressBar = findViewById(R.id.progressBar);
+        mSplashBinding = DataBindingUtil.setContentView(this,R.layout.activity_splash);
 
         getSupportActionBar().hide();
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                //Write whatever to want to do after delay specified (1 sec)
+                //Write whatever to want to do after delay specified (3 sec)
                 if (!isOnline()) {
-                    mProgressBar.setVisibility(View.GONE);
+                    mSplashBinding.progressBar.setVisibility(View.GONE);
                     Snackbar snackbar = Snackbar
-                            .make(mRelativeLayout,"No Internet Access",Snackbar.LENGTH_INDEFINITE)
+                            .make(mSplashBinding.splashLayout,"No Internet Access",Snackbar.LENGTH_INDEFINITE)
                             .setAction("Retry", new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -56,6 +56,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private boolean isOnline() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        return connectivityManager.getActiveNetworkInfo() != null && connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting();
+        return connectivityManager.getActiveNetworkInfo() != null &&
+                connectivityManager.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 }
