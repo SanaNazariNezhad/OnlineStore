@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import org.maktab.onlinestore.R;
-import org.maktab.onlinestore.controller.activity.SubCategoriesActivity;
+import org.maktab.onlinestore.view.activity.SubCategoriesActivity;
 import org.maktab.onlinestore.data.model.ProductCategory;
 
 import java.util.List;

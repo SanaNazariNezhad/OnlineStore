@@ -1,4 +1,4 @@
-package org.maktab.onlinestore.controller.fragment;
+package org.maktab.onlinestore.view.fragment;
 
 import android.os.Bundle;
 

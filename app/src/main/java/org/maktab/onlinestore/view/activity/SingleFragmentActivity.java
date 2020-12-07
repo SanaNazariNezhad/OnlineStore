@@ -1,4 +1,4 @@
-package org.maktab.onlinestore.controller.activity;
+package org.maktab.onlinestore.view.activity;
 
 import android.os.Bundle;
 

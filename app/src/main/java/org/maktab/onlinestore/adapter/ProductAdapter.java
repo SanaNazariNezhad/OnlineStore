@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import org.maktab.onlinestore.R;
-import org.maktab.onlinestore.controller.activity.ProductDetailActivity;
+import org.maktab.onlinestore.view.activity.ProductDetailActivity;
 import org.maktab.onlinestore.data.model.Product;
 
 import java.util.List;

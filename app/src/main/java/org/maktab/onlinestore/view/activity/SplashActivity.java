@@ -1,4 +1,4 @@
-package org.maktab.onlinestore.controller.activity;
+package org.maktab.onlinestore.view.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,7 +14,6 @@ import android.widget.RelativeLayout;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.maktab.onlinestore.R;
-import org.maktab.onlinestore.controller.activity.HomeActivity;
 
 public class SplashActivity extends AppCompatActivity {
 

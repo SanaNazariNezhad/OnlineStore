@@ -1,11 +1,11 @@
-package org.maktab.onlinestore.controller.activity;
+package org.maktab.onlinestore.view.activity;
 
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
 
-import org.maktab.onlinestore.controller.fragment.ProductDetailFragment;
+import org.maktab.onlinestore.view.fragment.ProductDetailFragment;
 
 public class ProductDetailActivity extends SingleFragmentActivity {
 
