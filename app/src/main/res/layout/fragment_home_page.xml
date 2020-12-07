@@ -1,90 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:background="@drawable/recycler_background"
-    android:gravity="center"
-    android:orientation="vertical"
-    tools:context=".view.fragment.HomePageFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
 
-    <ScrollView
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@drawable/recycler_background"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:context=".view.fragment.HomePageFragment">
 
-        <LinearLayout
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/textView_highest_score_product"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:padding="4dp"
-                android:text="@string/the_highest_score_products"
-                android:textColor="@color/black" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_highest_score"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="62dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="62dp"/>
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/recycler_layout_second"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView_latest_product"
+                    android:id="@+id/textView_highest_score_product"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:padding="8dp"
-                    android:text="@string/the_latest_products"
+                    android:padding="4dp"
+                    android:text="@string/the_highest_score_products"
                     android:textColor="@color/black" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_latest"
+                    android:id="@+id/recycler_highest_score"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="8dp" />
+                    android:layout_marginStart="62dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="62dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/recycler_layout_second"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView_latest_product"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:padding="8dp"
+                        android:text="@string/the_latest_products"
+                        android:textColor="@color/black" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_latest"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="8dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/textView_most_visited_product"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:padding="8dp"
+                        android:textColor="@color/black"
+                        android:text="@string/the_most_visited_products" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_most_visited"
+                        android:layout_width="match_parent"
+                        android:layout_marginEnd="24dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginBottom="36dp"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
             </LinearLayout>
+        </ScrollView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView_most_visited_product"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:padding="8dp"
-                android:textColor="@color/black"
-                android:text="@string/the_most_visited_products" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_most_visited"
-                android:layout_width="match_parent"
-                android:layout_marginEnd="24dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="36dp"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
-
-</LinearLayout>
+    </LinearLayout>
+</layout>

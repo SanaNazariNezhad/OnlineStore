@@ -39,7 +39,7 @@ public class HomePageFragment extends Fragment {
     int pastVisiblesItems, visibleItemCount, totalItemCount;
     private LinearLayoutManager mLinearLayoutManager;
 
-
+    
 
     public HomePageFragment() {
         // Required empty public constructor
