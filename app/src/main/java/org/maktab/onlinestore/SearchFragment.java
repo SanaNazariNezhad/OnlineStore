@@ -2,6 +2,7 @@ package org.maktab.onlinestore;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -10,8 +11,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 
 import org.maktab.onlinestore.adapter.MostVisitedProductAdapter;
 import org.maktab.onlinestore.adapter.SearchProductAdapter;
@@ -47,22 +52,13 @@ public class SearchFragment extends Fragment {
         if (getArguments() != null){
             mQuery = getArguments().getString(SEARCH_QUERY);
         }
+        setHasOptionsMenu(true);
 
         mProductViewModel = new ViewModelProvider(this).get(ProductViewModel.class);
         mProductViewModel.fetchSearchItemsAsync(mQuery);
         mProductViewModel.setQueryInPreferences(mQuery);
         mLiveDataSearchProducts = mProductViewModel.getSearchItemsLiveData();
         observers();
-    }
-
-    private void observers() {
-        mLiveDataSearchProducts.observe(this, new Observer<List<Product>>() {
-            @Override
-            public void onChanged(List<Product> productList) {
-                mProductViewModel.setSearchProduct(productList);
-                setSearchAdapter();
-            }
-        });
     }
 
     @Override
@@ -77,6 +73,52 @@ public class SearchFragment extends Fragment {
         initView();
 
         return mFragmentSearchBinding.getRoot();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.home, menu);
+
+        MenuItem searchMenuItem = menu.findItem(R.id.menu_item_search);
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        setSearchViewListeners(searchView);
+    }
+
+    private void setSearchViewListeners(SearchView searchView) {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                mProductViewModel.fetchSearchItemsAsync(query);
+                mProductViewModel.setQueryInPreferences(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String query = mProductViewModel.getQueryFromPreferences();
+                if (query != null)
+                    searchView.setQuery(query, false);
+            }
+        });
+    }
+
+    private void observers() {
+        mLiveDataSearchProducts.observe(this, new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> productList) {
+                mProductViewModel.setSearchProduct(productList);
+                setSearchAdapter();
+            }
+        });
     }
 
     private void setSearchAdapter() {
