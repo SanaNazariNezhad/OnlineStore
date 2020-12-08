@@ -22,6 +22,7 @@ import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.SearchProductAdapter;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.FragmentSearchBinding;
+import org.maktab.onlinestore.view.BottomSheet;
 import org.maktab.onlinestore.viewmodel.ProductViewModel;
 
 import java.util.List;
@@ -79,11 +80,24 @@ public class SearchFragment extends Fragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        inflater.inflate(R.menu.home, menu);
+        inflater.inflate(R.menu.search, menu);
 
         MenuItem searchMenuItem = menu.findItem(R.id.menu_item_search);
         SearchView searchView = (SearchView) searchMenuItem.getActionView();
         setSearchViewListeners(searchView);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.filter_id:
+                BottomSheet bottomSheet = new BottomSheet();
+                bottomSheet.show(getActivity().getSupportFragmentManager(),bottomSheet.getTag());
+                return true;
+            default :
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
     private void setSearchViewListeners(SearchView searchView) {
