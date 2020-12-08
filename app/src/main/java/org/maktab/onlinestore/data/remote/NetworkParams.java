@@ -28,6 +28,7 @@ public class NetworkParams {
         put("consumer_key", CONSUMER_KEY);
         put("consumer_secret", CONSUMER_SECRET);
     }};
+    public static final String SEARCH = "search";
 
     public static Map<String, String> getMostVisitedProducts() {
         Map<String, String> products = new HashMap<>();
@@ -84,6 +85,14 @@ public class NetworkParams {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
         products.put(PARENT_OF_CATEGORY, parentId);
+
+        return products;
+    }
+
+    public static Map<String, String> getSearchProducts(String query) {
+        Map<String, String> products = new HashMap<>();
+        products.putAll(BASE_OPTIONS);
+        products.put(SEARCH, query);
 
         return products;
     }

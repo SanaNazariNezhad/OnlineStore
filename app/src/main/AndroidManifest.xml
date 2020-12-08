@@ -3,7 +3,7 @@
     package="org.maktab.onlinestore">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OnlineStore">
+        <activity android:name=".SearchActivity"></activity>
         <activity android:name=".view.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,9 +25,7 @@
         <activity
             android:name=".view.activity.HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/Theme.OnlineStore.NoActionBar">
-
-        </activity>
+            android:theme="@style/Theme.OnlineStore.NoActionBar"></activity>
     </application>
 
 </manifest>

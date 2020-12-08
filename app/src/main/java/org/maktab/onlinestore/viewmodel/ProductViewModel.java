@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import org.maktab.onlinestore.data.model.Images;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
+import org.maktab.onlinestore.utilities.QueryPreferences;
 import org.maktab.onlinestore.view.activity.ProductDetailActivity;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public class ProductViewModel extends AndroidViewModel {
     private List<Product> mProductListMostVisited;
     private List<Product> mProductListLatest;
     private List<Product> mProductListHighestScore;
+    private List<Product> mProductList;
+    private List<Product> mSearchProduct;
     private Context mContext;
     private Product mDetailedProduct;
 
@@ -27,6 +30,15 @@ public class ProductViewModel extends AndroidViewModel {
     public ProductViewModel(@NonNull Application application) {
         super(application);
         mRepository = new OnlineStoreRepository();
+
+    }
+
+    public List<Product> getSearchProduct() {
+        return mSearchProduct;
+    }
+
+    public void setSearchProduct(List<Product> searchProduct) {
+        mSearchProduct = searchProduct;
     }
 
     public List<Product> getProductListMostVisited() {
@@ -51,6 +63,14 @@ public class ProductViewModel extends AndroidViewModel {
 
     public void setProductListHighestScore(List<Product> productListHighestScore) {
         mProductListHighestScore = productListHighestScore;
+    }
+
+    public List<Product> getProductList() {
+        return mProductList;
+    }
+
+    public void setProductList(List<Product> productList) {
+        mProductList = productList;
     }
 
     public void setContext(Context context) {
@@ -97,7 +117,23 @@ public class ProductViewModel extends AndroidViewModel {
         return mRepository.getHighestScoreProductsLiveData();
     }
 
+    public LiveData<List<Product>> getSearchItemsLiveData() {
+        return mRepository.getSearchProductsLiveData();
+    }
+
     public void onClickListItem(int productId) {
         mContext.startActivity(ProductDetailActivity.newIntent(mContext,productId));
+    }
+
+    public void fetchSearchItemsAsync(String query) {
+        mRepository.fetchSearchItemsAsync(query);
+    }
+
+    public void setQueryInPreferences(String query) {
+        QueryPreferences.setSearchQuery(getApplication(), query);
+    }
+
+    public String getQueryFromPreferences() {
+        return QueryPreferences.getSearchQuery(getApplication());
     }
 }
