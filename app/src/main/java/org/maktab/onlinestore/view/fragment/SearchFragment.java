@@ -1,4 +1,4 @@
-package org.maktab.onlinestore;
+package org.maktab.onlinestore.view.fragment;
 
 import android.os.Bundle;
 
@@ -18,7 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 
-import org.maktab.onlinestore.adapter.MostVisitedProductAdapter;
+import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.SearchProductAdapter;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.FragmentSearchBinding;

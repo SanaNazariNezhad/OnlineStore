@@ -1,6 +1,5 @@
 package org.maktab.onlinestore.view.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,7 +21,7 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 
 import org.maktab.onlinestore.R;
-import org.maktab.onlinestore.SearchActivity;
+import org.maktab.onlinestore.view.activity.SearchActivity;
 import org.maktab.onlinestore.adapter.HighestScoreProductAdapter;
 import org.maktab.onlinestore.adapter.LatestProductAdapter;
 import org.maktab.onlinestore.adapter.MostVisitedProductAdapter;
