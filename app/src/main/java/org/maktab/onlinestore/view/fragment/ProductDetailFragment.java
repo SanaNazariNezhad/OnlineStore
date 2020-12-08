@@ -15,12 +15,9 @@ import android.view.ViewGroup;
 
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.ProductDetailAdapter;
-import org.maktab.onlinestore.data.model.Images;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.FragmentProductDetailBinding;
 import org.maktab.onlinestore.viewmodel.ProductViewModel;
-
-import java.util.List;
 
 public class ProductDetailFragment extends Fragment {
 
@@ -28,7 +25,6 @@ public class ProductDetailFragment extends Fragment {
     private ProductViewModel mProductViewModel;
     private LiveData<Product> mProductLiveData;
     private FragmentProductDetailBinding mProductDetailBinding;
-    private Product mProduct;
 
     public static final String BUNDLE_KEY_PRODUCT_ID = "bundle_key_product_id";
     private int mProductId;
@@ -72,26 +68,25 @@ public class ProductDetailFragment extends Fragment {
         mProductLiveData.observe(this, new Observer<Product>() {
             @Override
             public void onChanged(Product product) {
-                mProduct = product;
-                List<Images> imagesList = product.getImages();
-                setAdapterProductDetail(imagesList);
-                mProductDetailBinding.textProductName.setText(mProduct.getTitle());
-                String detail = mProduct.getShort_description() + "\n" + mProduct.getDescription()
-                        + "\n" + " Average Rating: \t " + mProduct.getAverage_rating() + "\n\n"
-                        + " Price: \t" + mProduct.getPrice() + "\n\n";
+                mProductViewModel.setDetailedProduct(product);
+                setAdapterProductDetail();
+                mProductDetailBinding.textProductName.setText(product.getTitle());
+                String detail = product.getShort_description() + "\n" + product.getDescription()
+                        + "\n" + " Average Rating: \t " + product.getAverage_rating() + "\n\n"
+                        + " Price: \t" + product.getPrice() + "\n\n";
                 mProductDetailBinding.textViewProductDetail.setText(detail);
             }
         });
     }
 
-    private void setAdapterProductDetail(List<Images> imagesList) {
-        mDetailAdapter = new ProductDetailAdapter(imagesList, getActivity());
+    private void setAdapterProductDetail() {
+        mDetailAdapter = new ProductDetailAdapter(this,mProductViewModel);
         mProductDetailBinding.recyclerProductDetail.setAdapter(mDetailAdapter);
     }
 
     private void getProductFromProductViewModel() {
         mProductViewModel = new ViewModelProvider(this).get(ProductViewModel.class);
-        mProductViewModel.getProductItems(mProductId);
+        mProductViewModel.fetchProductItems(mProductId);
         mProductLiveData = mProductViewModel.getLiveDateProduct();
     }
 

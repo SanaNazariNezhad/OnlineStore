@@ -1,81 +1,76 @@
 package org.maktab.onlinestore.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.data.model.Images;
+import org.maktab.onlinestore.databinding.ItemHighestScoreBinding;
+import org.maktab.onlinestore.viewmodel.ProductViewModel;
 
-import java.util.List;
 
 public class ProductDetailAdapter extends RecyclerView.Adapter<ProductDetailAdapter.ProductHolder> {
 
-    private List<Images> mImages;
-    private Context mContext;
+    private final ProductViewModel mProductViewModel;
+    private final LifecycleOwner mOwner;
 
-    public List<Images> getImages() {
-        return mImages;
-    }
-
-    public void setImages(List<Images> images) {
-        mImages = images;
-    }
-
-    public ProductDetailAdapter(List<Images> images, Context context) {
-        mImages = images;
-        mContext = context;
+    public ProductDetailAdapter(LifecycleOwner owner,ProductViewModel productViewModel) {
+        mOwner = owner;
+        mProductViewModel = productViewModel;
     }
 
     @Override
     public int getItemCount() {
-        return mImages.size();
+        return mProductViewModel.getDetailedProduct().getImages().size();
     }
 
     @NonNull
     @Override
     public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        LayoutInflater layoutInflater = LayoutInflater.from(mContext);
-        View view = layoutInflater.inflate(R.layout.item_highest_score,parent,false);
+        LayoutInflater inflater = LayoutInflater.from(mProductViewModel.getApplication());
+        ItemHighestScoreBinding highestScoreBinding = DataBindingUtil.inflate(
+                inflater,
+                R.layout.item_highest_score,
+                parent,
+                false);
 
-        ProductHolder productHolder = new ProductHolder(view);
+        ProductHolder productHolder = new ProductHolder(highestScoreBinding);
         return productHolder;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
 
-        Images images = mImages.get(position);
+        Images images = mProductViewModel.getDetailedProduct().getImages().get(position);
         holder.bindProduct(images);
     }
 
     class ProductHolder extends RecyclerView.ViewHolder {
 
-        private ImageView mImageView;
-        private Images mImage;
+        private final ItemHighestScoreBinding mItemHighestScoreBinding;
 
-        public ProductHolder(@NonNull View itemView) {
-            super(itemView);
-            mImageView = itemView.findViewById(R.id.image_highest_score);
+        public ProductHolder(ItemHighestScoreBinding itemHighestScoreBinding) {
+            super(itemHighestScoreBinding.getRoot());
 
+            mItemHighestScoreBinding = itemHighestScoreBinding;
+            mItemHighestScoreBinding.setLifecycleOwner(mOwner);
         }
 
         public void bindProduct(Images image) {
-            mImage = image;
 
             Glide.with(itemView)
                     .load(image.getSrc())
                     .centerCrop()
                     .placeholder(R.mipmap.ic_launcher)
-                    .into(mImageView);
+                    .into(mItemHighestScoreBinding.imageHighestScore);
         }
     }
 }

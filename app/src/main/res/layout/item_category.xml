@@ -5,6 +5,18 @@
 
     <data>
 
+        <variable
+            name="categoryViewModel"
+            type="org.maktab.onlinestore.viewmodel.CategoryViewModel" />
+
+        <variable
+            name="parentId"
+            type="Integer" />
+
+        <variable
+            name="state"
+            type="String" />
+
     </data>
 
     <RelativeLayout
@@ -12,7 +24,8 @@
         android:background="@drawable/recycler_layout"
         android:padding="16dp"
         android:layout_margin="8dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> categoryViewModel.onClickListItem(parentId,state)}">
 
 
         <ImageView

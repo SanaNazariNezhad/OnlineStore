@@ -69,7 +69,7 @@ public class SubCategoriesFragment extends Fragment {
 
     private void getSubCategoryFromCategoryViewModel() {
         mCategoryViewModel = new ViewModelProvider(this).get(CategoryViewModel.class);
-        mCategoryViewModel.getSubCategoryItems(String.valueOf(mParentId));
+        mCategoryViewModel.fetchSubCategoryItems(String.valueOf(mParentId));
         mCategoryItemsLiveData = mCategoryViewModel.getLiveDataCategoryItems();
     }
 
@@ -78,9 +78,10 @@ public class SubCategoriesFragment extends Fragment {
             @Override
             public void onChanged(List<ProductCategory> categories) {
                 if (categories.size() != 0) {
-                    setSubCategoryAdapter(categories);
+                    mCategoryViewModel.setCategoryList(categories);
+                    setSubCategoryAdapter();
                 } else {
-                    mCategoryViewModel.getProductItemsWithParentId(String.valueOf(mParentId));
+                    mCategoryViewModel.fetchProductItemsWithParentId(String.valueOf(mParentId));
                     mProductsLiveData = mCategoryViewModel.getLiveDataProductWithParentId();
                     setObserverForProduct();
                 }
@@ -88,8 +89,8 @@ public class SubCategoriesFragment extends Fragment {
         });
     }
 
-    private void setSubCategoryAdapter(List<ProductCategory> categories) {
-        mCategoryAdapter = new SubCategoryAdapter(getActivity(), categories);
+    private void setSubCategoryAdapter() {
+        mCategoryAdapter = new SubCategoryAdapter(this,getActivity(),mCategoryViewModel);
         mSubCategoriesBinding.recyclerSubCategory.setAdapter(mCategoryAdapter);
     }
 
@@ -97,15 +98,15 @@ public class SubCategoriesFragment extends Fragment {
         mProductsLiveData.observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> productList) {
-
-                setProductAdapter(productList);
+                mCategoryViewModel.setProductList(productList);
+                setProductAdapter();
 
             }
         });
     }
 
-    private void setProductAdapter(List<Product> productList) {
-        mProductAdapter = new ProductAdapter(productList, getActivity());
+    private void setProductAdapter() {
+        mProductAdapter = new ProductAdapter(this,getActivity(),mCategoryViewModel);
         mSubCategoriesBinding.recyclerSubCategory.setAdapter(mProductAdapter);
     }
 
@@ -113,5 +114,4 @@ public class SubCategoriesFragment extends Fragment {
         mSubCategoriesBinding.recyclerSubCategory
                 .setLayoutManager(new LinearLayoutManager(getContext()));
     }
-
 }
