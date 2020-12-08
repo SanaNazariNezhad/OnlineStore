@@ -96,7 +96,6 @@ public class SearchFragment extends Fragment {
                 return true;
             default :
                 return super.onOptionsItemSelected(item);
-
         }
     }
 
