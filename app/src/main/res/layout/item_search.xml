@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="productViewModel"
-            type="org.maktab.onlinestore.viewmodel.ProductViewModel" />
+            name="searchViewModel"
+            type="org.maktab.onlinestore.viewmodel.SearchViewModel" />
 
         <variable
             name="productId"
@@ -21,7 +21,7 @@
         android:padding="16dp"
         android:layout_margin="8dp"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> productViewModel.onClickListItem(productId)}">
+        android:onClick="@{() -> searchViewModel.onClickListItem(productId)}">
 
 
         <ImageView

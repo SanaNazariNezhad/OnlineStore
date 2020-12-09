@@ -63,7 +63,7 @@
 
 
                     <RelativeLayout
-                        android:id="@+id/profileLayout"
+                        android:id="@+id/layout_sort_sellers"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -87,12 +87,13 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="15dp"
                             android:layout_alignParentStart="true"
-                            android:text="The best sellers"
+                            android:text="The top sellers"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/layout_sort_high_to_low"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -122,6 +123,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/layout_sort_low_to_high"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -151,6 +153,7 @@
                     </RelativeLayout>
 
                     <RelativeLayout
+                        android:id="@+id/layout_newest"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"

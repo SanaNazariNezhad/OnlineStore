@@ -1,35 +1,38 @@
 package org.maktab.onlinestore.view;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.maktab.onlinestore.R;
-import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
-import org.maktab.onlinestore.databinding.LayoutBottomSheetFilterBinding;
 import org.maktab.onlinestore.databinding.LayoutBottomSheetSortBinding;
+import org.maktab.onlinestore.viewmodel.SearchViewModel;
 
 public class BottomSheetSort extends BottomSheetDialogFragment {
 
 
+    public static final String EXTRA_SORT_ID = "extra_sort_id";
     BottomSheetBehavior bottomSheetBehavior;
-    LayoutBottomSheetSortBinding bi;
-    public static final int THE_BEST_SELLERS = 0;
+    public static final int THE_NEWEST = 0;
     public static final int PRICES_HIGH_TO_LOW = 1;
     public static final int PRICES_LOW_TO_HIGH = 2;
-    public static final int THE_NEWEST = 3;
-    private OnlineStoreRepository mRepository;
+    public static final int TOP_SELLERS = 3;
+    private SearchViewModel mSearchViewModel;
+    private LayoutBottomSheetSortBinding mBottomSheetSortBinding;
 
 
     @Override
@@ -40,7 +43,7 @@ public class BottomSheetSort extends BottomSheetDialogFragment {
         View view = View.inflate(getContext(), R.layout.layout_bottom_sheet_sort, null);
 
         //binding views to data binding.
-        bi = DataBindingUtil.bind(view);
+        mBottomSheetSortBinding = DataBindingUtil.bind(view);
 
         //setting layout with bottom sheet
         bottomSheet.setContentView(view);
@@ -53,20 +56,20 @@ public class BottomSheetSort extends BottomSheetDialogFragment {
 
 
         //setting max height of bottom sheet
-        bi.extraSpace.setMinimumHeight((Resources.getSystem().getDisplayMetrics().heightPixels) / 2);
+        mBottomSheetSortBinding.extraSpace.setMinimumHeight((Resources.getSystem().getDisplayMetrics().heightPixels) / 2);
 
 
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View view, int i) {
                 if (BottomSheetBehavior.STATE_EXPANDED == i) {
-                    showView(bi.appBarLayout, getActionBarSize());
-                    hideAppBar(bi.profileLayout);
+                    showView(mBottomSheetSortBinding.appBarLayout, getActionBarSize());
+                    hideAppBar(mBottomSheetSortBinding.layoutSortSellers);
 
                 }
                 if (BottomSheetBehavior.STATE_COLLAPSED == i) {
-                    hideAppBar(bi.appBarLayout);
-                    showView(bi.profileLayout, getActionBarSize());
+                    hideAppBar(mBottomSheetSortBinding.appBarLayout);
+                    showView(mBottomSheetSortBinding.layoutSortSellers, getActionBarSize());
                 }
 
                 if (BottomSheetBehavior.STATE_HIDDEN == i) {
@@ -82,7 +85,7 @@ public class BottomSheetSort extends BottomSheetDialogFragment {
         });
 
         //aap bar cancel button clicked
-        bi.cancelBtn.setOnClickListener(new View.OnClickListener() {
+        mBottomSheetSortBinding.cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -91,38 +94,43 @@ public class BottomSheetSort extends BottomSheetDialogFragment {
         });
 
         //hiding app bar at the start
-        hideAppBar(bi.appBarLayout);
+        hideAppBar(mBottomSheetSortBinding.appBarLayout);
 
-        mRepository = new OnlineStoreRepository();
+        mSearchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
 
-        bi.tvBestSellers.setOnClickListener(new View.OnClickListener() {
+        mBottomSheetSortBinding.layoutSortSellers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mRepository.setSort(THE_BEST_SELLERS);
+                mSearchViewModel.setSort(TOP_SELLERS);
                 checkVisibility();
+                sendResult(TOP_SELLERS);
             }
         });
 
-        bi.tvPriceHighToLow.setOnClickListener(new View.OnClickListener() {
+        mBottomSheetSortBinding.layoutSortHighToLow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mRepository.setSort(PRICES_HIGH_TO_LOW);
+                mSearchViewModel.setSort(PRICES_HIGH_TO_LOW);
                 checkVisibility();
+                sendResult(PRICES_HIGH_TO_LOW);
             }
         });
 
-        bi.tvPriceLowToHigh.setOnClickListener(new View.OnClickListener() {
+        mBottomSheetSortBinding.layoutSortLowToHigh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mRepository.setSort(PRICES_LOW_TO_HIGH);
+                mSearchViewModel.setSort(PRICES_LOW_TO_HIGH);
                 checkVisibility();
+                sendResult(PRICES_LOW_TO_HIGH);
             }
         });
-        bi.tvNewest.setOnClickListener(new View.OnClickListener() {
+
+        mBottomSheetSortBinding.layoutNewest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mRepository.setSort(THE_NEWEST);
+                mSearchViewModel.setSort(THE_NEWEST);
                 checkVisibility();
+                sendResult(THE_NEWEST);
             }
         });
 
@@ -133,26 +141,26 @@ public class BottomSheetSort extends BottomSheetDialogFragment {
     }
 
     private void checkVisibility() {
-        if (mRepository.getSort() == THE_BEST_SELLERS){
-            bi.ivBestSellers.setVisibility(View.VISIBLE);
-            bi.ivPriceHighToLow.setVisibility(View.GONE);
-            bi.ivPriceLowToHigh.setVisibility(View.GONE);
-            bi.ivNewest.setVisibility(View.GONE);
-        }else if (mRepository.getSort() == PRICES_HIGH_TO_LOW){
-            bi.ivBestSellers.setVisibility(View.GONE);
-            bi.ivPriceHighToLow.setVisibility(View.VISIBLE);
-            bi.ivPriceLowToHigh.setVisibility(View.GONE);
-            bi.ivNewest.setVisibility(View.GONE);
-        }else if (mRepository.getSort() == PRICES_LOW_TO_HIGH){
-            bi.ivBestSellers.setVisibility(View.GONE);
-            bi.ivPriceHighToLow.setVisibility(View.GONE);
-            bi.ivPriceLowToHigh.setVisibility(View.VISIBLE);
-            bi.ivNewest.setVisibility(View.GONE);
-        }else if (mRepository.getSort() == THE_NEWEST){
-            bi.ivBestSellers.setVisibility(View.GONE);
-            bi.ivPriceHighToLow.setVisibility(View.GONE);
-            bi.ivPriceLowToHigh.setVisibility(View.GONE);
-            bi.ivNewest.setVisibility(View.VISIBLE);
+        if (mSearchViewModel.getSort() == TOP_SELLERS){
+            mBottomSheetSortBinding.ivBestSellers.setVisibility(View.VISIBLE);
+            mBottomSheetSortBinding.ivPriceHighToLow.setVisibility(View.GONE);
+            mBottomSheetSortBinding.ivPriceLowToHigh.setVisibility(View.GONE);
+            mBottomSheetSortBinding.ivNewest.setVisibility(View.GONE);
+        }else if (mSearchViewModel.getSort() == PRICES_HIGH_TO_LOW){
+            mBottomSheetSortBinding.ivBestSellers.setVisibility(View.GONE);
+            mBottomSheetSortBinding.ivPriceHighToLow.setVisibility(View.VISIBLE);
+            mBottomSheetSortBinding.ivPriceLowToHigh.setVisibility(View.GONE);
+            mBottomSheetSortBinding.ivNewest.setVisibility(View.GONE);
+        }else if (mSearchViewModel.getSort() == PRICES_LOW_TO_HIGH){
+            mBottomSheetSortBinding.ivBestSellers.setVisibility(View.GONE);
+            mBottomSheetSortBinding.ivPriceHighToLow.setVisibility(View.GONE);
+            mBottomSheetSortBinding.ivPriceLowToHigh.setVisibility(View.VISIBLE);
+            mBottomSheetSortBinding.ivNewest.setVisibility(View.GONE);
+        }else if (mSearchViewModel.getSort() == THE_NEWEST){
+            mBottomSheetSortBinding.ivBestSellers.setVisibility(View.GONE);
+            mBottomSheetSortBinding.ivPriceHighToLow.setVisibility(View.GONE);
+            mBottomSheetSortBinding.ivPriceLowToHigh.setVisibility(View.GONE);
+            mBottomSheetSortBinding.ivNewest.setVisibility(View.VISIBLE);
         }
     }
 
@@ -180,5 +188,15 @@ public class BottomSheetSort extends BottomSheetDialogFragment {
         final TypedArray array = getContext().getTheme().obtainStyledAttributes(new int[]{android.R.attr.actionBarSize});
         int size = (int) array.getDimension(0, 0);
         return size;
+    }
+
+    private void sendResult(int sortId) {
+        Fragment fragment = getTargetFragment();
+        int requestCode = getTargetRequestCode();
+        int resultCode = Activity.RESULT_OK;
+        Intent intent = new Intent();
+        intent.putExtra(EXTRA_SORT_ID, sortId);
+
+        fragment.onActivityResult(requestCode, resultCode, intent);
     }
 }

@@ -13,31 +13,29 @@ import com.bumptech.glide.Glide;
 
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.data.model.Product;
-import org.maktab.onlinestore.databinding.ItemCategoryBinding;
 import org.maktab.onlinestore.databinding.ItemSearchBinding;
-import org.maktab.onlinestore.viewmodel.CategoryViewModel;
-import org.maktab.onlinestore.viewmodel.ProductViewModel;
+import org.maktab.onlinestore.viewmodel.SearchViewModel;
 
 public class SearchProductAdapter extends RecyclerView.Adapter<SearchProductAdapter.ProductHolder> {
 
-    private final ProductViewModel mProductViewModel;
+    private final SearchViewModel mSearchViewModel;
     private final LifecycleOwner mOwner;
 
-    public SearchProductAdapter(LifecycleOwner owner, Context context, ProductViewModel productViewModel) {
+    public SearchProductAdapter(LifecycleOwner owner, Context context, SearchViewModel searchViewModel) {
         mOwner = owner;
-        mProductViewModel = productViewModel;
-        mProductViewModel.setContext(context);
+        mSearchViewModel = searchViewModel;
+        mSearchViewModel.setContext(context);
     }
     @Override
     public int getItemCount() {
-        return mProductViewModel.getSearchProduct().size();
+        return mSearchViewModel.getSearchProduct().size();
     }
 
     @NonNull
     @Override
     public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        LayoutInflater inflater = LayoutInflater.from(mProductViewModel.getApplication());
+        LayoutInflater inflater = LayoutInflater.from(mSearchViewModel.getApplication());
         ItemSearchBinding itemSearchBinding = DataBindingUtil.inflate(
                 inflater,
                 R.layout.item_search,
@@ -51,7 +49,7 @@ public class SearchProductAdapter extends RecyclerView.Adapter<SearchProductAdap
     @Override
     public void onBindViewHolder(@NonNull ProductHolder holder, int position) {
 
-        Product product = mProductViewModel.getSearchProduct().get(position);
+        Product product = mSearchViewModel.getSearchProduct().get(position);
         holder.bindProduct(product);
     }
 
@@ -62,7 +60,7 @@ public class SearchProductAdapter extends RecyclerView.Adapter<SearchProductAdap
         public ProductHolder(ItemSearchBinding itemSearchBinding) {
             super(itemSearchBinding.getRoot());
             mItemSearchBinding = itemSearchBinding;
-            mItemSearchBinding.setProductViewModel(mProductViewModel);
+            mItemSearchBinding.setSearchViewModel(mSearchViewModel);
             mItemSearchBinding.setLifecycleOwner(mOwner);
 
 
