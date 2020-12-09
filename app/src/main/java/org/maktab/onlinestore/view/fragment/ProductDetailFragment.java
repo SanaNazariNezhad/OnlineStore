@@ -12,17 +12,22 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import org.maktab.onlinestore.data.model.Cart;
+import org.maktab.onlinestore.view.activity.CartActivity;
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.ProductDetailAdapter;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.FragmentProductDetailBinding;
+import org.maktab.onlinestore.viewmodel.CartViewModel;
 import org.maktab.onlinestore.viewmodel.ProductViewModel;
 
 public class ProductDetailFragment extends Fragment {
 
     private ProductDetailAdapter mDetailAdapter;
     private ProductViewModel mProductViewModel;
+    private CartViewModel mCartViewModel;
     private LiveData<Product> mProductLiveData;
     private FragmentProductDetailBinding mProductDetailBinding;
 
@@ -47,6 +52,7 @@ public class ProductDetailFragment extends Fragment {
         if (getArguments() != null) {
             mProductId = getArguments().getInt(BUNDLE_KEY_PRODUCT_ID);
         }
+        mCartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
         getProductFromProductViewModel();
         setObserver();
     }
@@ -61,7 +67,20 @@ public class ProductDetailFragment extends Fragment {
                 false);
 
         initView();
+        listeners();
         return mProductDetailBinding.getRoot();
+    }
+
+    private void listeners() {
+        mProductDetailBinding.imageViewCart
+                .setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+//                        startActivity(CartActivity.newIntent(getActivity()));
+                        mCartViewModel.insertToCart(new Cart(mProductId));
+                        Toast.makeText(getActivity(),"add to cart",Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     private void setObserver() {
@@ -72,9 +91,10 @@ public class ProductDetailFragment extends Fragment {
                 setAdapterProductDetail();
                 mProductDetailBinding.textProductName.setText(product.getTitle());
                 String detail = product.getShort_description() + "\n" + product.getDescription()
-                        + "\n" + " Average Rating: \t " + product.getAverage_rating() + "\n\n"
-                        + " Price: \t" + product.getPrice() + "\n\n";
+                        + "\n" + " Average Rating: \t " + product.getAverage_rating() + "\n\n";
                 mProductDetailBinding.textViewProductDetail.setText(detail);
+
+                mProductDetailBinding.textViewPrice.setText(product.getPrice());
             }
         });
     }
