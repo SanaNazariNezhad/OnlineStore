@@ -53,12 +53,12 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
             public void onStateChanged(@NonNull View view, int i) {
                 if (BottomSheetBehavior.STATE_EXPANDED == i) {
                     showView(bi.appBarLayout, getActionBarSize());
-                    hideAppBar(bi.profileLayout);
+                    hideAppBar(bi.colorLayout);
 
                 }
                 if (BottomSheetBehavior.STATE_COLLAPSED == i) {
                     hideAppBar(bi.appBarLayout);
-                    showView(bi.profileLayout, getActionBarSize());
+                    showView(bi.colorLayout, getActionBarSize());
                 }
 
                 if (BottomSheetBehavior.STATE_HIDDEN == i) {
@@ -79,22 +79,6 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
             public void onClick(View view) {
 
                 dismiss();
-            }
-        });
-
-        //aap bar edit button clicked
-        bi.editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getContext(), "Edit button clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        //aap bar more button clicked
-        bi.moreBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getContext(), "More button clicked", Toast.LENGTH_SHORT).show();
             }
         });
 
