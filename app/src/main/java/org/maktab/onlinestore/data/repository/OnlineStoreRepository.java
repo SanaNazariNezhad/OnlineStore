@@ -36,6 +36,15 @@ public class OnlineStoreRepository {
     private MutableLiveData<List<Product>> mSearchProductsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<ProductCategory>> mCategoryItemsLiveData = new MutableLiveData<>();
     private MutableLiveData<Product> mProductLiveData = new MutableLiveData<>();
+    private int mSort;
+
+    public int getSort() {
+        return mSort;
+    }
+
+    public void setSort(int sort) {
+        mSort = sort;
+    }
 
     public MutableLiveData<List<Product>> getSearchProductsLiveData() {
         return mSearchProductsLiveData;

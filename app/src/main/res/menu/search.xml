@@ -10,7 +10,12 @@
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="ifRoom" />
 
-    <item android:title="Item"
+    <item android:title="@string/sort"
+        android:id="@+id/sort_id"
+        android:icon="@drawable/ic_sort"
+        app:showAsAction="ifRoom"/>
+
+    <item android:title="@string/filter"
         android:id="@+id/filter_id"
         android:icon="@drawable/ic_filter"
         app:showAsAction="ifRoom"/>

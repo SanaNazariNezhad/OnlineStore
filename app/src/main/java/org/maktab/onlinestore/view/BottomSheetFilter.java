@@ -16,20 +16,20 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.maktab.onlinestore.R;
-import org.maktab.onlinestore.databinding.LayoutBottomSheetBinding;
+import org.maktab.onlinestore.databinding.LayoutBottomSheetFilterBinding;
 
-public class BottomSheet extends BottomSheetDialogFragment {
+public class BottomSheetFilter extends BottomSheetDialogFragment {
 
 
     BottomSheetBehavior bottomSheetBehavior;
-    LayoutBottomSheetBinding bi;
+    LayoutBottomSheetFilterBinding bi;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         BottomSheetDialog bottomSheet = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
 
         //inflating layout
-        View view = View.inflate(getContext(), R.layout.layout_bottom_sheet, null);
+        View view = View.inflate(getContext(), R.layout.layout_bottom_sheet_filter, null);
 
         //binding views to data binding.
         bi = DataBindingUtil.bind(view);

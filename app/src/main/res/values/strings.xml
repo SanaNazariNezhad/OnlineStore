@@ -18,4 +18,6 @@
     <string name="the_latest_products">The Latest Products:</string>
     <string name="product_features">Product Features:</string>
     <string name="search">Search</string>
+    <string name="sort">Sort</string>
+    <string name="filter">Filter</string>
 </resources>

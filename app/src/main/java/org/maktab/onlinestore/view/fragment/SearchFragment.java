@@ -22,7 +22,8 @@ import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.SearchProductAdapter;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.FragmentSearchBinding;
-import org.maktab.onlinestore.view.BottomSheet;
+import org.maktab.onlinestore.view.BottomSheetFilter;
+import org.maktab.onlinestore.view.BottomSheetSort;
 import org.maktab.onlinestore.viewmodel.ProductViewModel;
 
 import java.util.List;
@@ -91,8 +92,12 @@ public class SearchFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.filter_id:
-                BottomSheet bottomSheet = new BottomSheet();
-                bottomSheet.show(getActivity().getSupportFragmentManager(),bottomSheet.getTag());
+                BottomSheetFilter bottomSheetFilter = new BottomSheetFilter();
+                bottomSheetFilter.show(getActivity().getSupportFragmentManager(), bottomSheetFilter.getTag());
+                return true;
+            case R.id.sort_id:
+                BottomSheetSort bottomSheetSort = new BottomSheetSort();
+                bottomSheetSort.show(getActivity().getSupportFragmentManager(), bottomSheetSort.getTag());
                 return true;
             default :
                 return super.onOptionsItemSelected(item);
