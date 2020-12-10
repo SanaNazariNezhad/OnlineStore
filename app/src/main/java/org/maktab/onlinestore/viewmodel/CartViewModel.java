@@ -2,6 +2,7 @@ package org.maktab.onlinestore.viewmodel;
 
 import android.app.Application;
 import android.content.Context;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -12,6 +13,7 @@ import org.maktab.onlinestore.data.model.Cart;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.repository.CartDBRepository;
 import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
+import org.maktab.onlinestore.view.activity.CartActivity;
 import org.maktab.onlinestore.view.activity.ProductDetailActivity;
 
 import java.util.ArrayList;
@@ -70,5 +72,13 @@ public class CartViewModel extends AndroidViewModel {
 
     public void onClickListItem(int productId) {
         mContext.startActivity(ProductDetailActivity.newIntent(mContext,productId));
+    }
+    public void onClickToGoToCart() {
+        mContext.startActivity(CartActivity.newIntent(getApplication()));
+    }
+
+    public void onClickToBuy(int productId) {
+        insertToCart(new Cart(productId));
+        Toast.makeText(mContext,"add to cart",Toast.LENGTH_SHORT).show();
     }
 }

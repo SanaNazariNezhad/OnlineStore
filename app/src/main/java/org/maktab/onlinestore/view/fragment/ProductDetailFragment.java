@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.maktab.onlinestore.data.model.Cart;
-import org.maktab.onlinestore.view.activity.CartActivity;
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.ProductDetailAdapter;
 import org.maktab.onlinestore.data.model.Product;
@@ -53,6 +52,7 @@ public class ProductDetailFragment extends Fragment {
             mProductId = getArguments().getInt(BUNDLE_KEY_PRODUCT_ID);
         }
         mCartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
+        mCartViewModel.setContext(getActivity());
         getProductFromProductViewModel();
         setObserver();
     }
@@ -72,15 +72,10 @@ public class ProductDetailFragment extends Fragment {
     }
 
     private void listeners() {
-        mProductDetailBinding.imageViewCart
-                .setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-//                        startActivity(CartActivity.newIntent(getActivity()));
-                        mCartViewModel.insertToCart(new Cart(mProductId));
-                        Toast.makeText(getActivity(),"add to cart",Toast.LENGTH_SHORT).show();
-                    }
-                });
+        mProductDetailBinding.setCartViewModel(mCartViewModel);
+        mProductDetailBinding.setLifecycleOwner(getActivity());
+        mProductDetailBinding.setProductId(mProductId);
+
     }
 
     private void setObserver() {
@@ -92,7 +87,7 @@ public class ProductDetailFragment extends Fragment {
                 mProductDetailBinding.textProductName.setText(product.getTitle());
                 String detail = product.getShort_description() + "\n" + product.getDescription()
                         + "\n" + " Average Rating: \t " + product.getAverage_rating() + "\n\n";
-                mProductDetailBinding.textViewProductDetail.setText(detail);
+                mProductDetailBinding.textviewDescription.setText(detail);
 
                 mProductDetailBinding.textViewPrice.setText(product.getPrice());
             }
