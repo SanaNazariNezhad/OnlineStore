@@ -21,6 +21,8 @@
     <string name="sort">Sort</string>
     <string name="filter">Filter</string>
     <string name="cart">Cart</string>
-    <string name="total">Total</string>
+    <string name="total">Total:</string>
     <string name="product_specifications">Product Specifications:</string>
+    <string name="toman">Toman</string>
+    <string name="Continue">Continue</string>
 </resources>
