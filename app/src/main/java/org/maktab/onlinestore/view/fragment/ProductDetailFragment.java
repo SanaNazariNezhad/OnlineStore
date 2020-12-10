@@ -71,6 +71,51 @@ public class ProductDetailFragment extends Fragment {
         return mProductDetailBinding.getRoot();
     }
 
+    private void checkRating(Product product) {
+        if (product.getAverage_rating().equalsIgnoreCase("0.5")){
+            mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_half));
+        }else if (product.getAverage_rating().equalsIgnoreCase("1.00")){
+            mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+        }else if (product.getAverage_rating().equalsIgnoreCase("1.5")){
+            mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar2.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_half));
+        }else if (product.getAverage_rating().equalsIgnoreCase("2.00")){
+            mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar2.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+        }else if (product.getAverage_rating().equalsIgnoreCase("2.5")){
+            mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar2.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar3.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_half));
+        }else if (product.getAverage_rating().equalsIgnoreCase("3.00")){
+            mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar2.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar3.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+        }else if (product.getAverage_rating().equalsIgnoreCase("3.5")){
+            mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar2.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar3.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar4.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_half));
+        }else if (product.getAverage_rating().equalsIgnoreCase("4.00")){
+            mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar2.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar3.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar4.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+        }else if (product.getAverage_rating().equalsIgnoreCase("4.5")){
+            mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar2.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar3.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar4.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar5.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_half));
+        }else if (product.getAverage_rating().equalsIgnoreCase("5.00")){
+            mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar2.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar3.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar4.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+            mProductDetailBinding.imageViewStar5.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
+        }
+        mProductDetailBinding.textViewRate.setText(String.valueOf(product.getRating_count()));
+    }
+
     private void listeners() {
         mProductDetailBinding.setCartViewModel(mCartViewModel);
         mProductDetailBinding.setLifecycleOwner(getActivity());
@@ -82,11 +127,12 @@ public class ProductDetailFragment extends Fragment {
         mProductLiveData.observe(this, new Observer<Product>() {
             @Override
             public void onChanged(Product product) {
+                checkRating(product);
                 mProductViewModel.setDetailedProduct(product);
                 setAdapterProductDetail();
                 mProductDetailBinding.textProductName.setText(product.getTitle());
                 String detail = product.getShort_description() + "\n" + product.getDescription()
-                        + "\n" + " Average Rating: \t " + product.getAverage_rating() + "\n\n";
+                        + "\n\n";
                 mProductDetailBinding.textviewDescription.setText(detail);
 
                 mProductDetailBinding.textViewPrice.setText(product.getPrice());
