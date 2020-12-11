@@ -20,6 +20,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.databinding.LayoutBottomSheetFilterBinding;
+import org.maktab.onlinestore.databinding.LayoutBottomSheetFilterCategoryBinding;
 
 public class BottomSheetFilter extends BottomSheetDialogFragment {
 
@@ -27,13 +28,42 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     public static final String EXTRA_FILTER_COLOR = "extra_filter_color";
     BottomSheetBehavior bottomSheetBehavior;
     LayoutBottomSheetFilterBinding mFilterBinding;
+    LayoutBottomSheetFilterCategoryBinding mFilterCategoryBinding;
+    private int REQUEST_CODE;
     String mColor;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         BottomSheetDialog bottomSheet = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
 
+
+        REQUEST_CODE = getTargetRequestCode();
         //inflating layout
+        if (REQUEST_CODE == 0) {
+
+            setLayoutForFilterHome(bottomSheet);
+
+            //aap bar cancel button clicked
+            listeners();
+
+
+            //hiding app bar at the start
+            hideAppBar(mFilterBinding.appBarLayout);
+
+        }else {
+            setLayoutForFilter(bottomSheet);
+            //aap bar cancel button clicked
+            listenersForFilterCategory();
+
+            //hiding app bar at the start
+            hideAppBar(mFilterCategoryBinding.appBarLayout);
+
+        }
+
+        return bottomSheet;
+    }
+
+    private void setLayoutForFilterHome(BottomSheetDialog bottomSheet) {
         View view = View.inflate(getContext(), R.layout.layout_bottom_sheet_filter, null);
 
         //binding views to data binding.
@@ -47,7 +77,6 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
 
         //setting Peek at the 16:9 ratio keyline of its parent.
         bottomSheetBehavior.setPeekHeight(BottomSheetBehavior.PEEK_HEIGHT_AUTO);
-
 
         //setting max height of bottom sheet
         mFilterBinding.extraSpace.setMinimumHeight((Resources.getSystem().getDisplayMetrics().heightPixels) / 2);
@@ -77,16 +106,55 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
 
             }
         });
+    }
 
-        //aap bar cancel button clicked
-        listeners();
+    private void setLayoutForFilter(BottomSheetDialog bottomSheet) {
+        View view = View.inflate(getContext(), R.layout.layout_bottom_sheet_filter_category, null);
+
+        //binding views to data binding.
+        mFilterCategoryBinding = DataBindingUtil.bind(view);
+
+        //setting layout with bottom sheet
+        bottomSheet.setContentView(view);
+
+        bottomSheetBehavior = BottomSheetBehavior.from((View) (view.getParent()));
 
 
-        //hiding app bar at the start
-        hideAppBar(mFilterBinding.appBarLayout);
+        //setting Peek at the 16:9 ratio keyline of its parent.
+        bottomSheetBehavior.setPeekHeight(BottomSheetBehavior.PEEK_HEIGHT_AUTO);
+
+        //setting max height of bottom sheet
+        mFilterCategoryBinding.extraSpace.setMinimumHeight((Resources.getSystem().getDisplayMetrics().heightPixels) / 2);
 
 
-        return bottomSheet;
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int i) {
+                if (BottomSheetBehavior.STATE_EXPANDED == i) {
+                    showView(mFilterCategoryBinding.appBarLayout, getActionBarSize());
+                    hideAppBar(mFilterCategoryBinding.colorLayout);
+
+                }
+                if (BottomSheetBehavior.STATE_COLLAPSED == i) {
+                    hideAppBar(mFilterCategoryBinding.appBarLayout);
+                    showView(mFilterCategoryBinding.colorLayout, getActionBarSize());
+                }
+
+                if (BottomSheetBehavior.STATE_HIDDEN == i) {
+                    dismiss();
+                }
+
+            }
+
+            @Override
+            public void onSlide(@NonNull View view, float v) {
+
+            }
+        });
+    }
+
+    private void listenersForFilterCategory() {
+
     }
 
     private void listeners() {
