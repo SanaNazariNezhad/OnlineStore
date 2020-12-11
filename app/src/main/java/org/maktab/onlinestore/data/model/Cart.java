@@ -17,6 +17,9 @@ public class Cart {
     @ColumnInfo(name = "product_id")
     private int product_id;
 
+    @ColumnInfo(name = "product_count")
+    private int product_count;
+
     public long getPrimaryId() {
         return primaryId;
     }
@@ -41,7 +44,16 @@ public class Cart {
         this.product_id = product_id;
     }
 
-    public Cart(int product_id) {
+    public int getProduct_count() {
+        return product_count;
+    }
+
+    public void setProduct_count(int product_count) {
+        this.product_count = product_count;
+    }
+
+    public Cart(int product_id, int product_count) {
         this.product_id = product_id;
+        this.product_count = product_count;
     }
 }

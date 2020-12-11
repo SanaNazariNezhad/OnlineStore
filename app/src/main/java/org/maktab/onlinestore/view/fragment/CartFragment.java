@@ -61,11 +61,22 @@ public class CartFragment extends Fragment {
                 mCartViewModel.setProductList(mProductList);
                 mOrderedProductAdapter = new OrderedProductAdapter(getActivity(),getActivity(), mCartViewModel);
                 mFragmentCartBinding.recyclerCart.setAdapter(mOrderedProductAdapter);
+                mCartViewModel.setOrderedProductAdapter(mOrderedProductAdapter);
                 int totalPrice = 0;
                 for (int i = 0; i < mProductList.size(); i++) {
-                    totalPrice += Integer.parseInt(mProductList.get(i).getPrice());
+                    int price = Integer.parseInt(mProductList.get(i).getPrice());
+                    int count = mCartViewModel.getCart(mProductList.get(i).getId()).getProduct_count();
+                    totalPrice += (price * count);
                 }
                 mFragmentCartBinding.totalPrice.setText(String.valueOf(totalPrice));
+                if (mProductList.size() == 0) {
+                    mFragmentCartBinding.layoutEmptyCart.setVisibility(View.VISIBLE);
+                    mFragmentCartBinding.constraintLayoutContinue.setVisibility(View.GONE);
+                }
+                else {
+                    mFragmentCartBinding.layoutEmptyCart.setVisibility(View.GONE);
+                    mFragmentCartBinding.constraintLayoutContinue.setVisibility(View.VISIBLE);
+                }
             }
         });
     }
@@ -80,11 +91,15 @@ public class CartFragment extends Fragment {
                 container,
                 false);
 
+        mCartViewModel.setFragmentCartBinding(mFragmentCartBinding);
+
         initView();
         return mFragmentCartBinding.getRoot();
     }
 
     private void initView() {
         mFragmentCartBinding.recyclerCart.setLayoutManager(new LinearLayoutManager(getContext()));
+        mFragmentCartBinding.layoutEmptyCart.setVisibility(View.VISIBLE);
+        mFragmentCartBinding.constraintLayoutContinue.setVisibility(View.GONE);
     }
 }

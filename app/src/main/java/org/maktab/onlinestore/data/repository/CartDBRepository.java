@@ -62,4 +62,9 @@ public class CartDBRepository implements IRepository {
     public List<Cart> getCarts() {
         return mCartDAO.getCarts();
     }
+
+    @Override
+    public Cart getCart(int productId) {
+        return mCartDAO.getCart(productId);
+    }
 }

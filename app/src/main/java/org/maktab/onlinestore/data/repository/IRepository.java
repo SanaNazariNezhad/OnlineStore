@@ -11,4 +11,5 @@ public interface IRepository {
     void deleteCart(Cart cart);
     void deleteAllCart();
     List<Cart> getCarts();
+    Cart getCart(int productId);
 }

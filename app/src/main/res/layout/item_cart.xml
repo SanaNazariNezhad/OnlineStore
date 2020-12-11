@@ -109,6 +109,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@id/number_of_product"
+            android:onClick="@{() -> cartViewModel.onClickToBuyAgain(productId)}"
             android:src="@drawable/ic_add" />
 
         <TextView
@@ -137,6 +138,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/number_of_product"
+            android:onClick="@{() -> cartViewModel.onClickToDelete(productId)}"
             android:src="@drawable/ic_delete" />
 
 

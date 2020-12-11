@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
 import org.maktab.onlinestore.R;
+import org.maktab.onlinestore.data.model.Cart;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.repository.CartDBRepository;
 import org.maktab.onlinestore.databinding.ItemCartBinding;
@@ -75,8 +76,16 @@ public class OrderedProductAdapter extends RecyclerView.Adapter<OrderedProductAd
         }
 
         public void bindProduct(Product product) {
-            mItemCartBinding.setProductId(product.getId());
-            mItemCartBinding.textCartProductName.setText(product.getTitle());
+            Cart cart = mCartDBRepository
+                    .getCart(product.getId());
+            if (cart != null) {
+                mItemCartBinding.setProductId(product.getId());
+                mItemCartBinding.textCartProductName.setText(product.getTitle());
+
+                mItemCartBinding.numberOfProduct
+                        .setText(String.valueOf(cart.getProduct_count()));
+            }
+
             mItemCartBinding.textCartProductPrice.setText(product.getPrice());
             Glide.with(itemView)
                     .load(product.getImages().get(0).getSrc())

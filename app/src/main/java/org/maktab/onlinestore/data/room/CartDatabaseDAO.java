@@ -29,4 +29,7 @@ public interface CartDatabaseDAO {
     @Query("SELECT * FROM cart")
     List<Cart> getCarts();
 
+    @Query("SELECT * FROM cart WHERE product_id=:productId")
+    Cart getCart(int productId);
+
 }
