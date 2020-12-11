@@ -106,4 +106,12 @@ public class ProductViewModel extends AndroidViewModel {
     public String getQueryFromPreferences() {
         return QueryPreferences.getSearchQuery(getApplication());
     }
+
+    public void fetchProductItemsWithParentId(String parentId) {
+        mRepository.fetchProductItemsWithParentIdAsync(parentId);
+    }
+
+    public LiveData<List<Product>> getLiveDataProductWithParentId(){
+        return mRepository.getProductWithParentIdLiveData();
+    }
 }

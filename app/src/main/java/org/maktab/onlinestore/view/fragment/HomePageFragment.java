@@ -46,6 +46,7 @@ public class HomePageFragment extends Fragment {
     private LiveData<List<Product>> mLatestProductItemsLiveData;
     private LiveData<List<Product>> mHighestScoreProductItemsLiveData;
     private FragmentHomePageBinding mHomePageBinding;
+    private LiveData<List<Product>> mFeaturesProductsLiveData;
     private int loading = 1;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
 
@@ -127,6 +128,9 @@ public class HomePageFragment extends Fragment {
         mMostVisitedProductItemsLiveData = mProductViewModel.getLiveDateMostVisitedProducts();
         mLatestProductItemsLiveData = mProductViewModel.getLiveDateLatestProducts();
         mHighestScoreProductItemsLiveData = mProductViewModel.getLiveDateHighestScoreProducts();
+        mProductViewModel.fetchProductItemsWithParentId(String.valueOf(119));
+        mFeaturesProductsLiveData = mProductViewModel.getLiveDataProductWithParentId();
+        setObserver();
     }
 
     private void setObserver() {
@@ -135,7 +139,6 @@ public class HomePageFragment extends Fragment {
             public void onChanged(List<Product> products) {
                 mProductViewModel.setProductListMostVisited(products);
                 setAdapterMostVisited();
-                showSlideImage(products);
             }
         });
         mLatestProductItemsLiveData.observe(this, new Observer<List<Product>>() {
@@ -150,6 +153,12 @@ public class HomePageFragment extends Fragment {
             public void onChanged(List<Product> products) {
                 mProductViewModel.setProductListHighestScore(products);
                 setAdapterHighestScore();
+            }
+        });
+        mFeaturesProductsLiveData.observe(this, new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> productList) {
+                showSlideImage(productList);
             }
         });
     }
