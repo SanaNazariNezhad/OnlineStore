@@ -1,5 +1,6 @@
 package org.maktab.onlinestore.view.fragment;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
+
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.view.activity.SearchActivity;
 import org.maktab.onlinestore.adapter.HighestScoreProductAdapter;
@@ -29,6 +33,7 @@ import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.FragmentHomePageBinding;
 import org.maktab.onlinestore.viewmodel.ProductViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomePageFragment extends Fragment {
@@ -130,6 +135,7 @@ public class HomePageFragment extends Fragment {
             public void onChanged(List<Product> products) {
                 mProductViewModel.setProductListMostVisited(products);
                 setAdapterMostVisited();
+                showSlideImage(products);
             }
         });
         mLatestProductItemsLiveData.observe(this, new Observer<List<Product>>() {
@@ -146,6 +152,16 @@ public class HomePageFragment extends Fragment {
                 setAdapterHighestScore();
             }
         });
+    }
+
+    private void showSlideImage(List<Product> products) {
+        List<SlideModel> slideModels = new ArrayList<>();
+        for (int i = 0; i < products.size(); i++) {
+            String uri = products.get(i).getImages().get(0).getSrc();
+            SlideModel slideModel = new SlideModel(uri,i + 1 + "", ScaleTypes.CENTER_CROP);
+            slideModels.add(slideModel);
+        }
+        mHomePageBinding.imageSlider.setImageList(slideModels);
     }
 
     private void initView() {
