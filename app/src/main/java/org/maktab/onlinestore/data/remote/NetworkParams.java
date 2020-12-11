@@ -33,6 +33,7 @@ public class NetworkParams {
     public static final String FILTER_ORDERBY_META_KEY = "filter[orderby_meta_key]";
     public static final String PRICE = "price";
     public static final String META_VALUE_NUM = "meta_value_num";
+    public static final String PAGE = "page";
 
     public static Map<String, String> getMostVisitedProducts() {
         Map<String, String> products = new HashMap<>();
@@ -64,7 +65,7 @@ public class NetworkParams {
     public static Map<String, String> getProducts(String page) {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
-        products.put("page", page);
+        products.put(PAGE, page);
 
         return products;
     }
@@ -73,6 +74,15 @@ public class NetworkParams {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
         products.put(CATEGORY,parentId);
+
+        return products;
+    }
+
+    public static Map<String, String> getSpecialProducts(String parentId,String page) {
+        Map<String, String> products = new HashMap<>();
+        products.putAll(BASE_OPTIONS);
+        products.put(CATEGORY,parentId);
+        products.put(PAGE,page);
 
         return products;
     }

@@ -1,6 +1,5 @@
 package org.maktab.onlinestore.view.fragment;
 
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,9 +21,11 @@ import android.view.ViewGroup;
 import android.widget.SearchView;
 
 import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.models.SlideModel;
 
 import org.maktab.onlinestore.R;
+import org.maktab.onlinestore.view.activity.ProductDetailActivity;
 import org.maktab.onlinestore.view.activity.SearchActivity;
 import org.maktab.onlinestore.adapter.HighestScoreProductAdapter;
 import org.maktab.onlinestore.adapter.LatestProductAdapter;
@@ -46,7 +47,11 @@ public class HomePageFragment extends Fragment {
     private LiveData<List<Product>> mLatestProductItemsLiveData;
     private LiveData<List<Product>> mHighestScoreProductItemsLiveData;
     private FragmentHomePageBinding mHomePageBinding;
-    private LiveData<List<Product>> mFeaturesProductsLiveData;
+    private LiveData<List<Product>> mSpecialProductsLiveData1;
+    private LiveData<List<Product>> mSpecialProductsLiveData2;
+    private LiveData<List<Product>> mSpecialProductsLiveData3;
+    private List<Product> mSpecialProducts;
+    List<SlideModel> mSlideModels;
     private int loading = 1;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
 
@@ -67,6 +72,8 @@ public class HomePageFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         setHasOptionsMenu(true);
+        mSpecialProducts = new ArrayList<>();
+        mSlideModels = new ArrayList<>();
         getProductsFromProductViewModel();
         setObserver();
     }
@@ -100,7 +107,7 @@ public class HomePageFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                startActivity(SearchActivity.newIntent(getActivity(),query));
+                startActivity(SearchActivity.newIntent(getActivity(), query));
                 return true;
             }
 
@@ -128,9 +135,17 @@ public class HomePageFragment extends Fragment {
         mMostVisitedProductItemsLiveData = mProductViewModel.getLiveDateMostVisitedProducts();
         mLatestProductItemsLiveData = mProductViewModel.getLiveDateLatestProducts();
         mHighestScoreProductItemsLiveData = mProductViewModel.getLiveDateHighestScoreProducts();
-        mProductViewModel.fetchProductItemsWithParentId(String.valueOf(119));
-        mFeaturesProductsLiveData = mProductViewModel.getLiveDataProductWithParentId();
-        setObserver();
+
+        for (int i = 1; i < 4; i++) {
+            mProductViewModel.fetchSpecialProductItems(String.valueOf(119), i + "");
+            if (i == 1)
+                mSpecialProductsLiveData1 = mProductViewModel.getLiveDataSpecialProduct1();
+            else if (i==2)
+                mSpecialProductsLiveData2 = mProductViewModel.getLiveDataSpecialProduct2();
+            else if (i==3)
+                mSpecialProductsLiveData3 = mProductViewModel.getLiveDataSpecialProduct3();
+        }
+
     }
 
     private void setObserver() {
@@ -155,22 +170,48 @@ public class HomePageFragment extends Fragment {
                 setAdapterHighestScore();
             }
         });
-        mFeaturesProductsLiveData.observe(this, new Observer<List<Product>>() {
+        mSpecialProductsLiveData1.observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> productList) {
-                showSlideImage(productList);
+                mSpecialProducts.addAll(productList);
+
+            }
+        });
+        mSpecialProductsLiveData2.observe(this, new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> productList) {
+                mSpecialProducts.addAll(productList);
+
+            }
+        });
+        mSpecialProductsLiveData3.observe(this, new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> productList) {
+                mSpecialProducts.addAll(productList);
+                showSlideImage(mSpecialProducts);
+
             }
         });
     }
 
     private void showSlideImage(List<Product> products) {
-        List<SlideModel> slideModels = new ArrayList<>();
-        for (int i = 0; i < products.size(); i++) {
-            String uri = products.get(i).getImages().get(0).getSrc();
-            SlideModel slideModel = new SlideModel(uri,i + 1 + "", ScaleTypes.CENTER_CROP);
-            slideModels.add(slideModel);
-        }
-        mHomePageBinding.imageSlider.setImageList(slideModels);
+
+            for (int i = 0; i < products.size(); i++) {
+                String uri = products.get(i).getImages().get(0).getSrc();
+                SlideModel slideModel = new SlideModel(uri, i + 1 + "", ScaleTypes.CENTER_INSIDE);
+                mSlideModels.add(slideModel);
+            }
+            mHomePageBinding.imageSlider.setImageList(mSlideModels);
+            mHomePageBinding.imageSlider.setItemClickListener(new ItemClickListener() {
+                @Override
+                public void onItemSelected(int i) {
+                    String url = mSlideModels.get(i).getImageUrl();
+                    for (int j = 0; j < mSpecialProducts.size(); j++) {
+                        if (mSpecialProducts.get(j).getImages().get(0).getSrc().equalsIgnoreCase(url))
+                            startActivity(ProductDetailActivity.newIntent(getActivity(),mSpecialProducts.get(j).getId()));
+                    }
+                }
+            });
     }
 
     private void initView() {
@@ -193,7 +234,7 @@ public class HomePageFragment extends Fragment {
     }
 
     private void setAdapterMostVisited() {
-        mMostVisitedProductAdapter = new MostVisitedProductAdapter(this,getActivity(),mProductViewModel);
+        mMostVisitedProductAdapter = new MostVisitedProductAdapter(this, getActivity(), mProductViewModel);
         mHomePageBinding.recyclerMostVisited.setAdapter(mMostVisitedProductAdapter);
         /*mProductAdapter.setOnBottomReachedListener(new OnBottomReachedListener() {
             @Override
@@ -229,12 +270,12 @@ public class HomePageFragment extends Fragment {
     }
 
     private void setAdapterLatest() {
-        mLatestProductAdapter = new LatestProductAdapter(this,getActivity(),mProductViewModel);
+        mLatestProductAdapter = new LatestProductAdapter(this, getActivity(), mProductViewModel);
         mHomePageBinding.recyclerLatest.setAdapter(mLatestProductAdapter);
     }
 
     private void setAdapterHighestScore() {
-        mHighestScoreProductAdapter = new HighestScoreProductAdapter(this,getActivity(),mProductViewModel);
+        mHighestScoreProductAdapter = new HighestScoreProductAdapter(this, getActivity(), mProductViewModel);
         mHomePageBinding.recyclerHighestScore.setAdapter(mHighestScoreProductAdapter);
     }
 }

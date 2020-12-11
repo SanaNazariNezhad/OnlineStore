@@ -38,6 +38,9 @@ public class OnlineStoreRepository {
     private MutableLiveData<List<Product>> mSortedLowToHighSearchProductsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mSortedHighToLowSearchProductsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mSortedTopSellersSearchProductsLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mSpecialProductsLiveData1 = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mSpecialProductsLiveData2 = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mSpecialProductsLiveData3 = new MutableLiveData<>();
     private MutableLiveData<Product> mProductLiveData = new MutableLiveData<>();
     private static int mSort;
 
@@ -91,6 +94,18 @@ public class OnlineStoreRepository {
 
     public MutableLiveData<List<Product>> getSortedTopSellersSearchProductsLiveData() {
         return mSortedTopSellersSearchProductsLiveData;
+    }
+
+    public MutableLiveData<List<Product>> getSpecialProductsLiveData1() {
+        return mSpecialProductsLiveData1;
+    }
+
+    public MutableLiveData<List<Product>> getSpecialProductsLiveData2() {
+        return mSpecialProductsLiveData2;
+    }
+
+    public MutableLiveData<List<Product>> getSpecialProductsLiveData3() {
+        return mSpecialProductsLiveData3;
     }
 
     public String getPage() {
@@ -241,6 +256,34 @@ public class OnlineStoreRepository {
         });
     }
 
+    public void fetchSpecialProductItemsAsync(String id, String page) {
+        Call<List<Product>> call =
+                mAPIServiceListOfProduct.products(NetworkParams.getSpecialProducts(id, page));
+
+        call.enqueue(new Callback<List<Product>>() {
+
+            //this run on main thread
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                List<Product> items = response.body();
+
+                //update adapter of recyclerview
+                if (page.equalsIgnoreCase("1"))
+                    mSpecialProductsLiveData1.postValue(items);
+                else if (page.equalsIgnoreCase("2"))
+                    mSpecialProductsLiveData2.postValue(items);
+                else if (page.equalsIgnoreCase("3"))
+                    mSpecialProductsLiveData3.postValue(items);
+            }
+
+            //this run on main thread
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        });
+    }
+
     public void fetchCategoryItemsAsync() {
         Call<List<ProductCategory>> call =
                 mAPIServiceCategory.categories(NetworkParams.getCategories());
@@ -289,7 +332,7 @@ public class OnlineStoreRepository {
 
     public void fetchProductItemAsync(int id) {
         Call<Product> call =
-                mAPIServiceProduct.getProduct(id,NetworkParams.getProducts("1"));
+                mAPIServiceProduct.getProduct(id, NetworkParams.getProducts("1"));
 
         call.enqueue(new Callback<Product>() {
 
