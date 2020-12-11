@@ -88,7 +88,7 @@ public class MostVisitedProductAdapter extends RecyclerView.Adapter<MostVisitedP
         public void bindProduct(Product product) {
             mItemMostVisitedBinding.setProductId(product.getId());
             mItemMostVisitedBinding.textViewNameMostVisited.setText(product.getTitle());
-            Glide.with(itemView)
+            Glide.with(mItemMostVisitedBinding.getRoot())
                     .load(product.getImages().get(0).getSrc())
                     .centerCrop()
                     .placeholder(R.mipmap.ic_launcher)

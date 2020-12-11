@@ -89,7 +89,7 @@ public class HighestScoreProductAdapter extends RecyclerView.Adapter<HighestScor
             mItemHighestScoreBinding.setProductId(product.getId());
 
 //            mTextView.setText(product.getTitle());
-            Glide.with(itemView)
+            Glide.with(mItemHighestScoreBinding.getRoot())
                     .load(product.getImages().get(0).getSrc())
                     .centerCrop()
                     .placeholder(R.mipmap.ic_launcher)

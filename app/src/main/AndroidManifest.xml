@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OnlineStore">
-        <activity android:name=".view.activity.CartActivity"></activity>
+        <activity android:name=".view.activity.CartActivity"
+            android:configChanges="orientation">
+        </activity>
         <activity android:name=".view.activity.SearchActivity" />
         <activity android:name=".view.activity.SplashActivity">
             <intent-filter>

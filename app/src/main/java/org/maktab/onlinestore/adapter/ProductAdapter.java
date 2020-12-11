@@ -71,7 +71,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductH
             mItemCategoryBinding.setParentId(product.getId());
 
             mItemCategoryBinding.textCategory.setText(product.getTitle());
-            Glide.with(itemView)
+            Glide.with(mItemCategoryBinding.getRoot())
                     .load(product.getImages().get(0).getSrc())
                     .centerCrop()
                     .placeholder(R.mipmap.ic_launcher)

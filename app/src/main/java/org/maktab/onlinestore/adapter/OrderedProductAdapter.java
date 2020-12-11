@@ -87,7 +87,7 @@ public class OrderedProductAdapter extends RecyclerView.Adapter<OrderedProductAd
             }
 
             mItemCartBinding.textCartProductPrice.setText(product.getPrice());
-            Glide.with(itemView)
+            Glide.with(mItemCartBinding.getRoot())
                     .load(product.getImages().get(0).getSrc())
                     .centerCrop()
                     .placeholder(R.mipmap.ic_launcher)

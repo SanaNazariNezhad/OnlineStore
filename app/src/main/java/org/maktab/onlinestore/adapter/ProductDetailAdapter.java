@@ -66,7 +66,7 @@ public class ProductDetailAdapter extends RecyclerView.Adapter<ProductDetailAdap
 
         public void bindProduct(Images image) {
 
-            Glide.with(itemView)
+            Glide.with(mItemHighestScoreBinding.getRoot())
                     .load(image.getSrc())
                     .centerCrop()
                     .placeholder(R.mipmap.ic_launcher)

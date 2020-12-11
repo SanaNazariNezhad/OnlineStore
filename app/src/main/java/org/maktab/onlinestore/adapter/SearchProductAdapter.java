@@ -10,6 +10,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
 
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.data.model.Product;
@@ -70,11 +71,12 @@ public class SearchProductAdapter extends RecyclerView.Adapter<SearchProductAdap
             mItemSearchBinding.setProductId(product.getId());
 
             mItemSearchBinding.textSearchProduct.setText(product.getTitle());
-            Glide.with(itemView)
+            Glide.with(mItemSearchBinding.getRoot())
                     .load(product.getImages().get(0).getSrc())
                     .centerCrop()
                     .placeholder(R.mipmap.ic_launcher)
                     .into(mItemSearchBinding.imageSearchProduct);
+
         }
     }
 }

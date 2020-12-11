@@ -97,7 +97,7 @@ public class LatestProductAdapter extends RecyclerView.Adapter<LatestProductAdap
             mItemLatestBinding.setProductId(product.getId());
 
             mItemLatestBinding.textViewNameLatest.setText(product.getPrice());
-            Glide.with(itemView)
+            Glide.with(mItemLatestBinding.getRoot())
                     .load(product.getImages().get(0).getSrc())
                     .centerCrop()
                     .placeholder(R.mipmap.ic_launcher)
