@@ -14,15 +14,13 @@ public class NetworkParams {
     public static final String BASE_URL = "https://woocommerce.maktabsharif.ir/wp-json/wc/v3/";
     public static final String CONSUMER_KEY = "ck_671aacd21cdac7c8fafc30c6fa0bf09eba15b074";
     public static final String CONSUMER_SECRET = "cs_75d98b6177540214b3fb44fee036cf935f025616";
-    public static final String RATING_COUNT = "crating_count";
-    public static final String AVERAGE_RATING = "rating";
+    public static final String RATING_COUNT = "rating_count";
+    public static final String AVERAGE_RATING = "average_rating";
     public static final String CREATED_AT = "created_at";
     public static final String DESC = "desc";
     public static final String ASC = "asc";
-    public static final String FIELDS = "fields";
     public static final String  PARENT_CATEGORY = "0";
     public static final String PARENT_OF_CATEGORY = "parent";
-    public static final String FILTER_ORDER = "filter[order]";
     public static final String ORDER = "order";
     public static final String CATEGORY = "category";
     public static final String SEARCH = "search";
@@ -42,8 +40,8 @@ public class NetworkParams {
     public static Map<String, String> getMostVisitedProducts() {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
-        products.put(FILTER_ORDER, DESC);
-        products.put(FIELDS, RATING_COUNT);
+        products.put(ORDER, ASC);
+        products.put(ORDERBY, "rating");
 
         return products;
     }
@@ -51,7 +49,7 @@ public class NetworkParams {
     public static Map<String, String> getHighestScoreProducts() {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
-        products.put(ORDERBY, AVERAGE_RATING);
+        products.put(ORDERBY, "popularity");
         products.put(ORDER, ASC);
 
         return products;
@@ -60,8 +58,8 @@ public class NetworkParams {
     public static Map<String, String> getLatestProducts() {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
-        products.put(FILTER_ORDER, DESC);
-        products.put(FIELDS, CREATED_AT);
+        products.put(ORDERBY, CREATED_AT);
+        products.put(ORDER, DESC);
 
         return products;
     }
