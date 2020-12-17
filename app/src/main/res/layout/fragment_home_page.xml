@@ -34,22 +34,23 @@
             android:id="@+id/textView_highest_score_product"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="42dp"
             app:layout_constraintTop_toBottomOf="@id/image_slider"
             android:padding="4dp"
             android:text="@string/the_highest_score_products"
+            style="@style/TextAppearance.AppCompat.SearchResult.Title"
+            android:textStyle="italic"
             android:textColor="@color/black" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_highest_score"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_gravity="center"
             app:layout_constraintTop_toBottomOf="@id/textView_highest_score_product"
-            android:layout_marginStart="62dp"
-            android:layout_marginTop="6dp"
-            android:layout_marginEnd="62dp" />
+            android:layout_marginTop="6dp" />
 
         <TextView
             android:id="@+id/textView_latest_product"
@@ -58,7 +59,10 @@
             app:layout_constraintTop_toBottomOf="@id/recycler_highest_score"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            style="@style/TextAppearance.AppCompat.SearchResult.Title"
+            android:textStyle="italic"
             android:padding="8dp"
             android:text="@string/the_latest_products"
             android:textColor="@color/black" />
@@ -67,27 +71,29 @@
             android:id="@+id/recycler_latest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             app:layout_constraintTop_toBottomOf="@id/textView_latest_product"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_gravity="center"
-            android:layout_marginStart="8dp" />
+            android:layout_gravity="center" />
 
         <TextView
             android:id="@+id/textView_most_visited_product"
             app:layout_constraintTop_toBottomOf="@id/recycler_latest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:padding="8dp"
             android:textColor="@color/black"
+            style="@style/TextAppearance.AppCompat.SearchResult.Title"
+            android:textStyle="italic"
             android:text="@string/the_most_visited_products" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_most_visited"
             app:layout_constraintTop_toBottomOf="@id/textView_most_visited_product"
             android:layout_width="match_parent"
-            android:layout_marginEnd="24dp"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="36dp"
             android:layout_height="wrap_content" />

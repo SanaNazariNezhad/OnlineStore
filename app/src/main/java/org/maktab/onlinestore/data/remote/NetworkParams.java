@@ -17,23 +17,27 @@ public class NetworkParams {
     public static final String RATING_COUNT = "crating_count";
     public static final String AVERAGE_RATING = "rating";
     public static final String CREATED_AT = "created_at";
-    public static final String DESC = "DESC";
+    public static final String DESC = "desc";
+    public static final String ASC = "asc";
     public static final String FIELDS = "fields";
     public static final String  PARENT_CATEGORY = "0";
     public static final String PARENT_OF_CATEGORY = "parent";
     public static final String FILTER_ORDER = "filter[order]";
+    public static final String ORDER = "order";
     public static final String CATEGORY = "category";
+    public static final String SEARCH = "search";
+    public static final String FILTER_ORDERBY = "filter[orderby]";
+    public static final String ORDERBY = "order_by";
+    public static final String FILTER_ORDERBY_META_KEY = "filter[orderby_meta_key]";
+    public static final String PRICE = "price";
+    public static final String META_VALUE_NUM = "meta_value_num";
+    public static final String PAGE = "page";
+
 
     public static final Map<String, String> BASE_OPTIONS = new HashMap<String, String>() {{
         put("consumer_key", CONSUMER_KEY);
         put("consumer_secret", CONSUMER_SECRET);
     }};
-    public static final String SEARCH = "search";
-    public static final String FILTER_ORDERBY = "filter[orderby]";
-    public static final String FILTER_ORDERBY_META_KEY = "filter[orderby_meta_key]";
-    public static final String PRICE = "price";
-    public static final String META_VALUE_NUM = "meta_value_num";
-    public static final String PAGE = "page";
 
     public static Map<String, String> getMostVisitedProducts() {
         Map<String, String> products = new HashMap<>();
@@ -47,8 +51,8 @@ public class NetworkParams {
     public static Map<String, String> getHighestScoreProducts() {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
-        products.put(FILTER_ORDER, DESC);
-        products.put(FIELDS, AVERAGE_RATING);
+        products.put(ORDERBY, AVERAGE_RATING);
+        products.put(ORDER, ASC);
 
         return products;
     }

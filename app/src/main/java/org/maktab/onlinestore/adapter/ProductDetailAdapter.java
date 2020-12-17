@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide;
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.data.model.Images;
 import org.maktab.onlinestore.databinding.ItemHighestScoreBinding;
+import org.maktab.onlinestore.databinding.ItemImageDetailBinding;
 import org.maktab.onlinestore.viewmodel.ProductViewModel;
 
 
@@ -36,13 +37,13 @@ public class ProductDetailAdapter extends RecyclerView.Adapter<ProductDetailAdap
     public ProductHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         LayoutInflater inflater = LayoutInflater.from(mProductViewModel.getApplication());
-        ItemHighestScoreBinding highestScoreBinding = DataBindingUtil.inflate(
+        ItemImageDetailBinding itemImageDetailBinding = DataBindingUtil.inflate(
                 inflater,
-                R.layout.item_highest_score,
+                R.layout.item_image_detail,
                 parent,
                 false);
 
-        ProductHolder productHolder = new ProductHolder(highestScoreBinding);
+        ProductHolder productHolder = new ProductHolder(itemImageDetailBinding);
         return productHolder;
     }
 
@@ -55,22 +56,22 @@ public class ProductDetailAdapter extends RecyclerView.Adapter<ProductDetailAdap
 
     class ProductHolder extends RecyclerView.ViewHolder {
 
-        private final ItemHighestScoreBinding mItemHighestScoreBinding;
+        private final ItemImageDetailBinding mDetailBinding;
 
-        public ProductHolder(ItemHighestScoreBinding itemHighestScoreBinding) {
-            super(itemHighestScoreBinding.getRoot());
+        public ProductHolder(ItemImageDetailBinding itemImageDetailBinding) {
+            super(itemImageDetailBinding.getRoot());
 
-            mItemHighestScoreBinding = itemHighestScoreBinding;
-            mItemHighestScoreBinding.setLifecycleOwner(mOwner);
+            mDetailBinding = itemImageDetailBinding;
+            mDetailBinding.setLifecycleOwner(mOwner);
         }
 
         public void bindProduct(Images image) {
 
-            Glide.with(mItemHighestScoreBinding.getRoot())
+            Glide.with(mDetailBinding.getRoot())
                     .load(image.getSrc())
                     .centerCrop()
                     .placeholder(R.mipmap.ic_launcher)
-                    .into(mItemHighestScoreBinding.imageHighestScore);
+                    .into(mDetailBinding.imageDetail);
         }
     }
 }

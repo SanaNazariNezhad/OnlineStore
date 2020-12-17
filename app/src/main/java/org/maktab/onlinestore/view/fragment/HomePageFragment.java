@@ -224,13 +224,12 @@ public class HomePageFragment extends Fragment {
                 .setLayoutManager(new LinearLayoutManager(getContext(),
                         LinearLayoutManager.HORIZONTAL,
                         false));
-        mHomePageBinding.recyclerMostVisited
-                .addItemDecoration(new DividerItemDecoration(getContext(),
-                        DividerItemDecoration.HORIZONTAL));
 
         mHomePageBinding.recyclerLatest
-                .setLayoutManager(new GridLayoutManager(getContext(),
-                        3));
+                .setLayoutManager(new LinearLayoutManager(getContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false));
+
     }
 
     private void setAdapterMostVisited() {

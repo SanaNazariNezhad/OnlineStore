@@ -83,10 +83,10 @@ public class LatestProductAdapter extends RecyclerView.Adapter<LatestProductAdap
 
             mItemLatestBinding = itemLatestBinding;
 
-            mItemLatestBinding.textViewNameLatest.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+            /*mItemLatestBinding.textViewNameLatest.setEllipsize(TextUtils.TruncateAt.MARQUEE);
             mItemLatestBinding.textViewNameLatest.setSingleLine(true);
             mItemLatestBinding.textViewNameLatest.setSelected(true);
-            mItemLatestBinding.textViewNameLatest.setMarqueeRepeatLimit(-1);
+            mItemLatestBinding.textViewNameLatest.setMarqueeRepeatLimit(-1);*/
 
             mItemLatestBinding.setProductViewModel(mProductViewModel);
             mItemLatestBinding.setLifecycleOwner(mOwner);
@@ -96,7 +96,8 @@ public class LatestProductAdapter extends RecyclerView.Adapter<LatestProductAdap
         public void bindProduct(Product product) {
             mItemLatestBinding.setProductId(product.getId());
 
-            mItemLatestBinding.textViewNameLatest.setText(product.getPrice());
+            mItemLatestBinding.textViewPriceLatest.setText(product.getPrice());
+            mItemLatestBinding.textViewNameLatest.setText(product.getTitle());
             Glide.with(mItemLatestBinding.getRoot())
                     .load(product.getImages().get(0).getSrc())
                     .centerCrop()

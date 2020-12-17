@@ -87,6 +87,8 @@ public class HighestScoreProductAdapter extends RecyclerView.Adapter<HighestScor
 
         public void bindProduct(Product product) {
             mItemHighestScoreBinding.setProductId(product.getId());
+            mItemHighestScoreBinding.textViewNameHighestScore.setText(product.getTitle());
+            mItemHighestScoreBinding.textViewPriceHighestScore.setText(product.getPrice());
 
 //            mTextView.setText(product.getTitle());
             Glide.with(mItemHighestScoreBinding.getRoot())
