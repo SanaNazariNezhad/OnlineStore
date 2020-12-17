@@ -122,4 +122,13 @@ public class ProductViewModel extends AndroidViewModel {
     public LiveData<List<Product>> getLiveDataSpecialProduct3(){
         return mRepository.getSpecialProductsLiveData3();
     }
+
+    public void setColorInPreferences(String color) {
+        QueryPreferences.setFilterColor(getApplication(), color);
+    }
+
+    //
+    public String getColorFromPreferences() {
+        return QueryPreferences.getFilterColor(getApplication());
+    }
 }
