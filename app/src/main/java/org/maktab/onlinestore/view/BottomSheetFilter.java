@@ -33,7 +33,7 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     LayoutBottomSheetFilterCategoryBinding mFilterCategoryBinding;
     private int REQUEST_CODE;
     private SearchViewModel mSearchViewModel;
-    String mColor;
+    private String mColor;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -47,6 +47,8 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
             setLayoutForFilterHome(bottomSheet);
 
             mSearchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
+
+            updateUI();
 
             //aap bar cancel button clicked
             listeners();
@@ -202,100 +204,122 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         mFilterBinding.black.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mColor = "مشکی";
-                mSearchViewModel.setColorInPreferences(null);
-                mSearchViewModel.setColorInPreferences(mColor);
-                sendResult(mColor);
+               if (b){
+                    mColor = "مشکی";
+                    mSearchViewModel.setColorInPreferences(null);
+                    mSearchViewModel.setColorInPreferences(mColor);
+                    sendResult(mColor);
+                }
             }
         });
         mFilterBinding.white.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mColor = "سفید";
-                mSearchViewModel.setColorInPreferences(null);
-                mSearchViewModel.setColorInPreferences(mColor);
-                sendResult(mColor);
+                if (b){
+                    mColor = "سفید";
+                    mSearchViewModel.setColorInPreferences(null);
+                    mSearchViewModel.setColorInPreferences(mColor);
+                    sendResult(mColor);
+                }
             }
         });
         mFilterBinding.brown.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mColor = "قهوه ای";
-                mSearchViewModel.setColorInPreferences(null);
-                mSearchViewModel.setColorInPreferences(mColor);
-                sendResult(mColor);
+               if (b){
+                    mColor = "قهوه ای";
+                    mSearchViewModel.setColorInPreferences(null);
+                    mSearchViewModel.setColorInPreferences(mColor);
+                    sendResult(mColor);
+                }
             }
         });
         mFilterBinding.red.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mColor = "قرمز";
-                mSearchViewModel.setColorInPreferences(null);
-                mSearchViewModel.setColorInPreferences(mColor);
-                sendResult(mColor);
+               if (b){
+                    mColor = "قرمز";
+                    mSearchViewModel.setColorInPreferences(null);
+                    mSearchViewModel.setColorInPreferences(mColor);
+                    sendResult(mColor);
+                }
             }
         });
         mFilterBinding.orange.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mColor = "نارنجی";
-                mSearchViewModel.setColorInPreferences(null);
-                mSearchViewModel.setColorInPreferences(mColor);
-                sendResult(mColor);
+                if (b){
+                    mColor = "نارنجی";
+                    mSearchViewModel.setColorInPreferences(null);
+                    mSearchViewModel.setColorInPreferences(mColor);
+                    sendResult(mColor);
+                }
             }
         });
         mFilterBinding.yellow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mColor = "زرد";
-                mSearchViewModel.setColorInPreferences(null);
-                mSearchViewModel.setColorInPreferences(mColor);
-                sendResult(mColor);
+                if (b){
+                    mColor = "زرد";
+                    mSearchViewModel.setColorInPreferences(null);
+                    mSearchViewModel.setColorInPreferences(mColor);
+                    sendResult(mColor);
+                }
             }
         });
         mFilterBinding.green.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mColor = "سبز";
-                mSearchViewModel.setColorInPreferences(null);
-                mSearchViewModel.setColorInPreferences(mColor);
-                sendResult(mColor);
+                if (b){
+                    mColor = "سبز";
+                    mSearchViewModel.setColorInPreferences(null);
+                    mSearchViewModel.setColorInPreferences(mColor);
+                    sendResult(mColor);
+                }
             }
         });
         mFilterBinding.blue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mColor = "آبی";
-                mSearchViewModel.setColorInPreferences(null);
-                mSearchViewModel.setColorInPreferences(mColor);
-                sendResult(mColor);
+                if (b){
+                    mColor = "آبی";
+                    mSearchViewModel.setColorInPreferences(null);
+                    mSearchViewModel.setColorInPreferences(mColor);
+                    sendResult(mColor);
+                }
             }
         });
         mFilterBinding.purple.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mColor = "بنفش";
-                mSearchViewModel.setColorInPreferences(null);
-                mSearchViewModel.setColorInPreferences(mColor);
-                sendResult(mColor);
+                if (b){
+                    mColor = "بنفش";
+                    mSearchViewModel.setColorInPreferences(null);
+                    mSearchViewModel.setColorInPreferences(mColor);
+                    sendResult(mColor);
+                }
             }
         });
         mFilterBinding.pink.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mColor = "صورتی";
-                mSearchViewModel.setColorInPreferences(null);
-                mSearchViewModel.setColorInPreferences(mColor);
-                sendResult(mColor);
+               if (b){
+                    mColor = "صورتی";
+                    mSearchViewModel.setColorInPreferences(null);
+                    mSearchViewModel.setColorInPreferences(mColor);
+                    sendResult(mColor);
+                }
             }
         });
         mFilterBinding.noFilter.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                mColor = "";
-                mSearchViewModel.setColorInPreferences(null);
-                mSearchViewModel.setColorInPreferences(mColor);
-                sendResult(mColor);
+               if (b){
+                    mColor = "";
+                    mSearchViewModel.setColorInPreferences(null);
+                    mSearchViewModel.setColorInPreferences(mColor);
+                    sendResult(mColor);
+                }
             }
         });
 
