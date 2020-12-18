@@ -49,16 +49,17 @@ public class SearchFragment extends Fragment {
     private LiveData<List<Product>> mLiveDataSearchProducts;
     private LiveData<List<Product>> mLiveDataSortedLowToHighSearchProducts;
     private LiveData<List<Product>> mLiveDataSortedHighToLowSearchProducts;
-    private LiveData<List<Product>> mLiveDataTopSellersSearchProducts;
+    private LiveData<List<Product>> mLiveDataTotalSalesSearchProducts;
 
     public SearchFragment() {
         // Required empty public constructor
     }
-    public static SearchFragment newInstance(String query,String requestCode) {
+
+    public static SearchFragment newInstance(String query, String requestCode) {
         SearchFragment fragment = new SearchFragment();
         Bundle args = new Bundle();
-        args.putString(SEARCH_QUERY,query);
-        args.putString(REQUEST_CODE,requestCode);
+        args.putString(SEARCH_QUERY, query);
+        args.putString(REQUEST_CODE, requestCode);
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,7 +67,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null){
+        if (getArguments() != null) {
             mQuery = getArguments().getString(SEARCH_QUERY);
             mRequestCode = getArguments().getString(REQUEST_CODE);
         }
@@ -78,7 +79,7 @@ public class SearchFragment extends Fragment {
         mLiveDataSearchProducts = mSearchViewModel.getSearchItemsLiveData();
         mLiveDataSortedLowToHighSearchProducts = mSearchViewModel.getSortedLowToHighSearchItemsLiveData();
         mLiveDataSortedHighToLowSearchProducts = mSearchViewModel.getSortedHighToLowSearchItemsLiveData();
-        mLiveDataTopSellersSearchProducts = mSearchViewModel.getSortedTopSellersSearchItemsLiveData();
+        mLiveDataTotalSalesSearchProducts = mSearchViewModel.getSortedTotalSalesSearchItemsLiveData();
         observers();
     }
 
@@ -117,7 +118,7 @@ public class SearchFragment extends Fragment {
                     bottomSheetFilter.setTargetFragment(
                             SearchFragment.this,
                             REQUEST_CODE_FILTER_CATEGORY);
-                }else {
+                } else {
                     String color = mSearchViewModel.getColorFromPreferences();
                     if (color != null)
                         mSearchViewModel.setColorInPreferences(color);
@@ -145,7 +146,7 @@ public class SearchFragment extends Fragment {
 //                BottomSheetSort bottomSheetSort = new BottomSheetSort();
 //                bottomSheetSort.show(getActivity().getSupportFragmentManager(), bottomSheetSort.getTag());
                 return true;
-            default :
+            default:
                 return super.onOptionsItemSelected(item);
         }
     }
@@ -156,35 +157,37 @@ public class SearchFragment extends Fragment {
             return;
 
         if (requestCode == REQUEST_CODE_FILTER) {
-            Toast.makeText(getContext(),"filter",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "filter", Toast.LENGTH_SHORT).show();
             String color = data.getStringExtra(BottomSheetFilter.EXTRA_FILTER_COLOR);
             mSearchViewModel.fetchSearchItemsAsync(mQuery + " " + color);
             mSearchViewModel.setQueryInPreferences(mQuery);
             observers();
         } else if (requestCode == REQUEST_CODE_SORT) {
-            Toast.makeText(getContext(),"Sort",Toast.LENGTH_SHORT).show();
-            checkSort(data.getIntExtra(BottomSheetSort.EXTRA_SORT_ID,4));
+            Toast.makeText(getContext(), "Sort", Toast.LENGTH_SHORT).show();
+            checkSort(data.getIntExtra(BottomSheetSort.EXTRA_SORT_ID, 4));
         }
 
         //Todo....get data from bottomSheetFilter when filter in category
     }
 
     private void checkSort(int intExtra) {
-        if (intExtra == BottomSheetSort.TOP_SELLERS){
 
-            Toast.makeText(getContext(),"Sort Top Seller",Toast.LENGTH_SHORT).show();
+        if (intExtra == BottomSheetSort.TOP_SELLERS) {
 
-        }else if (intExtra == BottomSheetSort.PRICES_LOW_TO_HIGH){
+            mSearchViewModel.fetchSortedTotalSalesSearchItemsAsync(mQuery);
+            mSearchViewModel.setQueryInPreferences(mQuery);
+
+        } else if (intExtra == BottomSheetSort.PRICES_LOW_TO_HIGH) {
 
             mSearchViewModel.fetchSortedLowToHighSearchItemsAsync(mQuery);
             mSearchViewModel.setQueryInPreferences(mQuery);
 
-        }else if (intExtra == BottomSheetSort.PRICES_HIGH_TO_LOW){
+        } else if (intExtra == BottomSheetSort.PRICES_HIGH_TO_LOW) {
 
             mSearchViewModel.fetchSortedHighToLowSearchItemsAsync(mQuery);
             mSearchViewModel.setQueryInPreferences(mQuery);
 
-        }else if (intExtra == BottomSheetSort.THE_NEWEST){
+        } else if (intExtra == BottomSheetSort.THE_NEWEST) {
 
             mSearchViewModel.fetchSearchItemsAsync(mQuery);
             mSearchViewModel.setQueryInPreferences(mQuery);
@@ -222,7 +225,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onChanged(List<Product> productList) {
                 mSearchViewModel.setSearchProduct(productList);
-                Toast.makeText(getContext(),"Sort Newest" + productList.size() ,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Sort Newest", Toast.LENGTH_SHORT).show();
                 setSearchAdapter();
             }
         });
@@ -231,7 +234,7 @@ public class SearchFragment extends Fragment {
             @Override
             public void onChanged(List<Product> productList) {
                 mSearchViewModel.setSearchProduct(productList);
-                Toast.makeText(getContext(),"Sort Low to High" + productList.size(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Sort Low to High", Toast.LENGTH_SHORT).show();
                 setSearchAdapter();
             }
         });
@@ -240,14 +243,15 @@ public class SearchFragment extends Fragment {
             @Override
             public void onChanged(List<Product> productList) {
                 mSearchViewModel.setSearchProduct(productList);
-                Toast.makeText(getContext(),"Sort High to Low" + productList.size(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Sort High to Low", Toast.LENGTH_SHORT).show();
                 setSearchAdapter();
             }
         });
 
-        mLiveDataTopSellersSearchProducts.observe(this, new Observer<List<Product>>() {
+        mLiveDataTotalSalesSearchProducts.observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> productList) {
+                Toast.makeText(getContext(), "Sort Top Seller", Toast.LENGTH_SHORT).show();
                 mSearchViewModel.setSearchProduct(productList);
                 setSearchAdapter();
             }
@@ -255,7 +259,7 @@ public class SearchFragment extends Fragment {
     }
 
     private void setSearchAdapter() {
-        mSearchProductAdapter = new SearchProductAdapter(this,getActivity(), mSearchViewModel);
+        mSearchProductAdapter = new SearchProductAdapter(this, getActivity(), mSearchViewModel);
         mFragmentSearchBinding.recyclerSearch.setAdapter(mSearchProductAdapter);
     }
 

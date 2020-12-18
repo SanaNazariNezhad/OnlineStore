@@ -133,7 +133,8 @@ public class ProductDetailFragment extends Fragment {
                 setAdapterProductDetail();
                 mProductDetailBinding.textProductName.setText(product.getTitle());
                 String detail = product.getShort_description() + "\n" + product.getDescription()
-                        + "\n\n";
+                        + "\n" + "Total Sales:" + "\t" + product.getTotal_sales()
+                        +"\n\n";
                 mProductDetailBinding.textviewDescription.setText(detail);
 
                 mProductDetailBinding.textViewPrice.setText(product.getPrice());

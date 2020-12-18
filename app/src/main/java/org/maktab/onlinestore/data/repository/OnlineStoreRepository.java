@@ -37,7 +37,7 @@ public class OnlineStoreRepository {
     private MutableLiveData<List<Product>> mSearchProductsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mSortedLowToHighSearchProductsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mSortedHighToLowSearchProductsLiveData = new MutableLiveData<>();
-    private MutableLiveData<List<Product>> mSortedTopSellersSearchProductsLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mSortedTotalSalesSearchProductsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mSpecialProductsLiveData1 = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mSpecialProductsLiveData2 = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mSpecialProductsLiveData3 = new MutableLiveData<>();
@@ -92,8 +92,8 @@ public class OnlineStoreRepository {
         return mSortedHighToLowSearchProductsLiveData;
     }
 
-    public MutableLiveData<List<Product>> getSortedTopSellersSearchProductsLiveData() {
-        return mSortedTopSellersSearchProductsLiveData;
+    public MutableLiveData<List<Product>> getSortedTotalSalesSearchProductsLiveData() {
+        return mSortedTotalSalesSearchProductsLiveData;
     }
 
     public MutableLiveData<List<Product>> getSpecialProductsLiveData1() {
@@ -401,6 +401,25 @@ public class OnlineStoreRepository {
                 List<Product> items = response.body();
 
                 mSortedHighToLowSearchProductsLiveData.postValue(items);
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        });
+    }
+
+    public void fetchSortedTotalSalesSearchItemsAsync(String query) {
+        Call<List<Product>> call =
+                mAPIServiceProduct.products(NetworkParams.getSortedTotalSalesSearchProducts(query));
+
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                List<Product> items = response.body();
+
+                mSortedTotalSalesSearchProductsLiveData.postValue(items);
             }
 
             @Override

@@ -59,8 +59,8 @@ public class SearchViewModel extends AndroidViewModel {
         return mRepository.getSortedHighToLowSearchProductsLiveData();
     }
 
-    public LiveData<List<Product>> getSortedTopSellersSearchItemsLiveData() {
-        return mRepository.getSortedTopSellersSearchProductsLiveData();
+    public LiveData<List<Product>> getSortedTotalSalesSearchItemsLiveData() {
+        return mRepository.getSortedTotalSalesSearchProductsLiveData();
     }
 
     //
@@ -75,6 +75,10 @@ public class SearchViewModel extends AndroidViewModel {
 
     public void fetchSortedLowToHighSearchItemsAsync(String query) {
         mRepository.fetchSortedLowToHighSearchItemsAsync(query);
+    }
+
+    public void fetchSortedTotalSalesSearchItemsAsync(String query) {
+        mRepository.fetchSortedTotalSalesSearchItemsAsync(query);
     }
 
     public void fetchSortedHighToLowSearchItemsAsync(String query) {
