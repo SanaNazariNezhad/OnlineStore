@@ -29,4 +29,13 @@
     <string name="prices_from_high_to_low">Prices from high to low</string>
     <string name="prices_from_low_to_high">Prices from low to high</string>
     <string name="newest">Newest</string>
+
+
+    <string name="channel_id">onlineStore_channel_id</string>
+    <string name="channel_name">OnlineStore Channel</string>
+    <string name="channel_description">This is notification channel for onlineStore</string>
+    <string name="start_polling">Start polling</string>
+    <string name="stop_polling">Stop polling</string>
+    <string name="new_product_title">New Product</string>
+    <string name="new_product_text">You have new product in OnlineStore.</string>
 </resources>

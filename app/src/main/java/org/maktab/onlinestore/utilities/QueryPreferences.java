@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 public class QueryPreferences {
     private static final String PREF_SEARCH_QUERY = "searchQuery";
     private static final String PREF_FILTER_COLOR = "filterColor";
-    private static final String PREF_LAST_ID = "lastId";
+    private static final String PREF_NUMBER_OF_PRODUCT = "lastId";
 
     public static String getSearchQuery(Context context) {
         return getSharedPreferences(context).getString(PREF_SEARCH_QUERY, null);
@@ -27,6 +27,17 @@ public class QueryPreferences {
         getSharedPreferences(context)
                 .edit()
                 .putString(PREF_FILTER_COLOR, color)
+                .apply();
+    }
+
+    public static String getNumberOfProduct(Context context) {
+        return getSharedPreferences(context).getString(PREF_NUMBER_OF_PRODUCT, null);
+    }
+
+    public static void setNumberOfProduct(Context context, String numberOfProduct) {
+        getSharedPreferences(context)
+                .edit()
+                .putString(PREF_NUMBER_OF_PRODUCT, numberOfProduct)
                 .apply();
     }
 

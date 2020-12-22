@@ -12,6 +12,7 @@ import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
 import org.maktab.onlinestore.utilities.QueryPreferences;
 import org.maktab.onlinestore.view.activity.ProductDetailActivity;
+import org.maktab.onlinestore.worker.PollWorker;
 
 import java.util.List;
 
@@ -130,5 +131,14 @@ public class ProductViewModel extends AndroidViewModel {
     //
     public String getColorFromPreferences() {
         return QueryPreferences.getFilterColor(getApplication());
+    }
+
+    public void togglePolling() {
+        boolean isOn = PollWorker.isWorkEnqueued(getApplication());
+        PollWorker.enqueueWork(getApplication(), !isOn);
+    }
+
+    public boolean isTaskScheduled() {
+        return PollWorker.isWorkEnqueued(getApplication());
     }
 }

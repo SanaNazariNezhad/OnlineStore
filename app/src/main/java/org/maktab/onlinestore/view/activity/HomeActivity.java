@@ -1,5 +1,7 @@
 package org.maktab.onlinestore.view.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -22,6 +24,10 @@ public class HomeActivity extends AppCompatActivity {
     private ActivityHomeBinding mBinding;
 
     private AppBarConfiguration mAppBarConfiguration;
+
+    public static Intent newIntent (Context context){
+        return new Intent(context,HomeActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
