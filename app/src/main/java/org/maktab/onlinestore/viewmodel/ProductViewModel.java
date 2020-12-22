@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 
 import org.maktab.onlinestore.data.model.Images;
 import org.maktab.onlinestore.data.model.Product;
+import org.maktab.onlinestore.data.model.SalesReport;
 import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
 import org.maktab.onlinestore.utilities.QueryPreferences;
 import org.maktab.onlinestore.view.activity.ProductDetailActivity;
@@ -83,6 +84,10 @@ public class ProductViewModel extends AndroidViewModel {
         mRepository.fetchHighestScoreProductItemsAsync();
     }
 
+    public SalesReport fetchProductItemsSize(){
+        return mRepository.fetchProductItems();
+    }
+
     public LiveData<List<Product>> getLiveDateMostVisitedProducts(){
         return mRepository.getMostVisitedProductsLiveData();
     }
@@ -130,5 +135,14 @@ public class ProductViewModel extends AndroidViewModel {
     //
     public String getColorFromPreferences() {
         return QueryPreferences.getFilterColor(getApplication());
+    }
+
+    public void setTotalItemsInPreferences(int totalItems) {
+        QueryPreferences.setTotalItems(getApplication(), totalItems);
+    }
+
+    //
+    public int getTotalItemsFromPreferences() {
+        return QueryPreferences.getTotalItems(getApplication());
     }
 }

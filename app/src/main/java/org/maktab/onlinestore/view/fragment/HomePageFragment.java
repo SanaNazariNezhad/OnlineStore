@@ -25,6 +25,7 @@ import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.models.SlideModel;
 
 import org.maktab.onlinestore.R;
+import org.maktab.onlinestore.data.model.SalesReport;
 import org.maktab.onlinestore.view.activity.ProductDetailActivity;
 import org.maktab.onlinestore.view.activity.SearchActivity;
 import org.maktab.onlinestore.adapter.HighestScoreProductAdapter;
@@ -33,11 +34,12 @@ import org.maktab.onlinestore.adapter.MostVisitedProductAdapter;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.FragmentHomePageBinding;
 import org.maktab.onlinestore.viewmodel.ProductViewModel;
+import org.maktab.onlinestore.work.Worker;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomePageFragment extends Fragment {
+public class HomePageFragment extends VisibleFragment {
 
     private HighestScoreProductAdapter mHighestScoreProductAdapter;
     private MostVisitedProductAdapter mMostVisitedProductAdapter;
@@ -76,6 +78,7 @@ public class HomePageFragment extends Fragment {
         mSlideModels = new ArrayList<>();
         getProductsFromProductViewModel();
         setObserver();
+        Worker.enqueueWork(getActivity(), true);
     }
 
     @Override

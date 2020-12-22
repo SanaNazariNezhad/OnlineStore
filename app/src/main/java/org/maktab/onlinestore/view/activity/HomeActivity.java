@@ -1,5 +1,7 @@
 package org.maktab.onlinestore.view.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -18,6 +20,10 @@ import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.databinding.ActivityHomeBinding;
 
 public class HomeActivity extends AppCompatActivity {
+
+    public static Intent newIntent(Context context){
+        return new Intent(context,HomeActivity.class);
+    }
 
     private ActivityHomeBinding mBinding;
 

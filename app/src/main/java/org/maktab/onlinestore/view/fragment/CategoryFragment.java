@@ -21,7 +21,7 @@ import org.maktab.onlinestore.viewmodel.CategoryViewModel;
 
 import java.util.List;
 
-public class CategoryFragment extends Fragment {
+public class CategoryFragment extends VisibleFragment {
 
     private CategoryAdapter mCategoryAdapter;
     private CategoryViewModel mCategoryViewModel;

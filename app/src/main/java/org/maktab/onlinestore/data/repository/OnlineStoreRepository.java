@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.model.ProductCategory;
+import org.maktab.onlinestore.data.model.SalesReport;
 import org.maktab.onlinestore.data.remote.retrofit.APIService;
 import org.maktab.onlinestore.data.remote.NetworkParams;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceListOfProduct;
@@ -42,6 +43,7 @@ public class OnlineStoreRepository {
     private MutableLiveData<List<Product>> mSpecialProductsLiveData2 = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mSpecialProductsLiveData3 = new MutableLiveData<>();
     private MutableLiveData<Product> mProductLiveData = new MutableLiveData<>();
+    private MutableLiveData<SalesReport> mSalesReportMutableLiveData = new MutableLiveData<>();
     private static int mSort;
 
     public int getSort() {
@@ -50,6 +52,10 @@ public class OnlineStoreRepository {
 
     public void setSort(int sort) {
         mSort = sort;
+    }
+
+    public MutableLiveData<SalesReport> getSalesReportMutableLiveData() {
+        return mSalesReportMutableLiveData;
     }
 
     public MutableLiveData<List<Product>> getSearchProductsLiveData() {
@@ -129,10 +135,10 @@ public class OnlineStoreRepository {
     }
 
     //this method must run on background thread.
-    public List<Product> fetchProductItems(String page) {
-        Call<List<Product>> call = mAPIServiceListOfProduct.products(NetworkParams.getProducts(page));
+    public SalesReport fetchProductItems() {
+        Call<SalesReport> call = mAPIServiceListOfProduct.sales(NetworkParams.getTotalItemsSalesProducts());
         try {
-            Response<List<Product>> response = call.execute();
+            Response<SalesReport> response = call.execute();
             return response.body();
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
@@ -424,6 +430,25 @@ public class OnlineStoreRepository {
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        });
+    }
+
+    public void fetchTotalItemsSalesItemsAsync() {
+        Call<SalesReport> call =
+                mAPIServiceProduct.sales(NetworkParams.getTotalItemsSalesProducts());
+
+        call.enqueue(new Callback<SalesReport>() {
+            @Override
+            public void onResponse(Call<SalesReport> call, Response<SalesReport> response) {
+                SalesReport salesReport = response.body();
+
+                mSalesReportMutableLiveData.postValue(salesReport);
+            }
+
+            @Override
+            public void onFailure(Call<SalesReport> call, Throwable t) {
                 Log.e(TAG, t.getMessage(), t);
             }
         });
