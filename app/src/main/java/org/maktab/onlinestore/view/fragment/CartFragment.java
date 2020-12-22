@@ -23,7 +23,7 @@ import org.maktab.onlinestore.viewmodel.CartViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CartFragment extends Fragment {
+public class CartFragment extends VisibleFragment {
 
     FragmentCartBinding mFragmentCartBinding;
     private CartViewModel mCartViewModel;

@@ -22,7 +22,7 @@ import org.maktab.onlinestore.databinding.FragmentProductDetailBinding;
 import org.maktab.onlinestore.viewmodel.CartViewModel;
 import org.maktab.onlinestore.viewmodel.ProductViewModel;
 
-public class ProductDetailFragment extends Fragment {
+public class ProductDetailFragment extends VisibleFragment {
 
     private ProductDetailAdapter mDetailAdapter;
     private ProductViewModel mProductViewModel;

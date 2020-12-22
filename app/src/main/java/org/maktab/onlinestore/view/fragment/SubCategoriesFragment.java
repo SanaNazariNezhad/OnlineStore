@@ -29,7 +29,7 @@ import org.maktab.onlinestore.viewmodel.CategoryViewModel;
 
 import java.util.List;
 
-public class SubCategoriesFragment extends Fragment {
+public class SubCategoriesFragment extends VisibleFragment {
 
     public static final String BUNDLE_PARENT_ID = "Bundle_Parent_id";
     private int mParentId;

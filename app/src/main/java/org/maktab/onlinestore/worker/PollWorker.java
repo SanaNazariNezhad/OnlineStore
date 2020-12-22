@@ -29,7 +29,7 @@ public class PollWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        ServicesUtils.pollAndShowNotification(getApplicationContext(), TAG,"6");
+        ServicesUtils.pollAndShowNotification(getApplicationContext(), TAG);
         return Result.success();
     }
 

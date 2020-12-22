@@ -32,7 +32,7 @@ import org.maktab.onlinestore.viewmodel.SearchViewModel;
 
 import java.util.List;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends VisibleFragment {
 
     public static final String SEARCH_QUERY = "search_query";
     public static final int REQUEST_CODE_FILTER = 0;

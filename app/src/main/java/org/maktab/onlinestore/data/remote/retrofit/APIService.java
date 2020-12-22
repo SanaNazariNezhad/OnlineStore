@@ -2,6 +2,7 @@ package org.maktab.onlinestore.data.remote.retrofit;
 
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.model.ProductCategory;
+import org.maktab.onlinestore.data.model.SalesReport;
 
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,9 @@ public interface APIService {
 
     @GET("reports/sales/top_sellers")
     Call<List<Product>> topSellers(@QueryMap Map<String, String> options);
+
+    @GET("reports/sales")
+    Call<SalesReport> sales(@QueryMap Map<String, String> options);
 
 
 }

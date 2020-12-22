@@ -6,11 +6,13 @@ import androidx.lifecycle.MutableLiveData;
 
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.model.ProductCategory;
+import org.maktab.onlinestore.data.model.SalesReport;
 import org.maktab.onlinestore.data.remote.retrofit.APIService;
 import org.maktab.onlinestore.data.remote.NetworkParams;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceListOfProduct;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceCategory;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceProduct;
+import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceSales;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,6 +29,7 @@ public class OnlineStoreRepository {
     private final APIService mAPIServiceListOfProduct;
     private final APIService mAPIServiceProduct;
     private final APIService mAPIServiceCategory;
+    private final APIService mAPIServiceSalesReport;
     private String mPage;
     private MutableLiveData<List<Product>> mProductItemsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mProductWithParentIdLiveData = new MutableLiveData<>();
@@ -125,14 +128,17 @@ public class OnlineStoreRepository {
 
         Retrofit retrofitProduct = RetrofitInstanceProduct.getInstance().getRetrofit();
         mAPIServiceProduct = retrofitProduct.create(APIService.class);
+
+        Retrofit retrofitSalesReport = RetrofitInstanceSales.getInstance().getRetrofit();
+        mAPIServiceSalesReport = retrofitSalesReport.create(APIService.class);
         mPage = "1";
     }
 
     //this method must run on background thread.
-    public List<Product> fetchProductItems(String page) {
-        Call<List<Product>> call = mAPIServiceListOfProduct.products(NetworkParams.getProducts(page));
+    public SalesReport fetchSalesReport() {
+        Call<SalesReport> call = mAPIServiceSalesReport.sales(NetworkParams.getTotalItemsSalesProducts());
         try {
-            Response<List<Product>> response = call.execute();
+            Response<SalesReport> response = call.execute();
             return response.body();
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
