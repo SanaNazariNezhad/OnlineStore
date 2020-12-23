@@ -104,9 +104,9 @@ public class HomePageFragment extends Fragment {
 
         MenuItem togglePollingItem = menu.findItem(R.id.menu_item_poll_toggling);
         if (mProductViewModel.isTaskScheduled()) {
-            togglePollingItem.setTitle(R.string.stop_polling);
+            togglePollingItem.setIcon(R.drawable.ic_notifications_off);
         } else {
-            togglePollingItem.setTitle(R.string.start_polling);
+            togglePollingItem.setIcon(R.drawable.ic_notifications_active);
         }
     }
 
