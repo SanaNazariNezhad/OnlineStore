@@ -3,7 +3,6 @@ package org.maktab.onlinestore.view.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 
 import androidx.databinding.DataBindingUtil;
@@ -50,7 +49,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setNavigationView() {
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery)
+                R.id.nav_home, R.id.nav_category)
                 .setDrawerLayout(mBinding.drawerLayout)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);

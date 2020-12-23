@@ -12,7 +12,7 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_category">Category</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_setting">Setting</string>
     <string name="the_highest_score_products">The Highest Score Products:</string>
     <string name="the_most_visited_products">The Most Visited Products:</string>
     <string name="the_latest_products">The Latest Products:</string>
