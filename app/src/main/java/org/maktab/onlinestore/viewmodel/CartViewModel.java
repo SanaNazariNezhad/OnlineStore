@@ -11,8 +11,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
 import org.maktab.onlinestore.adapter.OrderedProductAdapter;
+import org.maktab.onlinestore.data.model.BillingAddress;
 import org.maktab.onlinestore.data.model.Cart;
+import org.maktab.onlinestore.data.model.Customer;
 import org.maktab.onlinestore.data.model.Product;
+import org.maktab.onlinestore.data.model.ShippingAddress;
 import org.maktab.onlinestore.data.repository.CartDBRepository;
 import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
 import org.maktab.onlinestore.databinding.FragmentCartBinding;
@@ -20,14 +23,16 @@ import org.maktab.onlinestore.view.activity.CartActivity;
 import org.maktab.onlinestore.view.activity.ProductDetailActivity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 public class CartViewModel extends AndroidViewModel {
 
     private CartDBRepository mCartDBRepository;
     private OnlineStoreRepository mStoreRepository;
     private LiveData<Product> mProductLiveData;
-    private LiveData<List<Product>> mProductListLiveData;
+    private LiveData<Customer> mCustomerLiveData;
     private List<Product> mProductList;
     private OrderedProductAdapter mOrderedProductAdapter;
     private FragmentCartBinding mFragmentCartBinding;
@@ -62,6 +67,10 @@ public class CartViewModel extends AndroidViewModel {
 
     public LiveData<Product> getLiveDateProduct() {
         return mStoreRepository.getProductLiveData();
+    }
+
+    public LiveData<Customer> getLiveDateCustomer() {
+        return mStoreRepository.getCustomerLiveData();
     }
 
     public void setContext(Context context) {
@@ -151,5 +160,24 @@ public class CartViewModel extends AndroidViewModel {
             totalPrice += (price * count);
         }
         return totalPrice;
+    }
+
+    public void onClickContinueBuy(){
+        Random random = new Random();
+        BillingAddress[] billingAddresses = new BillingAddress[1];
+        billingAddresses[0] = new BillingAddress("sana","nazari","maktab",
+                "rodaki","andishe","kermanshah","west","6714844718",
+                "iran","sana.nazari@gmail.com","9187287311");
+
+        ShippingAddress[] shippingAddresses = new ShippingAddress[1];
+        shippingAddresses[0] = new ShippingAddress("sana","nazari","maktab",
+                "rodaki","andishe","kermanshah","west","6714844718",
+                "iran");
+        Customer customer = new Customer(random.nextInt(),new Date().toString(),
+                "Sana.nazari@gmail.com","sana","nazari","sana.nazari",
+                "1234",0,"",0,0,"",
+                null,null);
+
+        mStoreRepository.fetchCreateCustomerAsync(customer);
     }
 }

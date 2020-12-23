@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import org.maktab.onlinestore.data.model.Customer;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.model.ProductCategory;
 import org.maktab.onlinestore.data.model.SalesReport;
@@ -30,6 +31,7 @@ public class OnlineStoreRepository {
     private final APIService mAPIServiceProduct;
     private final APIService mAPIServiceCategory;
     private final APIService mAPIServiceSalesReport;
+    private final APIService mAPIServiceCustomer;
     private String mPage;
     private MutableLiveData<List<Product>> mProductItemsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mProductWithParentIdLiveData = new MutableLiveData<>();
@@ -44,6 +46,7 @@ public class OnlineStoreRepository {
     private MutableLiveData<List<Product>> mSpecialProductsLiveData1 = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mSpecialProductsLiveData2 = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mSpecialProductsLiveData3 = new MutableLiveData<>();
+    private MutableLiveData<Customer> mCustomerLiveData = new MutableLiveData<>();
     private MutableLiveData<Product> mProductLiveData = new MutableLiveData<>();
     private static int mSort;
 
@@ -111,6 +114,10 @@ public class OnlineStoreRepository {
         return mSpecialProductsLiveData3;
     }
 
+    public MutableLiveData<Customer> getCustomerLiveData() {
+        return mCustomerLiveData;
+    }
+
     public String getPage() {
         return mPage;
     }
@@ -131,6 +138,9 @@ public class OnlineStoreRepository {
 
         Retrofit retrofitSalesReport = RetrofitInstanceSales.getInstance().getRetrofit();
         mAPIServiceSalesReport = retrofitSalesReport.create(APIService.class);
+
+        Retrofit retrofitCustomer = RetrofitInstanceSales.getInstance().getRetrofit();
+        mAPIServiceCustomer = retrofitCustomer.create(APIService.class);
         mPage = "1";
     }
 
@@ -430,6 +440,25 @@ public class OnlineStoreRepository {
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        });
+    }
+
+    public void fetchCreateCustomerAsync(Customer customer) {
+        Call<Customer> call =
+                mAPIServiceCustomer.customer(customer,NetworkParams.getTotalItemsSalesProducts());
+
+        call.enqueue(new Callback<Customer>() {
+            @Override
+            public void onResponse(Call<Customer> call, Response<Customer> response) {
+                Customer items = response.body();
+
+                mCustomerLiveData.postValue(items);
+            }
+
+            @Override
+            public void onFailure(Call<Customer> call, Throwable t) {
                 Log.e(TAG, t.getMessage(), t);
             }
         });

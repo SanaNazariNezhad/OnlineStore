@@ -12,10 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.OrderedProductAdapter;
 import org.maktab.onlinestore.adapter.SearchProductAdapter;
+import org.maktab.onlinestore.data.model.Customer;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.FragmentCartBinding;
 import org.maktab.onlinestore.viewmodel.CartViewModel;
@@ -30,6 +32,7 @@ public class CartFragment extends VisibleFragment {
     private LiveData<Product> mProductLiveData;
     private List<Product> mProductList;
     private OrderedProductAdapter mOrderedProductAdapter;
+    private LiveData<Customer> mCustomerLiveData;
 
     public CartFragment() {
         // Required empty public constructor
@@ -49,6 +52,7 @@ public class CartFragment extends VisibleFragment {
         mCartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
         mCartViewModel.getOrderedProduct();
         mProductLiveData = mCartViewModel.getLiveDateProduct();
+        mCustomerLiveData = mCartViewModel.getLiveDateCustomer();
         observer();
         
     }
@@ -79,6 +83,14 @@ public class CartFragment extends VisibleFragment {
                 }
             }
         });
+
+        mCustomerLiveData.observe(this, new Observer<Customer>() {
+            @Override
+            public void onChanged(Customer customer) {
+                Toast.makeText(getActivity(),customer.getFirst_name() + "\t" + customer.getLast_name()
+                + "\t" + customer.getEmail() + "\t" , Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -101,5 +113,6 @@ public class CartFragment extends VisibleFragment {
         mFragmentCartBinding.recyclerCart.setLayoutManager(new LinearLayoutManager(getContext()));
         mFragmentCartBinding.layoutEmptyCart.setVisibility(View.VISIBLE);
         mFragmentCartBinding.constraintLayoutContinue.setVisibility(View.GONE);
+        mFragmentCartBinding.setCartViewModel(mCartViewModel);
     }
 }

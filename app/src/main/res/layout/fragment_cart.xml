@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="cartViewModel"
+            type="org.maktab.onlinestore.viewmodel.CartViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -110,7 +114,8 @@
             android:textColor="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/guideline_end" />
+            app:layout_constraintEnd_toStartOf="@id/guideline_end"
+            android:onClick="@{() -> cartViewModel.onClickContinueBuy()}"/>
 
 
         <TextView
