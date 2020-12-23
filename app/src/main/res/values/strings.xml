@@ -40,4 +40,6 @@
     <string name="new_product_text">You have new product in OnlineStore.</string>
     <string name="notification">Notification</string>
     <string name="location">Location</string>
+    <string name="off">Off</string>
+    <string name="on">On</string>
 </resources>
