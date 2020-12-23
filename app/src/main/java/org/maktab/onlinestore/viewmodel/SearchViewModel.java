@@ -17,10 +17,6 @@ import java.util.List;
 public class SearchViewModel extends AndroidViewModel {
 
     private OnlineStoreRepository mRepository;
-    private List<Product> mProductListMostVisited;
-    private List<Product> mProductListLatest;
-    private List<Product> mProductListHighestScore;
-    private List<Product> mProductList;
     private List<Product> mSearchProduct;
     private Context mContext;
 
@@ -31,22 +27,18 @@ public class SearchViewModel extends AndroidViewModel {
 
     }
 
-    //
     public List<Product> getSearchProduct() {
         return mSearchProduct;
     }
 
-    ///
     public void setSearchProduct(List<Product> searchProduct) {
         mSearchProduct = searchProduct;
     }
 
-    //
     public void setContext(Context context) {
         mContext = context;
     }
 
-    ///
     public LiveData<List<Product>> getSearchItemsLiveData() {
         return mRepository.getSearchProductsLiveData();
     }
@@ -63,12 +55,10 @@ public class SearchViewModel extends AndroidViewModel {
         return mRepository.getSortedTotalSalesSearchProductsLiveData();
     }
 
-    //
     public void onClickListItem(int productId) {
         mContext.startActivity(ProductDetailActivity.newIntent(mContext,productId));
     }
 
-    ///
     public void fetchSearchItemsAsync(String query) {
         mRepository.fetchSearchItemsAsync(query);
     }
@@ -85,12 +75,10 @@ public class SearchViewModel extends AndroidViewModel {
         mRepository.fetchSortedHighToLowSearchItemsAsync(query);
     }
 
-    ///
     public void setQueryInPreferences(String query) {
         QueryPreferences.setSearchQuery(getApplication(), query);
     }
 
-    //
     public String getQueryFromPreferences() {
         return QueryPreferences.getSearchQuery(getApplication());
     }
@@ -99,7 +87,6 @@ public class SearchViewModel extends AndroidViewModel {
         QueryPreferences.setFilterColor(getApplication(), color);
     }
 
-    //
     public String getColorFromPreferences() {
         return QueryPreferences.getFilterColor(getApplication());
     }

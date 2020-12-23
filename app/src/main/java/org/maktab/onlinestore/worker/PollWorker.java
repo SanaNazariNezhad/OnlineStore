@@ -26,7 +26,6 @@ public class PollWorker extends Worker {
 
     private static final String TAG = "PollWorker";
     private static final String POLL_WORKER_NAME = "PollWorkerName";
-    private static SettingViewModel mSettingViewModel;
 
     public PollWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
