@@ -25,6 +25,7 @@ import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.models.SlideModel;
 
 import org.maktab.onlinestore.R;
+import org.maktab.onlinestore.utilities.QueryPreferences;
 import org.maktab.onlinestore.view.activity.ProductDetailActivity;
 import org.maktab.onlinestore.view.activity.SearchActivity;
 import org.maktab.onlinestore.adapter.HighestScoreProductAdapter;
@@ -33,6 +34,7 @@ import org.maktab.onlinestore.adapter.MostVisitedProductAdapter;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.FragmentHomePageBinding;
 import org.maktab.onlinestore.viewmodel.ProductViewModel;
+import org.maktab.onlinestore.viewmodel.SettingViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,7 @@ public class HomePageFragment extends Fragment {
     private MostVisitedProductAdapter mMostVisitedProductAdapter;
     private LatestProductAdapter mLatestProductAdapter;
     private ProductViewModel mProductViewModel;
+    private SettingViewModel mSettingViewModel;
     private LiveData<List<Product>> mMostVisitedProductItemsLiveData;
     private LiveData<List<Product>> mLatestProductItemsLiveData;
     private LiveData<List<Product>> mHighestScoreProductItemsLiveData;
@@ -108,6 +111,9 @@ public class HomePageFragment extends Fragment {
         } else {
             togglePollingItem.setIcon(R.drawable.ic_notifications_active);
         }
+        if (mSettingViewModel.getNotificationTime() == 0){
+            mSettingViewModel.setNotificationTime(3);
+        }
     }
 
     @Override
@@ -148,6 +154,7 @@ public class HomePageFragment extends Fragment {
 
     private void getProductsFromProductViewModel() {
         mProductViewModel = new ViewModelProvider(this).get(ProductViewModel.class);
+        mSettingViewModel = new ViewModelProvider(this).get(SettingViewModel.class);
         mProductViewModel.fetchMostVisitedProductItems();
         mProductViewModel.fetchLatestProductItems();
         mProductViewModel.fetchHighestScoreProductItems();

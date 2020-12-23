@@ -49,6 +49,16 @@ public class OnlineStoreRepository {
     private MutableLiveData<Customer> mCustomerLiveData = new MutableLiveData<>();
     private MutableLiveData<Product> mProductLiveData = new MutableLiveData<>();
     private static int mSort;
+    private static long mNotificationTime;
+
+
+    public static long getNotificationTime() {
+        return mNotificationTime;
+    }
+
+    public static void setNotificationTime(long notificationTime) {
+        OnlineStoreRepository.mNotificationTime = notificationTime;
+    }
 
     public int getSort() {
         return mSort;

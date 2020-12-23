@@ -1,6 +1,7 @@
 package org.maktab.onlinestore.worker;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -12,7 +13,11 @@ import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
+
+import org.maktab.onlinestore.utilities.QueryPreferences;
 import org.maktab.onlinestore.utilities.ServicesUtils;
+import org.maktab.onlinestore.viewmodel.SettingViewModel;
+
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +26,7 @@ public class PollWorker extends Worker {
 
     private static final String TAG = "PollWorker";
     private static final String POLL_WORKER_NAME = "PollWorkerName";
+    private static SettingViewModel mSettingViewModel;
 
     public PollWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -33,7 +39,7 @@ public class PollWorker extends Worker {
         return Result.success();
     }
 
-    public static void enqueueWork(Context context, boolean isOn) {
+    public static void enqueueWork(Context context, boolean isOn,long notificationTime) {
         Log.d(TAG, "enqueueWork");
         WorkManager workManager = WorkManager.getInstance(context);
 
@@ -44,7 +50,7 @@ public class PollWorker extends Worker {
                     .build();
 
             PeriodicWorkRequest periodicWorkRequest =
-                    new PeriodicWorkRequest.Builder(PollWorker.class, 15, TimeUnit.MINUTES)
+                    new PeriodicWorkRequest.Builder(PollWorker.class, notificationTime, TimeUnit.HOURS)
                             .setConstraints(constraints)
                             .build();
 

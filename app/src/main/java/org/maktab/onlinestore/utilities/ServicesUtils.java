@@ -31,7 +31,7 @@ public class ServicesUtils {
 //        }
 
 //        String serverId = String.valueOf(salesReport.getTotalItems());
-        String serverId = "4";
+        String serverId = "5";
         String lastSavedId = QueryPreferences.getNumberOfProduct(context);
         if (!serverId.equals(lastSavedId)) {
             Log.d(tag, "show notification");
