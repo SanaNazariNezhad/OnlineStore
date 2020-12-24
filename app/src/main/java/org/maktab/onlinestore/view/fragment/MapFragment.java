@@ -3,11 +3,15 @@ package org.maktab.onlinestore.view.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -27,7 +31,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.maktab.onlinestore.viewmodel.SettingViewModel;
 import org.maktab.onlinestore.R;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class MapFragment extends SupportMapFragment {
 
@@ -94,6 +101,7 @@ public class MapFragment extends SupportMapFragment {
                 // Creating MarkerOptions
 
                 mMarker.setPosition(latLng);
+                getAddress(latLng.latitude,latLng.longitude);
 
 //                    mMarkerOptions.position(latLng);
 //                    mMap.addMarker(mMarkerOptions);
@@ -211,9 +219,38 @@ public class MapFragment extends SupportMapFragment {
 
         }
 
+        getAddress(myLatLng.latitude,myLatLng.longitude);
+
         int margin = getResources().getDimensionPixelSize(R.dimen.map_inset_margin);
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds, margin);
         mMap.animateCamera(cameraUpdate);
+    }
+
+    public void getAddress(double lat, double lng) {
+        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+            Address obj = addresses.get(0);
+            String add = obj.getAddressLine(0);
+            add = add + "\n" + obj.getCountryName();
+            add = add + "\n" + obj.getCountryCode();
+            add = add + "\n" + obj.getAdminArea();
+            add = add + "\n" + obj.getPostalCode();
+            add = add + "\n" + obj.getSubAdminArea();
+            add = add + "\n" + obj.getLocality();
+            add = add + "\n" + obj.getSubThoroughfare();
+
+            Log.v("IGA", "Address" + add);
+            Toast.makeText(getActivity(), add, Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this, "Address=>" + add,
+            // Toast.LENGTH_SHORT).show();
+
+            // TennisAppActivity.showDialog(add);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
 }
