@@ -55,6 +55,7 @@ public class HomePageFragment extends Fragment {
     private LiveData<List<Product>> mSpecialProductsLiveData3;
     private List<Product> mSpecialProducts;
     List<SlideModel> mSlideModels;
+    private Menu mMenu;
     private int loading = 1;
     int pastVisiblesItems, visibleItemCount, totalItemCount;
 
@@ -105,6 +106,17 @@ public class HomePageFragment extends Fragment {
         SearchView searchView = (SearchView) searchMenuItem.getActionView();
         setSearchViewListeners(searchView);
 
+        mMenu = menu;
+        checkNotificationTime(menu);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        checkNotificationTime(mMenu);
+    }
+
+    private void checkNotificationTime(@NonNull Menu menu) {
         MenuItem togglePollingItem = menu.findItem(R.id.menu_item_poll_toggling);
         if (mProductViewModel.isTaskScheduled()) {
             togglePollingItem.setIcon(R.drawable.ic_notifications_off);
