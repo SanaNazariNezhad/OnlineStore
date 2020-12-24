@@ -1,19 +1,33 @@
 package org.maktab.onlinestore.viewmodel;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.location.Location;
+import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
 import org.maktab.onlinestore.databinding.FragmentNotificationBinding;
 import org.maktab.onlinestore.utilities.QueryPreferences;
 import org.maktab.onlinestore.view.activity.LocationActivity;
+import org.maktab.onlinestore.view.activity.MapActivity;
 import org.maktab.onlinestore.view.activity.NotificationActivity;
+import org.maktab.onlinestore.view.fragment.MapFragment;
 import org.maktab.onlinestore.worker.PollWorker;
 
 public class SettingViewModel extends AndroidViewModel {
@@ -21,6 +35,8 @@ public class SettingViewModel extends AndroidViewModel {
     private OnlineStoreRepository mRepository;
     private Context mContext;
     private FragmentNotificationBinding mNotificationBinding;
+    private MutableLiveData<Location> mMyLocation = new MutableLiveData<>();
+    private FusedLocationProviderClient mFusedLocationClient;
 
     public void setNotificationBinding(FragmentNotificationBinding notificationBinding) {
         mNotificationBinding = notificationBinding;
@@ -29,6 +45,7 @@ public class SettingViewModel extends AndroidViewModel {
     public SettingViewModel(@NonNull Application application) {
         super(application);
         mRepository = new OnlineStoreRepository();
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplication());
 
     }
 
@@ -42,6 +59,10 @@ public class SettingViewModel extends AndroidViewModel {
 
     public void onClickLocationItem() {
         mContext.startActivity(LocationActivity.newIntent(mContext));
+    }
+
+    public void onClickAddLocationItem() {
+        mContext.startActivity(MapActivity.newIntent(mContext));
     }
 
     public void togglePolling() {
@@ -112,5 +133,33 @@ public class SettingViewModel extends AndroidViewModel {
 
     public void setNotificationTime(long notificationTime) {
         QueryPreferences.setNotificationTime(getApplication(),notificationTime);
+    }
+
+    public LiveData<Location> getMyLocation() {
+        return mMyLocation;
+    }
+
+    @SuppressLint("MissingPermission")
+    public void requestLocation() {
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setNumUpdates(1);
+        locationRequest.setInterval(0);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationCallback locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                Location location = locationResult.getLocations().get(0);
+                Log.d(MapFragment.TAG,
+                        "lat: " + location.getLatitude() + ", lon: " + location.getLongitude());
+
+                mMyLocation.setValue(location);
+            }
+        };
+
+        mFusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper());
     }
 }

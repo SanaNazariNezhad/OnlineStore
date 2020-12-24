@@ -36,6 +36,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.3.1'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
     def retrofit_version = '2.9.0'
     def work_version = '2.4.0'
 
@@ -59,5 +60,8 @@ dependencies {
 
     implementation "androidx.work:work-runtime:$work_version"
     implementation 'org.greenrobot:eventbus:3.2.0'
+
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
 
 }
