@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/nav_setting"
-        android:name="org.maktab.onlinestore.view.fragment.SettingFragment"
-        android:label="@string/menu_setting"
-        tools:layout="@layout/fragment_setting" />
+        android:name="org.maktab.onlinestore.view.fragment.SettingsFragment"
+        android:label="@string/menu_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

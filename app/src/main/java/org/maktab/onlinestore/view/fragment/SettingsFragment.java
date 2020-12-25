@@ -11,22 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.maktab.onlinestore.R;
-import org.maktab.onlinestore.databinding.FragmentSearchBinding;
-import org.maktab.onlinestore.databinding.FragmentSettingBinding;
-import org.maktab.onlinestore.viewmodel.ProductViewModel;
-import org.maktab.onlinestore.viewmodel.SearchViewModel;
+import org.maktab.onlinestore.databinding.FragmentSettingsBinding;
 import org.maktab.onlinestore.viewmodel.SettingViewModel;
 
-public class SettingFragment extends Fragment {
+public class SettingsFragment extends Fragment {
 
-    private FragmentSettingBinding mSettingBinding;
+    private FragmentSettingsBinding mSettingsBinding;
     private SettingViewModel mSettingViewModel;
 
-    public SettingFragment() {
+    public SettingsFragment() {
         // Required empty public constructor
     }
-    public static SettingFragment newInstance() {
-        SettingFragment fragment = new SettingFragment();
+    public static SettingsFragment newInstance() {
+        SettingsFragment fragment = new SettingsFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -43,18 +40,18 @@ public class SettingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mSettingBinding = DataBindingUtil.inflate(inflater,
-                R.layout.fragment_setting,
+        mSettingsBinding = DataBindingUtil.inflate(inflater,
+                R.layout.fragment_settings,
                 container,
                 false);
 
         initView();
 //        listeners();
-        return mSettingBinding.getRoot();
+        return mSettingsBinding.getRoot();
     }
 
     private void listeners() {
-        mSettingBinding.imageViewLocation.setOnClickListener(new View.OnClickListener() {
+        mSettingsBinding.imageViewLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mSettingViewModel.onClickLocationItem();
@@ -64,6 +61,6 @@ public class SettingFragment extends Fragment {
 
     private void initView() {
         mSettingViewModel.setContext(getActivity());
-        mSettingBinding.setSettingViewModel(mSettingViewModel);
+        mSettingsBinding.setSettingViewModel(mSettingViewModel);
     }
 }

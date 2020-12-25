@@ -12,7 +12,7 @@
 
     <string name="menu_home">Home</string>
     <string name="menu_category">Category</string>
-    <string name="menu_setting">Setting</string>
+    <string name="menu_settings">Settings</string>
     <string name="the_highest_score_products">The Highest Score Products:</string>
     <string name="the_most_visited_products">The Most Visited Products:</string>
     <string name="the_latest_products">The Latest Products:</string>
@@ -59,5 +59,6 @@
     <string name="location_dialog_title">Turn on location </string>
     <string name="your_address">Your Address:</string>
     <string name="discount_code">Discount code:</string>
+    <string name="hour">hour</string>
 
 </resources>
