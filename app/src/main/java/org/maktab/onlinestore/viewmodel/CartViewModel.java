@@ -101,13 +101,12 @@ public class CartViewModel extends AndroidViewModel {
         Cart cart = mCartDBRepository.getCart(productId);
         if (cart == null) {
             insertToCart(new Cart(productId,1));
-            Toast.makeText(mContext, "add to cart", Toast.LENGTH_SHORT).show();
         }else {
             int count = cart.getProduct_count() + 1;
             cart.setProduct_count(count);
             mCartDBRepository.updateCart(cart);
-            Toast.makeText(mContext, "add to cart", Toast.LENGTH_SHORT).show();
         }
+        Toast.makeText(mContext, "add to cart", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -167,7 +166,11 @@ public class CartViewModel extends AndroidViewModel {
     }
 
     public void onClickContinueBuy(){
-        mContext.startActivity(BuyActivity.newIntent(mContext));
+        if (mProductList.size()==0){
+            Toast.makeText(mContext,"Your cart is Empty!",Toast.LENGTH_SHORT).show();
+        }else {
+            mContext.startActivity(BuyActivity.newIntent(mContext));
+        }
     }
 
     public void onclickBuy () {

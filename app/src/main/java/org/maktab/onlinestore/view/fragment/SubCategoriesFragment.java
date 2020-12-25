@@ -67,7 +67,7 @@ public class SubCategoriesFragment extends VisibleFragment {
 
         inflater.inflate(R.menu.home, menu);
 
-        MenuItem searchMenuItem = menu.findItem(R.id.menu_item_search);
+        MenuItem searchMenuItem = menu.findItem(R.id.menu_item_search_home);
         SearchView searchView = (SearchView) searchMenuItem.getActionView();
         setSearchViewListeners(searchView);
     }
