@@ -19,8 +19,11 @@ import org.maktab.onlinestore.data.model.ShippingAddress;
 import org.maktab.onlinestore.data.repository.CartDBRepository;
 import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
 import org.maktab.onlinestore.databinding.FragmentCartBinding;
+import org.maktab.onlinestore.view.activity.BuyActivity;
 import org.maktab.onlinestore.view.activity.CartActivity;
 import org.maktab.onlinestore.view.activity.ProductDetailActivity;
+import org.maktab.onlinestore.view.fragment.BuyFragment;
+import org.maktab.onlinestore.view.fragment.CartFragment;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +32,7 @@ import java.util.Random;
 
 public class CartViewModel extends AndroidViewModel {
 
+    public static final int REQUEST_CODE_BUY_FRAGMENT = 0;
     private CartDBRepository mCartDBRepository;
     private OnlineStoreRepository mStoreRepository;
     private LiveData<Product> mProductLiveData;
@@ -163,6 +167,10 @@ public class CartViewModel extends AndroidViewModel {
     }
 
     public void onClickContinueBuy(){
+        mContext.startActivity(BuyActivity.newIntent(mContext));
+    }
+
+    public void onclickBuy () {
         Random random = new Random();
         BillingAddress[] billingAddresses = new BillingAddress[1];
         billingAddresses[0] = new BillingAddress("sana","nazari","maktab",

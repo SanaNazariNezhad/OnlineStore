@@ -30,13 +30,13 @@ public class NetworkParams {
     public static final String PRICE = "price";
     public static final String META_VALUE_NUM = "price";
     public static final String PAGE = "page";
+    public static final String TOTAL_SALES = "total_sales";
 
 
     public static final Map<String, String> BASE_OPTIONS = new HashMap<String, String>() {{
         put("consumer_key", CONSUMER_KEY);
         put("consumer_secret", CONSUMER_SECRET);
     }};
-    public static final String TOTAL_SALES = "total_sales";
 
     public static Map<String, String> getMostVisitedProducts() {
         Map<String, String> products = new HashMap<>();
