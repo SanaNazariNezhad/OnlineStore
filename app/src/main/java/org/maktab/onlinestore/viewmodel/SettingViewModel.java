@@ -21,6 +21,7 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 import org.maktab.onlinestore.R;
+import org.maktab.onlinestore.adapter.AddressAdapter;
 import org.maktab.onlinestore.data.model.MapAddress;
 import org.maktab.onlinestore.data.repository.AddressDBRepository;
 import org.maktab.onlinestore.databinding.FragmentNotificationBinding;
@@ -39,7 +40,9 @@ public class SettingViewModel extends AndroidViewModel {
     private Context mContext;
     private FragmentNotificationBinding mNotificationBinding;
     private MutableLiveData<Location> mMyLocation = new MutableLiveData<>();
+    private MutableLiveData<List<MapAddress>> mLiveDataAddress = new MutableLiveData<>();
     private FusedLocationProviderClient mFusedLocationClient;
+    private AddressAdapter mAddressAdapter;
 
     public void setNotificationBinding(FragmentNotificationBinding notificationBinding) {
         mNotificationBinding = notificationBinding;
@@ -49,7 +52,12 @@ public class SettingViewModel extends AndroidViewModel {
         super(application);
         mRepository = AddressDBRepository.getInstance(application);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplication());
+        mLiveDataAddress = mRepository.getListMutableLiveData();
 
+    }
+
+    public MutableLiveData<List<MapAddress>> getLiveDataAddress() {
+        return mRepository.getListMutableLiveData();
     }
 
     public void setContext(Context context) {
@@ -71,7 +79,7 @@ public class SettingViewModel extends AndroidViewModel {
     public void togglePolling() {
         boolean isOn = PollWorker.isWorkEnqueued(getApplication());
         long time = QueryPreferences.getNotificationTime(getApplication());
-        PollWorker.enqueueWork(getApplication(), !isOn,time);
+        PollWorker.enqueueWork(getApplication(), !isOn, time);
     }
 
     public boolean isTaskScheduled() {
@@ -110,22 +118,19 @@ public class SettingViewModel extends AndroidViewModel {
                 QueryPreferences.setNotificationTime(getApplication(), Long.parseLong(userTime));
                 Toast.makeText(mContext, "Notification Time is:  " + userTime, Toast.LENGTH_SHORT).show();
             }
-        }else {
+        } else {
             if (mNotificationBinding.radioButton3.isChecked()) {
                 Toast.makeText(mContext, "Notification Time is:  " + 3, Toast.LENGTH_SHORT).show();
-                QueryPreferences.setNotificationTime(getApplication(),3);
-            }
-            else if (mNotificationBinding.radioButton5.isChecked()) {
+                QueryPreferences.setNotificationTime(getApplication(), 3);
+            } else if (mNotificationBinding.radioButton5.isChecked()) {
                 Toast.makeText(mContext, "Notification Time is:  " + 5, Toast.LENGTH_SHORT).show();
-                QueryPreferences.setNotificationTime(getApplication(),5);
-            }
-            else if (mNotificationBinding.radioButton8.isChecked()) {
+                QueryPreferences.setNotificationTime(getApplication(), 5);
+            } else if (mNotificationBinding.radioButton8.isChecked()) {
                 Toast.makeText(mContext, "Notification Time is:  " + 8, Toast.LENGTH_SHORT).show();
-                QueryPreferences.setNotificationTime(getApplication(),8);
-            }
-            else if (mNotificationBinding.radioButton12.isChecked()) {
+                QueryPreferences.setNotificationTime(getApplication(), 8);
+            } else if (mNotificationBinding.radioButton12.isChecked()) {
                 Toast.makeText(mContext, "Notification Time is:  " + 12, Toast.LENGTH_SHORT).show();
-                QueryPreferences.setNotificationTime(getApplication(),12);
+                QueryPreferences.setNotificationTime(getApplication(), 12);
             }
         }
     }
@@ -135,7 +140,7 @@ public class SettingViewModel extends AndroidViewModel {
     }
 
     public void setNotificationTime(long notificationTime) {
-        QueryPreferences.setNotificationTime(getApplication(),notificationTime);
+        QueryPreferences.setNotificationTime(getApplication(), notificationTime);
     }
 
     public LiveData<Location> getMyLocation() {
@@ -166,11 +171,48 @@ public class SettingViewModel extends AndroidViewModel {
                 Looper.getMainLooper());
     }
 
-    public void insertAddress(MapAddress mapAddress){
+    public void insertAddress(MapAddress mapAddress) {
         mRepository.insertAddress(mapAddress);
     }
 
-    public List<MapAddress> getAddresses(){
+    public MapAddress getSelectedAddress() {
+        return mRepository.getAddress();
+    }
+
+    public void updateAddress(MapAddress mapAddress) {
+        mRepository.updateAddress(mapAddress);
+    }
+
+    public List<MapAddress> getAddresses() {
         return mRepository.getMapAddresses();
+    }
+
+    public MapAddress getAddressWithId(long addressId) {
+        return mRepository.getAddressWithId(addressId);
+    }
+
+    public AddressAdapter getAddressAdapter() {
+        return mAddressAdapter;
+    }
+
+    public void setAddressAdapter(AddressAdapter addressAdapter) {
+        mAddressAdapter = addressAdapter;
+    }
+
+    public void onClickSelectedAddress(long addressId) {
+        MapAddress prev_address = getSelectedAddress();
+        if (prev_address != null) {
+            prev_address.setSelected_address(0);
+            updateAddress(prev_address);
+        }
+        MapAddress new_address = getAddressWithId(addressId);
+        new_address.setSelected_address(1);
+        updateAddress(new_address);
+        List<MapAddress> mapAddressList = getAddresses();
+
+        mLiveDataAddress.setValue(mapAddressList);
+        mRepository.setListMutableLiveData(mLiveDataAddress);
+
+
     }
 }

@@ -7,7 +7,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -33,7 +32,6 @@ import org.maktab.onlinestore.viewmodel.SettingViewModel;
 import org.maktab.onlinestore.R;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -95,13 +93,13 @@ public class MapFragment extends SupportMapFragment {
                 if (mMarker != null) {
 
                     mMarker.setPosition(latLng);
-                }else {
+                } else {
                     mMarkerOptions
                             .position(latLng)
                             .title("My Location");
                     mMarker = mMap.addMarker(mMarkerOptions);
                 }
-                getAddress(latLng.latitude,latLng.longitude);
+                getAddress(latLng.latitude, latLng.longitude);
 
 
             }
@@ -112,7 +110,7 @@ public class MapFragment extends SupportMapFragment {
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
 
-        inflater.inflate(R.menu.menu_fragment_location, menu);
+        inflater.inflate(R.menu.menu_fragment_map, menu);
     }
 
     @Override
@@ -127,13 +125,17 @@ public class MapFragment extends SupportMapFragment {
                 }
                 return true;
             case R.id.menu_item_done:
-                if (mLatLng != null && mAddress != null){
-                    MapAddress mapAddress = new MapAddress(mAddress,mLatLng.latitude,mLatLng.longitude);
+                if (mLatLng != null && mAddress != null) {
+                    MapAddress prev_address = mSettingViewModel.getSelectedAddress();
+                    if (prev_address != null) {
+                        prev_address.setSelected_address(0);
+                        mSettingViewModel.updateAddress(prev_address);
+                    }
+                    MapAddress mapAddress = new MapAddress(mAddress, mLatLng.latitude, mLatLng.longitude, 1);
                     mSettingViewModel.insertAddress(mapAddress);
                     Toast.makeText(getActivity(), "Done", Toast.LENGTH_SHORT).show();
-                }
-
-                else
+                    getActivity().finish();
+                } else
                     Toast.makeText(getActivity(), "Select Place", Toast.LENGTH_SHORT).show();
 
             default:
@@ -195,7 +197,7 @@ public class MapFragment extends SupportMapFragment {
 
     private void updateUI() {
         Location location = mSettingViewModel.getMyLocation().getValue();
-        if (location == null || mMap == null )
+        if (location == null || mMap == null)
             return;
 
         LatLng myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
@@ -208,15 +210,15 @@ public class MapFragment extends SupportMapFragment {
                 .position(myLatLng)
                 .title("My Location");
 
-        if (mMarker == null){
+        if (mMarker == null) {
 
             mMarker = mMap.addMarker(mMarkerOptions);
-        }else {
+        } else {
             mMarker.setPosition(myLatLng);
 
         }
 
-        getAddress(myLatLng.latitude,myLatLng.longitude);
+        getAddress(myLatLng.latitude, myLatLng.longitude);
 
         int margin = getResources().getDimensionPixelSize(R.dimen.map_inset_margin);
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngBounds(latLngBounds, margin);
@@ -237,7 +239,7 @@ public class MapFragment extends SupportMapFragment {
             mAddress = mAddress + "\n" + obj.getLocality();
             mAddress = mAddress + "\n" + obj.getSubThoroughfare();
 
-            mLatLng = new LatLng(lat,lng);
+            mLatLng = new LatLng(lat, lng);
 
         } catch (IOException e) {
 

@@ -5,6 +5,14 @@
 
     <data>
 
+        <variable
+            name="settingViewModel"
+            type="org.maktab.onlinestore.viewmodel.SettingViewModel" />
+
+        <variable
+            name="addressId"
+            type="Long" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,6 +20,7 @@
         android:background="@drawable/recycler_layout"
         android:padding="16dp"
         android:layout_margin="8dp"
+        android:onClick="@{() -> settingViewModel.onClickSelectedAddress(addressId)}"
         android:layout_height="wrap_content">
 
         <TextView
@@ -21,7 +30,6 @@
             android:maxLines="2"
            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_margin="16dp"
             android:gravity="center"
@@ -30,6 +38,16 @@
             android:textSize="16sp"
             style="@style/TextAppearance.AppCompat.Medium"
             tools:text="@string/menu_category" />
+
+        <ImageView
+            android:id="@+id/imageView_selected_address"
+            android:layout_width="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/text_view_address_name"
+            app:layout_constraintBottom_toBottomOf="@id/text_view_address_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="12dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_black" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

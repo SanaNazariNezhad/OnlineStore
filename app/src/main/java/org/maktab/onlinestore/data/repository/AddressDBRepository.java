@@ -2,8 +2,10 @@ package org.maktab.onlinestore.data.repository;
 
 import android.content.Context;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.room.Room;
 
+import org.maktab.onlinestore.data.model.Cart;
 import org.maktab.onlinestore.data.model.MapAddress;
 import org.maktab.onlinestore.data.room.CartDatabase;
 import org.maktab.onlinestore.data.room.CartDatabaseDAO;
@@ -16,7 +18,7 @@ public class AddressDBRepository implements IAddressRepository {
 
     private CartDatabaseDAO mCartDAO;
     private Context mContext;
-    private List<MapAddress> mMapAddresses;
+    private MutableLiveData<List<MapAddress>> mListMutableLiveData;
 
     public static AddressDBRepository getInstance(Context context) {
         if (sInstance == null)
@@ -34,6 +36,15 @@ public class AddressDBRepository implements IAddressRepository {
                 .build();
 
         mCartDAO = cartDatabase.getCartDatabaseDAO();
+        mListMutableLiveData = new MutableLiveData<>();
+    }
+
+    public MutableLiveData<List<MapAddress>> getListMutableLiveData() {
+        return mListMutableLiveData;
+    }
+
+    public void setListMutableLiveData(MutableLiveData<List<MapAddress>> listMutableLiveData) {
+        mListMutableLiveData = listMutableLiveData;
     }
 
     @Override
@@ -59,5 +70,15 @@ public class AddressDBRepository implements IAddressRepository {
     @Override
     public List<MapAddress> getMapAddresses() {
         return mCartDAO.getAddresses();
+    }
+
+    @Override
+    public MapAddress getAddress() {
+        return mCartDAO.getAddress();
+    }
+
+    @Override
+    public MapAddress getAddressWithId(long addressId) {
+        return mCartDAO.getAddressWithId(addressId);
     }
 }
