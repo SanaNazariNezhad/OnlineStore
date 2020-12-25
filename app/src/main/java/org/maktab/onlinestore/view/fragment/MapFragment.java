@@ -86,21 +86,11 @@ public class MapFragment extends SupportMapFragment {
             }
         });
     }
-//////////////////////////////
+
     private void listeners() {
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-
-                /*if (markerPoints.size() == 1) {
-                    markerPoints.clear();
-                    mMap.clear();
-                }
-
-                // Adding new item to the ArrayList
-                markerPoints.add(latLng);*/
-
-                // Creating MarkerOptions
 
                 if (mMarker != null) {
 
@@ -112,15 +102,6 @@ public class MapFragment extends SupportMapFragment {
                     mMarker = mMap.addMarker(mMarkerOptions);
                 }
                 getAddress(latLng.latitude,latLng.longitude);
-
-//                    mMarkerOptions.position(latLng);
-//                    mMap.addMarker(mMarkerOptions);
-
-
-                // Setting the position of the marker
-
-
-                // Add new marker to the Google Map Android API V2
 
 
             }
@@ -257,8 +238,6 @@ public class MapFragment extends SupportMapFragment {
             mAddress = mAddress + "\n" + obj.getSubThoroughfare();
 
             mLatLng = new LatLng(lat,lng);
-
-//            Toast.makeText(getActivity(), mAddress, Toast.LENGTH_SHORT).show();
 
         } catch (IOException e) {
 
