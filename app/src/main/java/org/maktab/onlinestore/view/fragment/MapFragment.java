@@ -28,6 +28,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.maktab.onlinestore.data.model.MapAddress;
 import org.maktab.onlinestore.viewmodel.SettingViewModel;
 import org.maktab.onlinestore.R;
 
@@ -44,9 +45,10 @@ public class MapFragment extends SupportMapFragment {
 
     private SettingViewModel mSettingViewModel;
     private GoogleMap mMap;
-    ArrayList markerPoints = new ArrayList();
-    MarkerOptions mMarkerOptions;
-    Marker mMarker;
+    private MarkerOptions mMarkerOptions;
+    private Marker mMarker;
+    private String mAddress;
+    private LatLng mLatLng;
 
     public MapFragment() {
         // Required empty public constructor
@@ -100,7 +102,15 @@ public class MapFragment extends SupportMapFragment {
 
                 // Creating MarkerOptions
 
-                mMarker.setPosition(latLng);
+                if (mMarker != null) {
+
+                    mMarker.setPosition(latLng);
+                }else {
+                    mMarkerOptions
+                            .position(latLng)
+                            .title("My Location");
+                    mMarker = mMap.addMarker(mMarkerOptions);
+                }
                 getAddress(latLng.latitude,latLng.longitude);
 
 //                    mMarkerOptions.position(latLng);
@@ -135,6 +145,16 @@ public class MapFragment extends SupportMapFragment {
                     requestLocationAccessPermission();
                 }
                 return true;
+            case R.id.menu_item_done:
+                if (mLatLng != null && mAddress != null){
+                    MapAddress mapAddress = new MapAddress(mAddress,mLatLng.latitude,mLatLng.longitude);
+                    mSettingViewModel.insertAddress(mapAddress);
+                    Toast.makeText(getActivity(), "Done", Toast.LENGTH_SHORT).show();
+                }
+
+                else
+                    Toast.makeText(getActivity(), "Select Place", Toast.LENGTH_SHORT).show();
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -207,10 +227,6 @@ public class MapFragment extends SupportMapFragment {
                 .position(myLatLng)
                 .title("My Location");
 
-        /*MarkerOptions myMarkerOptions = new MarkerOptions()
-                .position(myLatLng)
-                .title("My Location");*/
-
         if (mMarker == null){
 
             mMarker = mMap.addMarker(mMarkerOptions);
@@ -231,23 +247,21 @@ public class MapFragment extends SupportMapFragment {
         try {
             List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
             Address obj = addresses.get(0);
-            String add = obj.getAddressLine(0);
-            add = add + "\n" + obj.getCountryName();
-            add = add + "\n" + obj.getCountryCode();
-            add = add + "\n" + obj.getAdminArea();
-            add = add + "\n" + obj.getPostalCode();
-            add = add + "\n" + obj.getSubAdminArea();
-            add = add + "\n" + obj.getLocality();
-            add = add + "\n" + obj.getSubThoroughfare();
+            mAddress = obj.getAddressLine(0);
+            mAddress = mAddress + "\n" + obj.getCountryName();
+            mAddress = mAddress + "\n" + obj.getCountryCode();
+            mAddress = mAddress + "\n" + obj.getAdminArea();
+            mAddress = mAddress + "\n" + obj.getPostalCode();
+            mAddress = mAddress + "\n" + obj.getSubAdminArea();
+            mAddress = mAddress + "\n" + obj.getLocality();
+            mAddress = mAddress + "\n" + obj.getSubThoroughfare();
 
-            Log.v("IGA", "Address" + add);
-            Toast.makeText(getActivity(), add, Toast.LENGTH_SHORT).show();
-            // Toast.makeText(this, "Address=>" + add,
-            // Toast.LENGTH_SHORT).show();
+            mLatLng = new LatLng(lat,lng);
 
-            // TennisAppActivity.showDialog(add);
+//            Toast.makeText(getActivity(), mAddress, Toast.LENGTH_SHORT).show();
+
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }

@@ -5,6 +5,8 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
+
+import org.maktab.onlinestore.data.model.MapAddress;
 import org.maktab.onlinestore.data.model.Cart;
 import java.util.List;
 
@@ -21,7 +23,7 @@ public interface CartDatabaseDAO {
     void insertCarts(List<Cart> carts);
 
     @Delete
-    void deleteTask(Cart cart);
+    void deleteCart(Cart cart);
 
     @Query("DELETE FROM cart")
     void deleteAllCart();
@@ -31,5 +33,21 @@ public interface CartDatabaseDAO {
 
     @Query("SELECT * FROM cart WHERE product_id=:productId")
     Cart getCart(int productId);
+
+
+    @Update
+    void updateAddress(MapAddress mapAddress);
+
+    @Insert
+    void insertAddress(MapAddress mapAddress);
+
+    @Insert
+    void insertAddresses(List<MapAddress> mapAddresses);
+
+    @Delete
+    void deleteAddress(MapAddress mapAddress);
+
+    @Query("SELECT * FROM address")
+    List<MapAddress> getAddresses();
 
 }

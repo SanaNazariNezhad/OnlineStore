@@ -50,7 +50,7 @@ public class CartDBRepository implements IRepository {
 
     @Override
     public void deleteCart(Cart cart) {
-        mCartDAO.deleteTask(cart);
+        mCartDAO.deleteCart(cart);
     }
 
     @Override

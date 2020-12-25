@@ -21,7 +21,8 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 import org.maktab.onlinestore.R;
-import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
+import org.maktab.onlinestore.data.model.MapAddress;
+import org.maktab.onlinestore.data.repository.AddressDBRepository;
 import org.maktab.onlinestore.databinding.FragmentNotificationBinding;
 import org.maktab.onlinestore.utilities.QueryPreferences;
 import org.maktab.onlinestore.view.activity.LocationActivity;
@@ -30,9 +31,11 @@ import org.maktab.onlinestore.view.activity.NotificationActivity;
 import org.maktab.onlinestore.view.fragment.MapFragment;
 import org.maktab.onlinestore.worker.PollWorker;
 
+import java.util.List;
+
 public class SettingViewModel extends AndroidViewModel {
 
-    private OnlineStoreRepository mRepository;
+    private AddressDBRepository mRepository;
     private Context mContext;
     private FragmentNotificationBinding mNotificationBinding;
     private MutableLiveData<Location> mMyLocation = new MutableLiveData<>();
@@ -44,7 +47,7 @@ public class SettingViewModel extends AndroidViewModel {
 
     public SettingViewModel(@NonNull Application application) {
         super(application);
-        mRepository = new OnlineStoreRepository();
+        mRepository = AddressDBRepository.getInstance(application);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplication());
 
     }
@@ -161,5 +164,13 @@ public class SettingViewModel extends AndroidViewModel {
                 locationRequest,
                 locationCallback,
                 Looper.getMainLooper());
+    }
+
+    public void insertAddress(MapAddress mapAddress){
+        mRepository.insertAddress(mapAddress);
+    }
+
+    public List<MapAddress> getAddresses(){
+        return mRepository.getMapAddresses();
     }
 }
