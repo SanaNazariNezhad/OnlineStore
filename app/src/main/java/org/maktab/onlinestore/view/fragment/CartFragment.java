@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.NotNull;
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.OrderedProductAdapter;
 import org.maktab.onlinestore.adapter.SearchProductAdapter;
@@ -54,7 +55,6 @@ public class CartFragment extends VisibleFragment {
         mProductLiveData = mCartViewModel.getLiveDateProduct();
         mCustomerLiveData = mCartViewModel.getLiveDateCustomer();
         observer();
-        
     }
 
     private void observer() {
@@ -94,7 +94,7 @@ public class CartFragment extends VisibleFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
