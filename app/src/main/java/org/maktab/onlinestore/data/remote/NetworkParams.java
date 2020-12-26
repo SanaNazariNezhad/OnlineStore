@@ -37,6 +37,7 @@ public class NetworkParams {
         put("consumer_key", CONSUMER_KEY);
         put("consumer_secret", CONSUMER_SECRET);
     }};
+    public static final String PRODUCT = "product";
 
     public static Map<String, String> getMostVisitedProducts() {
         Map<String, String> products = new HashMap<>();
@@ -147,6 +148,14 @@ public class NetworkParams {
     public static Map<String, String> getTotalItemsSalesProducts() {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
+
+        return products;
+    }
+
+    public static Map<String, String> getCommentOfProduct(String productId) {
+        Map<String, String> products = new HashMap<>();
+        products.putAll(BASE_OPTIONS);
+        products.put(PRODUCT, productId);
 
         return products;
     }

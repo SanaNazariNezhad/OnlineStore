@@ -1,5 +1,6 @@
 package org.maktab.onlinestore.data.remote.retrofit;
 
+import org.maktab.onlinestore.data.model.Comment;
 import org.maktab.onlinestore.data.model.Customer;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.model.ProductCategory;
@@ -33,6 +34,9 @@ public interface APIService {
 
     @GET("reports/sales")
     Call<List<SalesReport>> sales(@QueryMap Map<String, String> options);
+
+    @GET("products/reviews")
+    Call<List<Comment>> comments(@QueryMap Map<String, String> options);
 
     @POST("customers")
     @Headers({ "Content-Type: application/json;charset=UTF-8"})

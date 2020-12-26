@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import org.maktab.onlinestore.data.model.Comment;
 import org.maktab.onlinestore.data.model.Images;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
@@ -24,6 +25,7 @@ public class ProductViewModel extends AndroidViewModel {
     private List<Product> mProductListHighestScore;
     private Context mContext;
     private Product mDetailedProduct;
+    private List<Comment> mCommentList;
 
 
     public ProductViewModel(@NonNull Application application) {
@@ -68,8 +70,20 @@ public class ProductViewModel extends AndroidViewModel {
         mDetailedProduct = detailedProduct;
     }
 
+    public List<Comment> getCommentList() {
+        return mCommentList;
+    }
+
+    public void setCommentList(List<Comment> commentList) {
+        mCommentList = commentList;
+    }
+
     public void fetchProductItems(int productId){
         mRepository.fetchProductItemAsync(productId);
+    }
+
+    public void fetchComment(String productId){
+        mRepository.fetchCommentAsync(productId);
     }
 
     public void fetchMostVisitedProductItems(){
@@ -94,6 +108,10 @@ public class ProductViewModel extends AndroidViewModel {
 
     public LiveData<Product> getLiveDateProduct(){
         return mRepository.getProductLiveData();
+    }
+
+    public LiveData<List<Comment>> getLiveDateComment(){
+        return mRepository.getLiveDataComment();
     }
 
     public LiveData<List<Product>> getLiveDateHighestScoreProducts(){

@@ -14,20 +14,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import org.maktab.onlinestore.adapter.ProductCommentAdapter;
 import org.maktab.onlinestore.data.model.Cart;
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.ProductDetailAdapter;
+import org.maktab.onlinestore.data.model.Comment;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.FragmentProductDetailBinding;
 import org.maktab.onlinestore.viewmodel.CartViewModel;
 import org.maktab.onlinestore.viewmodel.ProductViewModel;
 
+import java.util.List;
+
 public class ProductDetailFragment extends VisibleFragment {
 
     private ProductDetailAdapter mDetailAdapter;
+    private ProductCommentAdapter mCommentAdapter;
     private ProductViewModel mProductViewModel;
     private CartViewModel mCartViewModel;
     private LiveData<Product> mProductLiveData;
+    private LiveData<List<Comment>> mCommentLiveData;
     private FragmentProductDetailBinding mProductDetailBinding;
 
     public static final String BUNDLE_KEY_PRODUCT_ID = "bundle_key_product_id";
@@ -140,6 +146,20 @@ public class ProductDetailFragment extends VisibleFragment {
                 mProductDetailBinding.textViewPrice.setText(product.getPrice());
             }
         });
+        mCommentLiveData.observe(this, new Observer<List<Comment>>() {
+            @Override
+            public void onChanged(List<Comment> comments) {
+                if (comments != null) {
+                    mProductViewModel.setCommentList(comments);
+                    setCommentAdapter();
+                }
+            }
+        });
+    }
+
+    private void setCommentAdapter() {
+        mCommentAdapter = new ProductCommentAdapter(this,mProductViewModel);
+        mProductDetailBinding.recyclerComment.setAdapter(mCommentAdapter);
     }
 
     private void setAdapterProductDetail() {
@@ -150,11 +170,18 @@ public class ProductDetailFragment extends VisibleFragment {
     private void getProductFromProductViewModel() {
         mProductViewModel = new ViewModelProvider(this).get(ProductViewModel.class);
         mProductViewModel.fetchProductItems(mProductId);
+        mProductViewModel.fetchComment(String.valueOf(mProductId));
         mProductLiveData = mProductViewModel.getLiveDateProduct();
+        mCommentLiveData = mProductViewModel.getLiveDateComment();
     }
 
     private void initView() {
         mProductDetailBinding.recyclerProductDetail
+                .setLayoutManager(new LinearLayoutManager(getContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false));
+
+        mProductDetailBinding.recyclerComment
                 .setLayoutManager(new LinearLayoutManager(getContext(),
                         LinearLayoutManager.HORIZONTAL,
                         false));

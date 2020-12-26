@@ -4,12 +4,14 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import org.maktab.onlinestore.data.model.Comment;
 import org.maktab.onlinestore.data.model.Customer;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.model.ProductCategory;
 import org.maktab.onlinestore.data.model.SalesReport;
 import org.maktab.onlinestore.data.remote.retrofit.APIService;
 import org.maktab.onlinestore.data.remote.NetworkParams;
+import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceComments;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceListOfProduct;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceCategory;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceProduct;
@@ -32,6 +34,7 @@ public class OnlineStoreRepository {
     private final APIService mAPIServiceCategory;
     private final APIService mAPIServiceSalesReport;
     private final APIService mAPIServiceCustomer;
+    private final APIService mAPIServiceComment;
     private String mPage;
     private MutableLiveData<List<Product>> mProductItemsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mProductWithParentIdLiveData = new MutableLiveData<>();
@@ -48,6 +51,7 @@ public class OnlineStoreRepository {
     private MutableLiveData<List<Product>> mSpecialProductsLiveData3 = new MutableLiveData<>();
     private MutableLiveData<Customer> mCustomerLiveData = new MutableLiveData<>();
     private MutableLiveData<Product> mProductLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Comment>> mLiveDataComment = new MutableLiveData<>();
     private static int mSort;
     private static long mNotificationTime;
 
@@ -128,6 +132,10 @@ public class OnlineStoreRepository {
         return mCustomerLiveData;
     }
 
+    public MutableLiveData<List<Comment>> getLiveDataComment() {
+        return mLiveDataComment;
+    }
+
     public String getPage() {
         return mPage;
     }
@@ -151,6 +159,9 @@ public class OnlineStoreRepository {
 
         Retrofit retrofitCustomer = RetrofitInstanceSales.getInstance().getRetrofit();
         mAPIServiceCustomer = retrofitCustomer.create(APIService.class);
+
+        Retrofit retrofitComment = RetrofitInstanceComments.getInstance().getRetrofit();
+        mAPIServiceComment = retrofitComment.create(APIService.class);
         mPage = "1";
     }
 
@@ -469,6 +480,25 @@ public class OnlineStoreRepository {
 
             @Override
             public void onFailure(Call<Customer> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        });
+    }
+
+    public void fetchCommentAsync(String productId) {
+        Call<List<Comment>> call =
+                mAPIServiceComment.comments(NetworkParams.getCommentOfProduct(productId));
+
+        call.enqueue(new Callback<List<Comment>>() {
+            @Override
+            public void onResponse(Call<List<Comment>> call, Response<List<Comment>> response) {
+                List<Comment> items = response.body();
+
+                mLiveDataComment.postValue(items);
+            }
+
+            @Override
+            public void onFailure(Call<List<Comment>> call, Throwable t) {
                 Log.e(TAG, t.getMessage(), t);
             }
         });
