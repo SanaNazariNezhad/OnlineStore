@@ -212,6 +212,10 @@ public class CartViewModel extends AndroidViewModel {
         return mStoreRepository.getLiveDataPUTComment();
     }
 
+    public void fetchDeleteComment(int commentId){
+        mStoreRepository.fetchDeleteCommentAsync(commentId);
+    }
+
     public void onClickAddRate(int rate){
         mLiveDataRate.setValue(rate);
     }

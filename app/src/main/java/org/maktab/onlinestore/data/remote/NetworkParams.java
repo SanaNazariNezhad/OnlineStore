@@ -38,6 +38,8 @@ public class NetworkParams {
         put("consumer_secret", CONSUMER_SECRET);
     }};
     public static final String PRODUCT = "product";
+    public static final String FORCE = "force";
+    public static final String TRUE = "true";
 
     public static Map<String, String> getMostVisitedProducts() {
         Map<String, String> products = new HashMap<>();
@@ -164,6 +166,14 @@ public class NetworkParams {
     public static Map<String, String> getAddCommentOfProduct() {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
+
+        return products;
+    }
+
+    public static Map<String, String> deleteCommentOfProduct() {
+        Map<String, String> products = new HashMap<>();
+        products.putAll(BASE_OPTIONS);
+        products.put(FORCE, TRUE);
 
         return products;
     }

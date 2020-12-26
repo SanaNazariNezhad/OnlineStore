@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,6 +38,7 @@ public class ProductDetailFragment extends VisibleFragment {
     private LiveData<Product> mProductLiveData;
     private LiveData<List<Comment>> mCommentLiveData;
     private FragmentProductDetailBinding mProductDetailBinding;
+    private MutableLiveData<Comment> mLiveDataPUTComment;
 
     public static final String BUNDLE_KEY_PRODUCT_ID = "bundle_key_product_id";
     private int mProductId;
@@ -166,6 +168,15 @@ public class ProductDetailFragment extends VisibleFragment {
                 }
             }
         });
+        mLiveDataPUTComment.observe(this, new Observer<Comment>() {
+            @Override
+            public void onChanged(Comment comment) {
+                if (comment != null) {
+                    mProductViewModel.fetchComment(String.valueOf(mProductId));
+                    mCommentLiveData = mProductViewModel.getLiveDateComment();
+                }
+            }
+        });
     }
 
     private void setCommentAdapter() {
@@ -184,6 +195,8 @@ public class ProductDetailFragment extends VisibleFragment {
         mProductViewModel.fetchComment(String.valueOf(mProductId));
         mProductLiveData = mProductViewModel.getLiveDateProduct();
         mCommentLiveData = mProductViewModel.getLiveDateComment();
+        ////Todo Update comments recyclerView after update comments
+        mLiveDataPUTComment = mCartViewModel.getLiveDataPutComment();
     }
 
     private void initView() {

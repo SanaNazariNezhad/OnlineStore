@@ -54,12 +54,16 @@ public class OnlineStoreRepository {
     private MutableLiveData<Product> mProductLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Comment>> mLiveDataComment = new MutableLiveData<>();
     private MutableLiveData<Comment> mLiveDataOneComment = new MutableLiveData<>();
+    private MutableLiveData<Comment> mLiveDataPUTComment = new MutableLiveData<>();
+    private MutableLiveData<Comment> mLiveDataDeleteComment = new MutableLiveData<>();
+
+    public MutableLiveData<Comment> getLiveDataDeleteComment() {
+        return mLiveDataDeleteComment;
+    }
 
     public MutableLiveData<Comment> getLiveDataPUTComment() {
         return mLiveDataPUTComment;
     }
-
-    private MutableLiveData<Comment> mLiveDataPUTComment = new MutableLiveData<>();
     private static int mSort;
     private static long mNotificationTime;
 
@@ -570,6 +574,26 @@ public class OnlineStoreRepository {
                 Comment items = response.body();
 
                 mLiveDataPUTComment.postValue(items);
+            }
+
+            @Override
+            public void onFailure(Call<Comment> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        });
+    }
+
+    public void fetchDeleteCommentAsync(int commentId) {
+        Call<Comment> call =
+                mAPIServiceComment.deleteCommentWithId(commentId,
+                        NetworkParams.deleteCommentOfProduct());
+
+        call.enqueue(new Callback<Comment>() {
+            @Override
+            public void onResponse(Call<Comment> call, Response<Comment> response) {
+                Comment items = response.body();
+
+                mLiveDataDeleteComment.postValue(items);
             }
 
             @Override

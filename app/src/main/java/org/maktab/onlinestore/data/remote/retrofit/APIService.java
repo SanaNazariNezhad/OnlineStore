@@ -11,6 +11,7 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -45,6 +46,9 @@ public interface APIService {
     @PUT("products/reviews/{id}")
     @Headers({ "Content-Type: application/json"})
     Call<Comment> putCommentWithId(@Body Comment comment,@Path("id") int id,@QueryMap Map<String, String> options);
+
+    @DELETE("products/reviews/{id}")
+    Call<Comment> deleteCommentWithId(@Path("id") int id,@QueryMap Map<String, String> options);
 
 
     @POST("customers")
