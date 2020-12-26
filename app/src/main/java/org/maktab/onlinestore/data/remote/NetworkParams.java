@@ -160,6 +160,7 @@ public class NetworkParams {
         return products;
     }
 
+
     public static Map<String, String> getAddCommentOfProduct() {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);

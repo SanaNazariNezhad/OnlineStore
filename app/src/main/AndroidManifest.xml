@@ -18,7 +18,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.OnlineStore">
-        <activity android:name=".view.activity.BuyActivity"></activity>
+        <activity android:name=".view.activity.EditCommentActivity"></activity>
+        <activity android:name=".view.activity.BuyActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -31,8 +32,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".view.activity.LocationActivity">
-        </activity>
+        <activity android:name=".view.activity.LocationActivity"></activity>
         <activity android:name=".view.activity.MapActivity" />
         <activity android:name=".view.activity.NotificationActivity" />
         <activity
@@ -40,7 +40,6 @@
             android:configChanges="orientation" />
         <activity android:name=".view.activity.SearchActivity" />
         <activity android:name=".view.activity.SplashActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

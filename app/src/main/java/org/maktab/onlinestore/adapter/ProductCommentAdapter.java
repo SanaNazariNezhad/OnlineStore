@@ -1,6 +1,8 @@
 package org.maktab.onlinestore.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -8,13 +10,11 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.data.model.Comment;
-import org.maktab.onlinestore.data.model.Images;
 import org.maktab.onlinestore.databinding.ItemCommentBinding;
-import org.maktab.onlinestore.databinding.ItemImageDetailBinding;
+import org.maktab.onlinestore.view.activity.EditCommentActivity;
 import org.maktab.onlinestore.viewmodel.ProductViewModel;
 
 
@@ -22,10 +22,12 @@ public class ProductCommentAdapter extends RecyclerView.Adapter<ProductCommentAd
 
     private final ProductViewModel mProductViewModel;
     private final LifecycleOwner mOwner;
+    private Context mContext;
 
-    public ProductCommentAdapter(LifecycleOwner owner, ProductViewModel productViewModel) {
+    public ProductCommentAdapter(LifecycleOwner owner, ProductViewModel productViewModel, Context context) {
         mOwner = owner;
         mProductViewModel = productViewModel;
+        mContext = context;
     }
 
     @Override
@@ -58,15 +60,23 @@ public class ProductCommentAdapter extends RecyclerView.Adapter<ProductCommentAd
     class ProductHolder extends RecyclerView.ViewHolder {
 
         private final ItemCommentBinding mCommentBinding;
+        private Comment mComment;
 
         public ProductHolder(ItemCommentBinding itemCommentBinding) {
             super(itemCommentBinding.getRoot());
 
             mCommentBinding = itemCommentBinding;
             mCommentBinding.setLifecycleOwner(mOwner);
+            mCommentBinding.commentLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mContext.startActivity(EditCommentActivity.newIntent(mContext,mComment.getId()));
+                }
+            });
         }
 
         public void bindProduct(Comment comment) {
+            mComment = comment;
             mCommentBinding.userName.setText(comment.getReviewer());
             mCommentBinding.userEmail.setText(comment.getReviewer_email());
             mCommentBinding.userRate.setText(String.valueOf(comment.getRating()));

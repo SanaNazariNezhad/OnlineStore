@@ -21,6 +21,7 @@ import org.maktab.onlinestore.data.model.ShippingAddress;
 import org.maktab.onlinestore.data.repository.CartDBRepository;
 import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
 import org.maktab.onlinestore.databinding.FragmentCartBinding;
+import org.maktab.onlinestore.databinding.FragmentEditCommentBinding;
 import org.maktab.onlinestore.view.activity.BuyActivity;
 import org.maktab.onlinestore.view.activity.CartActivity;
 import org.maktab.onlinestore.view.activity.ProductDetailActivity;
@@ -42,6 +43,12 @@ public class CartViewModel extends AndroidViewModel {
     private List<Product> mProductList;
     private OrderedProductAdapter mOrderedProductAdapter;
     private FragmentCartBinding mFragmentCartBinding;
+    private FragmentEditCommentBinding mEditCommentBinding;
+
+    public void setEditCommentBinding(FragmentEditCommentBinding editCommentBinding) {
+        mEditCommentBinding = editCommentBinding;
+    }
+
     private Context mContext;
     private MutableLiveData<Integer> mLiveDataRate = new MutableLiveData<>();
 
@@ -193,11 +200,38 @@ public class CartViewModel extends AndroidViewModel {
         mStoreRepository.fetchAddCommentAsync(comment);
     }
 
+    public void fetchOneComment(int commentId){
+        mStoreRepository.fetchOneCommentAsync(commentId);
+    }
+
+    public void fetchPutComment(Comment comment){
+        mStoreRepository.fetchPUTCommentAsync(comment);
+    }
+
+    public MutableLiveData<Comment> getLiveDataPutComment() {
+        return mStoreRepository.getLiveDataPUTComment();
+    }
+
     public void onClickAddRate(int rate){
         mLiveDataRate.setValue(rate);
     }
 
+    public void onClickEditComment(){
+        mEditCommentBinding.name.setEnabled(true);
+        mEditCommentBinding.email.setEnabled(true);
+        mEditCommentBinding.comment.setEnabled(true);
+        mEditCommentBinding.star1Edit.setEnabled(true);
+        mEditCommentBinding.star2Edit.setEnabled(true);
+        mEditCommentBinding.star3Edit.setEnabled(true);
+        mEditCommentBinding.star4Edit.setEnabled(true);
+        mEditCommentBinding.star5Edit.setEnabled(true);
+    }
+
     public MutableLiveData<Integer> getLiveDataRate() {
         return mLiveDataRate;
+    }
+
+    public MutableLiveData<Comment> getLiveDataOneComment() {
+        return mStoreRepository.getLiveDataOneComment();
     }
 }
