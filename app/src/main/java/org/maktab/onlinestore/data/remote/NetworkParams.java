@@ -160,6 +160,13 @@ public class NetworkParams {
         return products;
     }
 
+    public static Map<String, String> getAddCommentOfProduct() {
+        Map<String, String> products = new HashMap<>();
+        products.putAll(BASE_OPTIONS);
+
+        return products;
+    }
+
 
     public static Uri getPhotoPageUri(Images images) {
         Uri uri = Uri.parse(images.getSrc())

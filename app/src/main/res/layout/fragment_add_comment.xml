@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="cartViewModel"
+            type="org.maktab.onlinestore.viewmodel.CartViewModel" />
 
     </data>
 
@@ -68,6 +71,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:onClick="@{() -> cartViewModel.onClickAddRate(1)}"
                 android:src="@drawable/ic_star_border" />
 
             <ImageView
@@ -78,6 +82,7 @@
                 app:layout_constraintStart_toEndOf="@id/star1"
                 app:layout_constraintEnd_toStartOf="@id/star3"
                 android:layout_weight="1"
+                android:onClick="@{() -> cartViewModel.onClickAddRate(2)}"
                 android:src="@drawable/ic_star_border" />
 
             <ImageView
@@ -87,6 +92,7 @@
                 app:layout_constraintStart_toEndOf="@id/star2"
                 app:layout_constraintEnd_toStartOf="@id/star4"
                 app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{() -> cartViewModel.onClickAddRate(3)}"
                 android:layout_weight="1"
                 android:src="@drawable/ic_star_border" />
 
@@ -97,6 +103,7 @@
                 app:layout_constraintStart_toEndOf="@id/star3"
                 app:layout_constraintEnd_toStartOf="@id/star5"
                 app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{() -> cartViewModel.onClickAddRate(4)}"
                 android:layout_weight="1"
                 android:src="@drawable/ic_star_border" />
 
@@ -106,6 +113,7 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toEndOf="@id/star4"
                 app:layout_constraintTop_toTopOf="parent"
+                android:onClick="@{() -> cartViewModel.onClickAddRate(5)}"
                 android:layout_weight="1"
                 android:src="@drawable/ic_star_border" />
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -50,6 +50,7 @@ public class OnlineStoreRepository {
     private MutableLiveData<List<Product>> mSpecialProductsLiveData2 = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mSpecialProductsLiveData3 = new MutableLiveData<>();
     private MutableLiveData<Customer> mCustomerLiveData = new MutableLiveData<>();
+    private MutableLiveData<Comment> mCommentLiveData = new MutableLiveData<>();
     private MutableLiveData<Product> mProductLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Comment>> mLiveDataComment = new MutableLiveData<>();
     private static int mSort;
@@ -62,6 +63,10 @@ public class OnlineStoreRepository {
 
     public static void setNotificationTime(long notificationTime) {
         OnlineStoreRepository.mNotificationTime = notificationTime;
+    }
+
+    public MutableLiveData<Comment> getCommentLiveData() {
+        return mCommentLiveData;
     }
 
     public int getSort() {
@@ -484,6 +489,26 @@ public class OnlineStoreRepository {
             }
         });
     }
+
+    public void fetchAddCommentAsync(Comment comment) {
+        Call<Comment> call =
+                mAPIServiceComment.addComment(comment,NetworkParams.getAddCommentOfProduct());
+
+        call.enqueue(new Callback<Comment>() {
+            @Override
+            public void onResponse(Call<Comment> call, Response<Comment> response) {
+                Comment items = response.body();
+
+                mCommentLiveData.postValue(items);
+            }
+
+            @Override
+            public void onFailure(Call<Comment> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        });
+    }
+
 
     public void fetchCommentAsync(String productId) {
         Call<List<Comment>> call =

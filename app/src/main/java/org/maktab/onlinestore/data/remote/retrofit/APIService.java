@@ -42,5 +42,8 @@ public interface APIService {
     @Headers({ "Content-Type: application/json;charset=UTF-8"})
     Call<Customer> customer(@Body Customer customer,@QueryMap Map<String, String> options);
 
+    @POST("products/reviews")
+    Call<Comment> addComment(@Body Comment comment,@QueryMap Map<String, String> options);
+
 
 }

@@ -8,11 +8,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import org.maktab.onlinestore.adapter.OrderedProductAdapter;
 import org.maktab.onlinestore.data.model.BillingAddress;
 import org.maktab.onlinestore.data.model.Cart;
+import org.maktab.onlinestore.data.model.Comment;
 import org.maktab.onlinestore.data.model.Customer;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.model.ShippingAddress;
@@ -34,19 +36,14 @@ import java.util.Random;
 
 public class CartViewModel extends AndroidViewModel {
 
-    public static final int REQUEST_CODE_BUY_FRAGMENT = 0;
     private CartDBRepository mCartDBRepository;
     private OnlineStoreRepository mStoreRepository;
-    private LiveData<Product> mProductLiveData;
     private LiveData<Customer> mCustomerLiveData;
     private List<Product> mProductList;
     private OrderedProductAdapter mOrderedProductAdapter;
     private FragmentCartBinding mFragmentCartBinding;
-    private List<Product> mProductListMostVisited;
-    private List<Product> mProductListLatest;
-    private List<Product> mProductListHighestScore;
-    private List<Product> mSearchProduct;
     private Context mContext;
+    private MutableLiveData<Integer> mLiveDataRate = new MutableLiveData<>();
 
 
     public CartViewModel(@NonNull Application application) {
@@ -65,8 +62,6 @@ public class CartViewModel extends AndroidViewModel {
         List<Cart> carts = mCartDBRepository.getCarts();
         for (int i = 0; i < carts.size(); i++) {
             mStoreRepository.fetchProductItemAsync(carts.get(i).getProduct_id());
-            mProductLiveData = mStoreRepository.getProductLiveData();
-
         }
 
     }
@@ -192,5 +187,17 @@ public class CartViewModel extends AndroidViewModel {
                 null,null);
 
         mStoreRepository.fetchCreateCustomerAsync(customer);
+    }
+
+    public void onClickAddComment(Comment comment){
+        mStoreRepository.fetchAddCommentAsync(comment);
+    }
+
+    public void onClickAddRate(int rate){
+        mLiveDataRate.setValue(rate);
+    }
+
+    public MutableLiveData<Integer> getLiveDataRate() {
+        return mLiveDataRate;
     }
 }
