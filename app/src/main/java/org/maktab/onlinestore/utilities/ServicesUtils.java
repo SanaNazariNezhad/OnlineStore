@@ -21,18 +21,14 @@ public class ServicesUtils {
     private static final int NOTIFICATION_ID = 1;
 
     public static void pollAndShowNotification(Context context, String tag) {
-//        String query = QueryPreferences.getSearchQuery(context);
 
         OnlineStoreRepository repository = new OnlineStoreRepository();
-
-        //Todo: get item number from server
-
         List<SalesReport> salesReports = repository.fetchSalesReport();
 
-//        if (salesReport == null) {
-//            Log.d(tag, "Items from server not fetched");
-//            return;
-//        }
+        if (salesReports == null) {
+            Log.d(tag, "Items from server not fetched");
+            return;
+        }
 
         SalesReport salesReport = salesReports.get(0);
         String serverId = String.valueOf(salesReport.getTotalItems());
