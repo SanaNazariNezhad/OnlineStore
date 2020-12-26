@@ -68,9 +68,11 @@ public class CartFragment extends VisibleFragment {
                 mCartViewModel.setOrderedProductAdapter(mOrderedProductAdapter);
                 int totalPrice = 0;
                 for (int i = 0; i < mProductList.size(); i++) {
-                    int price = Integer.parseInt(mProductList.get(i).getPrice());
-                    int count = mCartViewModel.getCart(mProductList.get(i).getId()).getProduct_count();
-                    totalPrice += (price * count);
+                    if (!mProductList.get(i).getPrice().equals("")) {
+                        int price = Integer.parseInt(mProductList.get(i).getPrice());
+                        int count = mCartViewModel.getCart(mProductList.get(i).getId()).getProduct_count();
+                        totalPrice += (price * count);
+                    }
                 }
                 mFragmentCartBinding.totalPrice.setText(String.valueOf(totalPrice));
                 if (mProductList.size() == 0) {

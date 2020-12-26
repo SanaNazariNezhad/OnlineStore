@@ -1,5 +1,7 @@
 package org.maktab.onlinestore.view.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.databinding.DataBindingUtil;
@@ -8,12 +10,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import org.maktab.onlinestore.R;
+import org.maktab.onlinestore.SwipeableRecyclerView;
 import org.maktab.onlinestore.adapter.AddressAdapter;
 import org.maktab.onlinestore.adapter.ProductAdapter;
 import org.maktab.onlinestore.data.model.MapAddress;
@@ -27,10 +33,13 @@ public class LocationFragment extends Fragment {
     private SettingViewModel mSettingViewModel;
     private AddressAdapter mAddressAdapter;
     private MutableLiveData<List<MapAddress>> mLiveDataAddress;
+    private List<MapAddress> mMapAddressList;
+    private MapAddress mAddressUndo;
 
     public LocationFragment() {
         // Required empty public constructor
     }
+
     public static LocationFragment newInstance() {
         LocationFragment fragment = new LocationFragment();
         Bundle args = new Bundle();
@@ -73,8 +82,18 @@ public class LocationFragment extends Fragment {
             public void onChanged(List<MapAddress> mapAddresses) {
                 mAddressAdapter.setMapAddresses(mapAddresses);
                 mAddressAdapter.notifyDataSetChanged();
+                mMapAddressList = mapAddresses;
+                setResult();
             }
         });
+    }
+
+    private void setResult() {
+
+        int resultCode = Activity.RESULT_OK;
+        Intent intent = new Intent();
+        getActivity().setResult(resultCode, intent);
+
     }
 
     @Override
@@ -90,7 +109,7 @@ public class LocationFragment extends Fragment {
     }
 
     private void setProductAdapter() {
-        mAddressAdapter = new AddressAdapter(this,getActivity(),mSettingViewModel);
+        mAddressAdapter = new AddressAdapter(this, getActivity(), mSettingViewModel);
         mAddressAdapter.setMapAddresses(mSettingViewModel.getAddresses());
         mLocationBinding.recyclerLocation.setAdapter(mAddressAdapter);
         mSettingViewModel.setAddressAdapter(mAddressAdapter);
@@ -99,5 +118,59 @@ public class LocationFragment extends Fragment {
     private void initView() {
         mLocationBinding.recyclerLocation
                 .setLayoutManager(new LinearLayoutManager(getContext()));
+        swipeRecycler();
     }
+
+    private void swipeRecycler() {
+        /*  set swipe touch listener */
+        SwipeableRecyclerView swipeTouchListener = new
+                SwipeableRecyclerView(mLocationBinding.recyclerLocation,
+                new SwipeableRecyclerView.SwipeListener() {
+
+                    @Override
+                    public boolean canSwipeRight(int position) {
+                        //enable/disable right swipe on checkbox base else use true/false
+                        return true;
+                    }
+
+                    @Override
+                    public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                        //on recycler view swipe right dismiss update adapter
+                        onRecyclerViewDismiss(reverseSortedPositions, mMapAddressList);
+                    }
+                });
+
+        //add item touch listener to recycler view
+        mLocationBinding.recyclerLocation.addOnItemTouchListener(swipeTouchListener);
+    }
+
+    private void onRecyclerViewDismiss(int[] reverseSortedPositions, List<MapAddress> mapAddressList) {
+        for (int position : reverseSortedPositions) {
+            mAddressUndo = mapAddressList.get(position);
+            mSettingViewModel.deleteLocationAddress(mapAddressList.get(position));
+        }
+        List<MapAddress> newAddressList = mSettingViewModel.getAddresses();
+        mLiveDataAddress.setValue(newAddressList);
+        mSettingViewModel.setLiveDataAddress(mLiveDataAddress);
+        showSnackBar();
+    }
+
+    private void showSnackBar() {
+        Snackbar snackbar = Snackbar.make(mLocationBinding.mainLayoutConstraint,
+                R.string.location_dismiss_success, Snackbar.LENGTH_SHORT);
+        snackbar.setAction(R.string.location_dismiss_undo, new MyUndoListener());
+        snackbar.show();
+    }
+
+    public class MyUndoListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            mSettingViewModel.insertAddress(mAddressUndo);
+            List<MapAddress> newAddressList = mSettingViewModel.getAddresses();
+            mLiveDataAddress.setValue(newAddressList);
+            mSettingViewModel.setLiveDataAddress(mLiveDataAddress);
+        }
+    }
+
 }

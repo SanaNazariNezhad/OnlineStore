@@ -24,6 +24,7 @@ import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.AddressAdapter;
 import org.maktab.onlinestore.data.model.MapAddress;
 import org.maktab.onlinestore.data.repository.AddressDBRepository;
+import org.maktab.onlinestore.databinding.FragmentBuyBinding;
 import org.maktab.onlinestore.databinding.FragmentNotificationBinding;
 import org.maktab.onlinestore.utilities.QueryPreferences;
 import org.maktab.onlinestore.view.activity.LocationActivity;
@@ -44,6 +45,7 @@ public class SettingViewModel extends AndroidViewModel {
     private FusedLocationProviderClient mFusedLocationClient;
     private AddressAdapter mAddressAdapter;
 
+
     public void setNotificationBinding(FragmentNotificationBinding notificationBinding) {
         mNotificationBinding = notificationBinding;
     }
@@ -58,6 +60,10 @@ public class SettingViewModel extends AndroidViewModel {
 
     public MutableLiveData<List<MapAddress>> getLiveDataAddress() {
         return mRepository.getListMutableLiveData();
+    }
+
+    public void setLiveDataAddress(MutableLiveData<List<MapAddress>> mutableLiveData) {
+        mRepository.setListMutableLiveData(mutableLiveData);
     }
 
     public void setContext(Context context) {
@@ -214,5 +220,13 @@ public class SettingViewModel extends AndroidViewModel {
         mRepository.setListMutableLiveData(mLiveDataAddress);
 
 
+    }
+
+    public void deleteLocationAddress(MapAddress mapAddress){
+        mRepository.deleteAddress(mapAddress);
+    }
+
+    public void insertLocationAddress(MapAddress mapAddress){
+        mRepository.insertAddress(mapAddress);
     }
 }

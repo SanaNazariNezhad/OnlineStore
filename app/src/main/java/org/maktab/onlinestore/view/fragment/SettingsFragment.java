@@ -46,17 +46,7 @@ public class SettingsFragment extends Fragment {
                 false);
 
         initView();
-//        listeners();
         return mSettingsBinding.getRoot();
-    }
-
-    private void listeners() {
-        mSettingsBinding.imageViewLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSettingViewModel.onClickLocationItem();
-            }
-        });
     }
 
     private void initView() {
