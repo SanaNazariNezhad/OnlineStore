@@ -28,6 +28,8 @@ import java.util.List;
 
 public class ProductDetailFragment extends VisibleFragment {
 
+    public static final int REQUEST_CODE_ADD_COMMENT = 0;
+    public static final String FRAGMENT_TAG_ADD = "AddComment";
     private ProductDetailAdapter mDetailAdapter;
     private ProductCommentAdapter mCommentAdapter;
     private ProductViewModel mProductViewModel;
@@ -79,41 +81,41 @@ public class ProductDetailFragment extends VisibleFragment {
 
     private void checkRating(Product product) {
         float rate = Float.parseFloat(product.getAverage_rating());
-        if (rate > 0.0 && rate <= 0.5){
+        if (rate > 0.0 && rate <= 0.5) {
             mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_half));
-        }else if (rate > 0.5 && rate <= 1.00){
+        } else if (rate > 0.5 && rate <= 1.00) {
             mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
-        }else if (rate > 1.00 && rate <= 1.5){
+        } else if (rate > 1.00 && rate <= 1.5) {
             mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar2.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_half));
-        }else if (rate > 1.5 && rate <= 2.00){
+        } else if (rate > 1.5 && rate <= 2.00) {
             mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar2.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
-        }else if (rate > 2.00 && rate <= 2.5){
+        } else if (rate > 2.00 && rate <= 2.5) {
             mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar2.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar3.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_half));
-        }else if (rate > 2.5 && rate <= 3.00){
+        } else if (rate > 2.5 && rate <= 3.00) {
             mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar2.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar3.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
-        }else if (rate > 3.00 && rate <= 3.5){
+        } else if (rate > 3.00 && rate <= 3.5) {
             mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar2.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar3.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar4.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_half));
-        }else if (rate > 3.5 && rate <= 4.00){
+        } else if (rate > 3.5 && rate <= 4.00) {
             mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar2.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar3.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar4.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
-        }else if (rate > 4.00 && rate <= 4.5){
+        } else if (rate > 4.00 && rate <= 4.5) {
             mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar2.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar3.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar4.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar5.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_half));
-        }else if (rate > 4.5 && rate <= 5.00){
+        } else if (rate > 4.5 && rate <= 5.00) {
             mProductDetailBinding.imageViewStar1.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar2.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
             mProductDetailBinding.imageViewStar3.setImageDrawable(getResources().getDrawable(R.drawable.ic_star_rate));
@@ -124,10 +126,19 @@ public class ProductDetailFragment extends VisibleFragment {
     }
 
     private void listeners() {
-        mProductDetailBinding.setCartViewModel(mCartViewModel);
-        mProductDetailBinding.setLifecycleOwner(getActivity());
-        mProductDetailBinding.setProductId(mProductId);
 
+        mProductDetailBinding.layoutAddComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AddCommentFragment addCommentFragment = AddCommentFragment.newInstance(mProductId);
+                addCommentFragment.setTargetFragment(
+                        ProductDetailFragment.this,
+                        REQUEST_CODE_ADD_COMMENT);
+                addCommentFragment.show(
+                        getActivity().getSupportFragmentManager(),
+                        FRAGMENT_TAG_ADD);
+            }
+        });
     }
 
     private void setObserver() {
@@ -140,7 +151,7 @@ public class ProductDetailFragment extends VisibleFragment {
                 mProductDetailBinding.textProductName.setText(product.getTitle());
                 String detail = product.getShort_description() + "\n" + product.getDescription()
                         + "\n" + "Total Sales:" + "\t" + product.getTotal_sales()
-                        +"\n\n";
+                        + "\n\n";
                 mProductDetailBinding.textviewDescription.setText(detail);
 
                 mProductDetailBinding.textViewPrice.setText(product.getPrice());
@@ -158,12 +169,12 @@ public class ProductDetailFragment extends VisibleFragment {
     }
 
     private void setCommentAdapter() {
-        mCommentAdapter = new ProductCommentAdapter(this,mProductViewModel);
+        mCommentAdapter = new ProductCommentAdapter(this, mProductViewModel);
         mProductDetailBinding.recyclerComment.setAdapter(mCommentAdapter);
     }
 
     private void setAdapterProductDetail() {
-        mDetailAdapter = new ProductDetailAdapter(this,mProductViewModel);
+        mDetailAdapter = new ProductDetailAdapter(this, mProductViewModel);
         mProductDetailBinding.recyclerProductDetail.setAdapter(mDetailAdapter);
     }
 
@@ -176,6 +187,9 @@ public class ProductDetailFragment extends VisibleFragment {
     }
 
     private void initView() {
+        mProductDetailBinding.setCartViewModel(mCartViewModel);
+        mProductDetailBinding.setLifecycleOwner(getActivity());
+        mProductDetailBinding.setProductId(mProductId);
         mProductDetailBinding.recyclerProductDetail
                 .setLayoutManager(new LinearLayoutManager(getContext(),
                         LinearLayoutManager.HORIZONTAL,

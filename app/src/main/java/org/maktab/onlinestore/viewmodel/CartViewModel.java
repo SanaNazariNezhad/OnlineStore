@@ -22,8 +22,10 @@ import org.maktab.onlinestore.databinding.FragmentCartBinding;
 import org.maktab.onlinestore.view.activity.BuyActivity;
 import org.maktab.onlinestore.view.activity.CartActivity;
 import org.maktab.onlinestore.view.activity.ProductDetailActivity;
+import org.maktab.onlinestore.view.fragment.AddCommentFragment;
 import org.maktab.onlinestore.view.fragment.BuyFragment;
 import org.maktab.onlinestore.view.fragment.CartFragment;
+import org.maktab.onlinestore.view.fragment.ProductDetailFragment;
 
 import java.util.ArrayList;
 import java.util.Date;
