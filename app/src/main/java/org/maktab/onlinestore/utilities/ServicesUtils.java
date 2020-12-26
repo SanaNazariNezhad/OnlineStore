@@ -14,6 +14,8 @@ import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
 import org.maktab.onlinestore.event.NotificationEvent;
 import org.maktab.onlinestore.view.activity.HomeActivity;
 
+import java.util.List;
+
 public class ServicesUtils {
 
     private static final int NOTIFICATION_ID = 1;
@@ -25,15 +27,16 @@ public class ServicesUtils {
 
         //Todo: get item number from server
 
-//        SalesReport salesReport = repository.fetchSalesReport();
+        List<SalesReport> salesReports = repository.fetchSalesReport();
 
 //        if (salesReport == null) {
 //            Log.d(tag, "Items from server not fetched");
 //            return;
 //        }
 
-//        String serverId = String.valueOf(salesReport.getTotalItems());
-        String serverId = "7";
+        SalesReport salesReport = salesReports.get(0);
+        String serverId = String.valueOf(salesReport.getTotalItems());
+//        String serverId = "3";
         String lastSavedId = QueryPreferences.getNumberOfProduct(context);
         if (!serverId.equals(lastSavedId)) {
             Log.d(tag, "show notification");

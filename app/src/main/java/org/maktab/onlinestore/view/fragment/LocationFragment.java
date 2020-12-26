@@ -21,7 +21,6 @@ import com.google.android.material.snackbar.Snackbar;
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.SwipeableRecyclerView;
 import org.maktab.onlinestore.adapter.AddressAdapter;
-import org.maktab.onlinestore.adapter.ProductAdapter;
 import org.maktab.onlinestore.data.model.MapAddress;
 import org.maktab.onlinestore.databinding.FragmentLocationBinding;
 import org.maktab.onlinestore.viewmodel.SettingViewModel;

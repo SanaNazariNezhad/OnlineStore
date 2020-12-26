@@ -32,7 +32,7 @@ public interface APIService {
     Call<List<Product>> topSellers(@QueryMap Map<String, String> options);
 
     @GET("reports/sales")
-    Call<SalesReport> sales(@QueryMap Map<String, String> options);
+    Call<List<SalesReport>> sales(@QueryMap Map<String, String> options);
 
     @POST("customers")
     @Headers({ "Content-Type: application/json;charset=UTF-8"})

@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.BuyProductAdapter;
-import org.maktab.onlinestore.adapter.OrderedProductAdapter;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.FragmentBuyBinding;
 import org.maktab.onlinestore.view.activity.LocationActivity;

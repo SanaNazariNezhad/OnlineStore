@@ -155,10 +155,10 @@ public class OnlineStoreRepository {
     }
 
     //this method must run on background thread.
-    public SalesReport fetchSalesReport() {
-        Call<SalesReport> call = mAPIServiceSalesReport.sales(NetworkParams.getTotalItemsSalesProducts());
+    public List<SalesReport> fetchSalesReport() {
+        Call<List<SalesReport>> call = mAPIServiceSalesReport.sales(NetworkParams.getTotalItemsSalesProducts());
         try {
-            Response<SalesReport> response = call.execute();
+            Response<List<SalesReport>> response = call.execute();
             return response.body();
         } catch (IOException e) {
             Log.e(TAG, e.getMessage(), e);
