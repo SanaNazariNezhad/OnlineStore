@@ -1,7 +1,10 @@
 package org.maktab.onlinestore.view.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
@@ -68,35 +71,35 @@ public class AddCommentFragment extends DialogFragment {
 
     private void checkRate(Integer integer) {
         if (integer == 1) {
-            mAddCommentBinding.star1.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_rate));
-            mAddCommentBinding.star2.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_border));
-            mAddCommentBinding.star3.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_border));
-            mAddCommentBinding.star4.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_border));
-            mAddCommentBinding.star5.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_border));
+            mAddCommentBinding.star1.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_rate,null));
+            mAddCommentBinding.star2.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_border,null));
+            mAddCommentBinding.star3.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_border,null));
+            mAddCommentBinding.star4.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_border,null));
+            mAddCommentBinding.star5.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_border,null));
         }else if (integer == 2){
-            mAddCommentBinding.star1.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_rate));
-            mAddCommentBinding.star2.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_rate));
-            mAddCommentBinding.star3.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_border));
-            mAddCommentBinding.star4.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_border));
-            mAddCommentBinding.star5.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_border));
+            mAddCommentBinding.star1.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_rate,null));
+            mAddCommentBinding.star2.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_rate,null));
+            mAddCommentBinding.star3.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_border,null));
+            mAddCommentBinding.star4.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_border,null));
+            mAddCommentBinding.star5.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_border,null));
         }else if (integer == 3){
-            mAddCommentBinding.star1.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_rate));
-            mAddCommentBinding.star2.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_rate));
-            mAddCommentBinding.star3.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_rate));
-            mAddCommentBinding.star4.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_border));
-            mAddCommentBinding.star5.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_border));
+            mAddCommentBinding.star1.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_rate,null));
+            mAddCommentBinding.star2.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_rate,null));
+            mAddCommentBinding.star3.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_rate,null));
+            mAddCommentBinding.star4.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_border,null));
+            mAddCommentBinding.star5.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_border,null));
         }else if (integer == 4){
-            mAddCommentBinding.star1.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_rate));
-            mAddCommentBinding.star2.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_rate));
-            mAddCommentBinding.star3.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_rate));
-            mAddCommentBinding.star4.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_rate));
-            mAddCommentBinding.star5.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_border));
+            mAddCommentBinding.star1.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_rate,null));
+            mAddCommentBinding.star2.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_rate,null));
+            mAddCommentBinding.star3.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_rate,null));
+            mAddCommentBinding.star4.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_rate,null));
+            mAddCommentBinding.star5.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_border,null));
         }else if (integer == 5){
-            mAddCommentBinding.star1.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_rate));
-            mAddCommentBinding.star2.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_rate));
-            mAddCommentBinding.star3.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_rate));
-            mAddCommentBinding.star4.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_rate));
-            mAddCommentBinding.star5.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.ic_star_rate));
+            mAddCommentBinding.star1.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_rate,null));
+            mAddCommentBinding.star2.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_rate,null));
+            mAddCommentBinding.star3.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_rate,null));
+            mAddCommentBinding.star4.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_rate,null));
+            mAddCommentBinding.star5.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_star_rate,null));
         }
     }
 
@@ -130,6 +133,7 @@ public class AddCommentFragment extends DialogFragment {
                             mAddCommentBinding.commentInsert.getText().toString(),
                             mRate, false);
                     mCartViewModel.onClickAddComment(comment);
+                    setResult();
                     dismiss();
                 }
                 else {
@@ -161,5 +165,15 @@ public class AddCommentFragment extends DialogFragment {
             mAddCommentBinding.commentFormInsert.setErrorEnabled(true);
             mAddCommentBinding.commentFormInsert.setError("Field cannot be empty!");
         }
+    }
+
+    private void setResult() {
+
+        Fragment fragment = getTargetFragment();
+        int requestCode = getTargetRequestCode();
+        int resultCode = Activity.RESULT_OK;
+        Intent intent = new Intent();
+        fragment.onActivityResult(requestCode, resultCode, intent);
+
     }
 }

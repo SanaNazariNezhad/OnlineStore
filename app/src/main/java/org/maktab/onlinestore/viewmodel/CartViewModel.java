@@ -208,10 +208,6 @@ public class CartViewModel extends AndroidViewModel {
         mStoreRepository.fetchPUTCommentAsync(comment);
     }
 
-    public MutableLiveData<Comment> getLiveDataPutComment() {
-        return mStoreRepository.getLiveDataPUTComment();
-    }
-
     public void fetchDeleteComment(int commentId){
         mStoreRepository.fetchDeleteCommentAsync(commentId);
     }

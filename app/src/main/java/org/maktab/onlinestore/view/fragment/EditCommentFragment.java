@@ -1,7 +1,10 @@
 package org.maktab.onlinestore.view.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
@@ -16,8 +19,6 @@ import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.data.model.Comment;
 import org.maktab.onlinestore.databinding.FragmentEditCommentBinding;
 import org.maktab.onlinestore.viewmodel.CartViewModel;
-
-import java.util.Date;
 
 public class EditCommentFragment extends Fragment {
 
@@ -138,6 +139,16 @@ public class EditCommentFragment extends Fragment {
         return mEditCommentBinding.getRoot();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK || data == null)
+            return;
+        if (requestCode == REQUEST_CODE_DELETE_COMMENT){
+            getActivity().finish();
+        }
+    }
+
     private void listeners() {
         mEditCommentBinding.btnSaveEdit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,7 +171,6 @@ public class EditCommentFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if (validateInput()) {
                     DeleteCommentFragment deleteCommentFragment = DeleteCommentFragment.newInstance(mCommentId);
 
                     deleteCommentFragment.setTargetFragment(
@@ -170,10 +180,6 @@ public class EditCommentFragment extends Fragment {
                     deleteCommentFragment.show(
                             getActivity().getSupportFragmentManager(),
                             FRAGMENT_TAG_DELETE_COMMENT);
-                }
-                else {
-                    checkInput();
-                }
             }
         });
     }

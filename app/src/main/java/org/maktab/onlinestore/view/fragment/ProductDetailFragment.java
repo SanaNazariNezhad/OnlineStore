@@ -1,7 +1,10 @@
 package org.maktab.onlinestore.view.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -38,7 +41,6 @@ public class ProductDetailFragment extends VisibleFragment {
     private LiveData<Product> mProductLiveData;
     private LiveData<List<Comment>> mCommentLiveData;
     private FragmentProductDetailBinding mProductDetailBinding;
-    private MutableLiveData<Comment> mLiveDataPUTComment;
 
     public static final String BUNDLE_KEY_PRODUCT_ID = "bundle_key_product_id";
     private int mProductId;
@@ -79,6 +81,29 @@ public class ProductDetailFragment extends VisibleFragment {
         initView();
         listeners();
         return mProductDetailBinding.getRoot();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK || data == null)
+            return;
+        if (requestCode == REQUEST_CODE_ADD_COMMENT){
+            fetchComment();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mCommentAdapter != null) {
+            fetchComment();
+        }
+    }
+
+    private void fetchComment() {
+        mProductViewModel.fetchComment(String.valueOf(mProductId));
+        mCommentLiveData = mProductViewModel.getLiveDateComment();
     }
 
     private void checkRating(Product product) {
@@ -164,16 +189,12 @@ public class ProductDetailFragment extends VisibleFragment {
             public void onChanged(List<Comment> comments) {
                 if (comments != null) {
                     mProductViewModel.setCommentList(comments);
-                    setCommentAdapter();
-                }
-            }
-        });
-        mLiveDataPUTComment.observe(this, new Observer<Comment>() {
-            @Override
-            public void onChanged(Comment comment) {
-                if (comment != null) {
-                    mProductViewModel.fetchComment(String.valueOf(mProductId));
-                    mCommentLiveData = mProductViewModel.getLiveDateComment();
+                    if (mCommentAdapter == null) {
+                        setCommentAdapter();
+                    }
+                    else {
+                        mCommentAdapter.notifyItemRangeChanged(0,comments.size());
+                    }
                 }
             }
         });
@@ -192,11 +213,8 @@ public class ProductDetailFragment extends VisibleFragment {
     private void getProductFromProductViewModel() {
         mProductViewModel = new ViewModelProvider(this).get(ProductViewModel.class);
         mProductViewModel.fetchProductItems(mProductId);
-        mProductViewModel.fetchComment(String.valueOf(mProductId));
+        fetchComment();
         mProductLiveData = mProductViewModel.getLiveDateProduct();
-        mCommentLiveData = mProductViewModel.getLiveDateComment();
-        ////Todo Update comments recyclerView after update comments
-        mLiveDataPUTComment = mCartViewModel.getLiveDataPutComment();
     }
 
     private void initView() {

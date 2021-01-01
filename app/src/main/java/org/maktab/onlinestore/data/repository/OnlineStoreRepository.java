@@ -35,7 +35,6 @@ public class OnlineStoreRepository {
     private final APIService mAPIServiceSalesReport;
     private final APIService mAPIServiceCustomer;
     private final APIService mAPIServiceComment;
-    private String mPage;
     private MutableLiveData<List<Product>> mProductItemsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mProductWithParentIdLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mMostVisitedProductsLiveData = new MutableLiveData<>();
@@ -56,32 +55,10 @@ public class OnlineStoreRepository {
     private MutableLiveData<Comment> mLiveDataOneComment = new MutableLiveData<>();
     private MutableLiveData<Comment> mLiveDataPUTComment = new MutableLiveData<>();
     private MutableLiveData<Comment> mLiveDataDeleteComment = new MutableLiveData<>();
-
-    public MutableLiveData<Comment> getLiveDataDeleteComment() {
-        return mLiveDataDeleteComment;
-    }
-
-    public MutableLiveData<Comment> getLiveDataPUTComment() {
-        return mLiveDataPUTComment;
-    }
     private static int mSort;
-    private static long mNotificationTime;
-
-
-    public static long getNotificationTime() {
-        return mNotificationTime;
-    }
-
-    public static void setNotificationTime(long notificationTime) {
-        OnlineStoreRepository.mNotificationTime = notificationTime;
-    }
 
     public MutableLiveData<Comment> getLiveDataOneComment() {
         return mLiveDataOneComment;
-    }
-
-    public MutableLiveData<Comment> getCommentLiveData() {
-        return mCommentLiveData;
     }
 
     public int getSort() {
@@ -98,10 +75,6 @@ public class OnlineStoreRepository {
 
     public MutableLiveData<List<Product>> getProductWithParentIdLiveData() {
         return mProductWithParentIdLiveData;
-    }
-
-    public MutableLiveData<List<Product>> getProductItemsLiveData() {
-        return mProductItemsLiveData;
     }
 
     public MutableLiveData<List<ProductCategory>> getCategoryItemsLiveData() {
@@ -156,14 +129,6 @@ public class OnlineStoreRepository {
         return mLiveDataComment;
     }
 
-    public String getPage() {
-        return mPage;
-    }
-
-    public void setPage(String page) {
-        mPage = page;
-    }
-
     public OnlineStoreRepository() {
         Retrofit retrofitListOfProduct = RetrofitInstanceListOfProduct.getInstance().getRetrofit();
         mAPIServiceListOfProduct = retrofitListOfProduct.create(APIService.class);
@@ -182,7 +147,6 @@ public class OnlineStoreRepository {
 
         Retrofit retrofitComment = RetrofitInstanceComments.getInstance().getRetrofit();
         mAPIServiceComment = retrofitComment.create(APIService.class);
-        mPage = "1";
     }
 
     //this method must run on background thread.
@@ -507,7 +471,9 @@ public class OnlineStoreRepository {
 
     public void fetchAddCommentAsync(Comment comment) {
         Call<Comment> call =
-                mAPIServiceComment.addComment(comment,NetworkParams.getAddCommentOfProduct());
+                mAPIServiceComment.addComment(comment.getProduct_id(),comment.getReview()
+                        ,comment.getReviewer(),comment.getReviewer_email(),comment.getRating(),
+                        NetworkParams.getAddCommentOfProduct());
 
         call.enqueue(new Callback<Comment>() {
             @Override

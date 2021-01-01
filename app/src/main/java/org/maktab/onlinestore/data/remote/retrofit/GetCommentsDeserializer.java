@@ -1,5 +1,7 @@
 package org.maktab.onlinestore.data.remote.retrofit;
 
+import android.text.Html;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -29,7 +31,7 @@ public class GetCommentsDeserializer implements JsonDeserializer<Comment> {
 
 
             comment = new Comment(id,product_id,date_created_gmt,reviewer,reviewer_email,
-                    review,rating,verified);
+                    Html.fromHtml(review).toString(),rating,verified);
 
 
         return comment;

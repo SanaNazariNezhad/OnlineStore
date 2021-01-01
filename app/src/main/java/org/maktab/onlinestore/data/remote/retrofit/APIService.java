@@ -12,9 +12,11 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -43,6 +45,7 @@ public interface APIService {
     @GET("products/reviews/{id}")
     Call<Comment> getCommentWithId(@Path("id") int id,@QueryMap Map<String, String> options);
 
+
     @PUT("products/reviews/{id}")
     @Headers({ "Content-Type: application/json"})
     Call<Comment> putCommentWithId(@Body Comment comment,@Path("id") int id,@QueryMap Map<String, String> options);
@@ -51,12 +54,14 @@ public interface APIService {
     Call<Comment> deleteCommentWithId(@Path("id") int id,@QueryMap Map<String, String> options);
 
 
+    @FormUrlEncoded
     @POST("customers")
-    @Headers({ "Content-Type: application/json;charset=UTF-8"})
     Call<Customer> customer(@Body Customer customer,@QueryMap Map<String, String> options);
 
+    @FormUrlEncoded
     @POST("products/reviews")
-    Call<Comment> addComment(@Body Comment comment,@QueryMap Map<String, String> options);
-
+    Call<Comment> addComment(@Field("product_id") int product_id,@Field("review") String review,
+                             @Field("reviewer") String reviewer,@Field("reviewer_email") String reviewer_email,
+                             @Field("rating") int rating,@QueryMap Map<String, String> options);
 
 }

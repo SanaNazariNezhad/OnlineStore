@@ -1,5 +1,7 @@
 package org.maktab.onlinestore.data.remote.retrofit;
 
+import android.text.Html;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -53,7 +55,7 @@ public class GetListOfProductDeserializer implements JsonDeserializer<List<Produ
                 imagesArray.add(images);
             }
 
-            Product item = new Product(title,id,price,regular_price,sale_price,weight,length,width,height,description,short_description,
+            Product item = new Product(title,id,price,regular_price,sale_price,weight,length,width,height,Html.fromHtml(description).toString(),short_description,
                     average_rating,rating_count,total_sales, imagesArray);
             items.add(item);
         }
