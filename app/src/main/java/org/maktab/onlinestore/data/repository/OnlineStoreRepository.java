@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import org.maktab.onlinestore.data.model.ColorAttribute;
 import org.maktab.onlinestore.data.model.Comment;
 import org.maktab.onlinestore.data.model.Customer;
 import org.maktab.onlinestore.data.model.Product;
@@ -11,6 +12,7 @@ import org.maktab.onlinestore.data.model.ProductCategory;
 import org.maktab.onlinestore.data.model.SalesReport;
 import org.maktab.onlinestore.data.remote.retrofit.APIService;
 import org.maktab.onlinestore.data.remote.NetworkParams;
+import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceColor;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceComments;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceListOfProduct;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceCategory;
@@ -35,6 +37,7 @@ public class OnlineStoreRepository {
     private final APIService mAPIServiceSalesReport;
     private final APIService mAPIServiceCustomer;
     private final APIService mAPIServiceComment;
+    private final APIService mAPIServiceColor;
     private MutableLiveData<List<Product>> mProductItemsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mProductWithParentIdLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mMostVisitedProductsLiveData = new MutableLiveData<>();
@@ -52,6 +55,7 @@ public class OnlineStoreRepository {
     private MutableLiveData<Comment> mCommentLiveData = new MutableLiveData<>();
     private MutableLiveData<Product> mProductLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Comment>> mLiveDataComment = new MutableLiveData<>();
+    private MutableLiveData<List<ColorAttribute>> mLiveDataColor = new MutableLiveData<>();
     private MutableLiveData<Comment> mLiveDataOneComment = new MutableLiveData<>();
     private MutableLiveData<Comment> mLiveDataPUTComment = new MutableLiveData<>();
     private MutableLiveData<Comment> mLiveDataDeleteComment = new MutableLiveData<>();
@@ -121,6 +125,10 @@ public class OnlineStoreRepository {
         return mSpecialProductsLiveData3;
     }
 
+    public MutableLiveData<List<ColorAttribute>> getLiveDataColor() {
+        return mLiveDataColor;
+    }
+
     public MutableLiveData<Customer> getCustomerLiveData() {
         return mCustomerLiveData;
     }
@@ -147,6 +155,9 @@ public class OnlineStoreRepository {
 
         Retrofit retrofitComment = RetrofitInstanceComments.getInstance().getRetrofit();
         mAPIServiceComment = retrofitComment.create(APIService.class);
+
+        Retrofit retrofitColor = RetrofitInstanceColor.getInstance().getRetrofit();
+        mAPIServiceColor = retrofitColor.create(APIService.class);
     }
 
     //this method must run on background thread.
@@ -450,6 +461,25 @@ public class OnlineStoreRepository {
         });
     }
 
+    public void fetchColorAttributeAsync() {
+        Call<List<ColorAttribute>> call =
+                mAPIServiceComment.colors(NetworkParams.getMainAddress());
+
+        call.enqueue(new Callback<List<ColorAttribute>>() {
+            @Override
+            public void onResponse(Call<List<ColorAttribute>> call, Response<List<ColorAttribute>> response) {
+                List<ColorAttribute> items = response.body();
+
+                mLiveDataColor.postValue(items);
+            }
+
+            @Override
+            public void onFailure(Call<List<ColorAttribute>> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        });
+    }
+
     public void fetchCreateCustomerAsync(Customer customer) {
         Call<Customer> call =
                 mAPIServiceCustomer.customer(customer,NetworkParams.getTotalItemsSalesProducts());
@@ -473,7 +503,7 @@ public class OnlineStoreRepository {
         Call<Comment> call =
                 mAPIServiceComment.addComment(comment.getProduct_id(),comment.getReview()
                         ,comment.getReviewer(),comment.getReviewer_email(),comment.getRating(),
-                        NetworkParams.getAddCommentOfProduct());
+                        NetworkParams.getMainAddress());
 
         call.enqueue(new Callback<Comment>() {
             @Override
@@ -512,7 +542,7 @@ public class OnlineStoreRepository {
 
     public void fetchOneCommentAsync(int commentId) {
         Call<Comment> call =
-                mAPIServiceComment.getCommentWithId(commentId,NetworkParams.getAddCommentOfProduct());
+                mAPIServiceComment.getCommentWithId(commentId,NetworkParams.getMainAddress());
 
         call.enqueue(new Callback<Comment>() {
             @Override
@@ -532,7 +562,7 @@ public class OnlineStoreRepository {
     public void fetchPUTCommentAsync(Comment comment) {
         Call<Comment> call =
                 mAPIServiceComment.putCommentWithId(comment,comment.getId(),
-                        NetworkParams.getAddCommentOfProduct());
+                        NetworkParams.getMainAddress());
 
         call.enqueue(new Callback<Comment>() {
             @Override

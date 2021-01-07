@@ -9,10 +9,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -20,9 +23,14 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.maktab.onlinestore.R;
+import org.maktab.onlinestore.data.model.ColorAttribute;
+import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.LayoutBottomSheetFilterBinding;
 import org.maktab.onlinestore.databinding.LayoutBottomSheetFilterCategoryBinding;
 import org.maktab.onlinestore.viewmodel.SearchViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BottomSheetFilter extends BottomSheetDialogFragment {
 
@@ -33,7 +41,9 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     LayoutBottomSheetFilterCategoryBinding mFilterCategoryBinding;
     private int REQUEST_CODE;
     private SearchViewModel mSearchViewModel;
+    private LiveData<List<ColorAttribute>> mColorsLiveData;
     private String mColor;
+    private List<ColorAttribute> mColorAttributes;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -47,6 +57,12 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
             setLayoutForFilterHome(bottomSheet);
 
             mSearchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
+
+            mSearchViewModel.fetchColorAttributeAsync();
+            mColorAttributes = new ArrayList<>();
+            mColorsLiveData = mSearchViewModel.getColorsLiveData();
+
+            observer();
 
             updateUI();
 
@@ -70,29 +86,63 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         return bottomSheet;
     }
 
+    private void observer() {
+        mColorsLiveData.observe(this, new Observer<List<ColorAttribute>>() {
+            @Override
+            public void onChanged(List<ColorAttribute> colorAttributes) {
+                mColorAttributes.addAll(colorAttributes);
+                setColorToView();
+                updateUI();
+            }
+        });
+    }
+
+    private void setColorToView() {
+        mFilterBinding.blue.setText(mColorAttributes.get(0).getName());
+        mFilterBinding.white.setText(mColorAttributes.get(1).getName());
+        mFilterBinding.pink.setText(mColorAttributes.get(2).getName());
+        mFilterBinding.coral.setText(mColorAttributes.get(3).getName());
+        mFilterBinding.black.setText(mColorAttributes.get(4).getName());
+        mFilterBinding.orange.setText(mColorAttributes.get(5).getName());
+
+        setColorDrawable(0, mFilterBinding.color1);
+        setColorDrawable(1, mFilterBinding.color2);
+        setColorDrawable(2, mFilterBinding.color3);
+        setColorDrawable(3, mFilterBinding.color4);
+        setColorDrawable(4, mFilterBinding.color5);
+        setColorDrawable(5, mFilterBinding.color6);
+    }
+
+    private void setColorDrawable(int i, ImageView p) {
+        if (mColorAttributes.get(i).getName().equals("سفید"))
+            p.setImageDrawable(getResources().getDrawable(R.drawable.ic__color_white));
+        else if (mColorAttributes.get(i).getName().equals("آبی"))
+            p.setImageDrawable(getResources().getDrawable(R.drawable.ic_color_blue));
+        else if (mColorAttributes.get(i).getName().equals("صورتی"))
+            p.setImageDrawable(getResources().getDrawable(R.drawable.ic_color_pink));
+        else if (mColorAttributes.get(i).getName().equals("مرجانی"))
+            p.setImageDrawable(getResources().getDrawable(R.drawable.ic_color_coral));
+        else if (mColorAttributes.get(i).getName().equals("مشکی"))
+            p.setImageDrawable(getResources().getDrawable(R.drawable.ic_color_black));
+        else if (mColorAttributes.get(i).getName().equals("نارنجی"))
+            p.setImageDrawable(getResources().getDrawable(R.drawable.ic_color_orange));
+    }
+
     private void updateUI() {
         String color = mSearchViewModel.getColorFromPreferences();
         if (color != null){
-            if (color.equalsIgnoreCase("مشکی"))
-                mFilterBinding.black.setChecked(true);
-            else if (color.equalsIgnoreCase("سفید"))
+            if (color.equalsIgnoreCase("سفید"))
                 mFilterBinding.white.setChecked(true);
-            else if (color.equalsIgnoreCase("قهوه ای"))
-                mFilterBinding.brown.setChecked(true);
-            else if (color.equalsIgnoreCase("قرمز"))
-                mFilterBinding.red.setChecked(true);
-            else if (color.equalsIgnoreCase("نارنجی"))
-                mFilterBinding.orange.setChecked(true);
-            else if (color.equalsIgnoreCase("زرد"))
-                mFilterBinding.yellow.setChecked(true);
-            else if (color.equalsIgnoreCase("سبز"))
-                mFilterBinding.green.setChecked(true);
             else if (color.equalsIgnoreCase("آبی"))
                 mFilterBinding.blue.setChecked(true);
-            else if (color.equalsIgnoreCase("بنفش"))
-                mFilterBinding.purple.setChecked(true);
             else if (color.equalsIgnoreCase("صورتی"))
                 mFilterBinding.pink.setChecked(true);
+            else if (color.equalsIgnoreCase("مرجانی"))
+                mFilterBinding.coral.setChecked(true);
+            else if (color.equalsIgnoreCase("مشکی"))
+                mFilterBinding.black.setChecked(true);
+            else if (color.equalsIgnoreCase("نارنجی"))
+                mFilterBinding.orange.setChecked(true);
             else if (color.equalsIgnoreCase(""))
                 mFilterBinding.noFilter.setChecked(true);
         }
@@ -223,22 +273,11 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
                 }
             }
         });
-        mFilterBinding.brown.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mFilterBinding.coral.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                if (b){
-                    mColor = "قهوه ای";
-                    mSearchViewModel.setColorInPreferences(null);
-                    mSearchViewModel.setColorInPreferences(mColor);
-                    sendResult(mColor);
-                }
-            }
-        });
-        mFilterBinding.red.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-               if (b){
-                    mColor = "قرمز";
+                    mColor = "مرجانی";
                     mSearchViewModel.setColorInPreferences(null);
                     mSearchViewModel.setColorInPreferences(mColor);
                     sendResult(mColor);
@@ -256,44 +295,11 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
                 }
             }
         });
-        mFilterBinding.yellow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b){
-                    mColor = "زرد";
-                    mSearchViewModel.setColorInPreferences(null);
-                    mSearchViewModel.setColorInPreferences(mColor);
-                    sendResult(mColor);
-                }
-            }
-        });
-        mFilterBinding.green.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b){
-                    mColor = "سبز";
-                    mSearchViewModel.setColorInPreferences(null);
-                    mSearchViewModel.setColorInPreferences(mColor);
-                    sendResult(mColor);
-                }
-            }
-        });
         mFilterBinding.blue.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b){
                     mColor = "آبی";
-                    mSearchViewModel.setColorInPreferences(null);
-                    mSearchViewModel.setColorInPreferences(mColor);
-                    sendResult(mColor);
-                }
-            }
-        });
-        mFilterBinding.purple.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b){
-                    mColor = "بنفش";
                     mSearchViewModel.setColorInPreferences(null);
                     mSearchViewModel.setColorInPreferences(mColor);
                     sendResult(mColor);
@@ -326,26 +332,18 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     }
 
     private void setColor() {
-        if (mFilterBinding.black.isChecked())
-            mColor = "مشکی";
-        else if (mFilterBinding.white.isChecked())
+        if (mFilterBinding.white.isChecked())
             mColor = "سفید";
-        else if (mFilterBinding.white.isChecked())
-            mColor = "قهوه ای";
-        else if (mFilterBinding.white.isChecked())
-            mColor = "قرمز";
-        else if (mFilterBinding.white.isChecked())
-            mColor = "نارنجی";
-        else if (mFilterBinding.white.isChecked())
-            mColor = "زرد";
-        else if (mFilterBinding.white.isChecked())
-            mColor = "سبز";
-        else if (mFilterBinding.white.isChecked())
+        else if (mFilterBinding.blue.isChecked())
             mColor = "آبی";
-        else if (mFilterBinding.white.isChecked())
-            mColor = "بنفش";
-        else if (mFilterBinding.white.isChecked())
+        else if (mFilterBinding.pink.isChecked())
             mColor = "صورتی";
+        else if (mFilterBinding.coral.isChecked())
+            mColor = "مرجانی";
+        else if (mFilterBinding.black.isChecked())
+            mColor = "مشکی";
+        else if (mFilterBinding.orange.isChecked())
+            mColor = "نارنجی";
         else if (mFilterBinding.noFilter.isChecked())
             mColor = "";
     }

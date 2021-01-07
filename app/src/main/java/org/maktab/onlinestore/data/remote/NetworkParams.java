@@ -163,7 +163,7 @@ public class NetworkParams {
     }
 
 
-    public static Map<String, String> getAddCommentOfProduct() {
+    public static Map<String, String> getMainAddress() {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
 

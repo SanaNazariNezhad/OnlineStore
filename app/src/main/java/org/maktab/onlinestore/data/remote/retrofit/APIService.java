@@ -1,5 +1,6 @@
 package org.maktab.onlinestore.data.remote.retrofit;
 
+import org.maktab.onlinestore.data.model.ColorAttribute;
 import org.maktab.onlinestore.data.model.Comment;
 import org.maktab.onlinestore.data.model.Customer;
 import org.maktab.onlinestore.data.model.Product;
@@ -38,6 +39,9 @@ public interface APIService {
 
     @GET("reports/sales")
     Call<List<SalesReport>> sales(@QueryMap Map<String, String> options);
+
+    @GET("products/attributes/3/terms")
+    Call<List<ColorAttribute>> colors(@QueryMap Map<String, String> options);
 
     @GET("products/reviews")
     Call<List<Comment>> comments(@QueryMap Map<String, String> options);

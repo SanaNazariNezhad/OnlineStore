@@ -95,14 +95,22 @@ public class LatestProductAdapter extends RecyclerView.Adapter<LatestProductAdap
 
         public void bindProduct(Product product) {
             mItemLatestBinding.setProductId(product.getId());
-
             mItemLatestBinding.textViewPriceLatest.setText(product.getPrice());
             mItemLatestBinding.textViewNameLatest.setText(product.getTitle());
-            Glide.with(mItemLatestBinding.getRoot())
-                    .load(product.getImages().get(0).getSrc())
-                    .centerCrop()
-                    .placeholder(R.mipmap.ic_launcher)
-                    .into(mItemLatestBinding.imageLatest);
+
+            if (product.getImages().size() == 0){
+                Glide.with(mItemLatestBinding.getRoot())
+                        .load(R.drawable.ic_image)
+                        .centerCrop()
+                        .placeholder(R.mipmap.ic_launcher)
+                        .into(mItemLatestBinding.imageLatest);
+            }else {
+                Glide.with(mItemLatestBinding.getRoot())
+                        .load(product.getImages().get(0).getSrc())
+                        .centerCrop()
+                        .placeholder(R.mipmap.ic_launcher)
+                        .into(mItemLatestBinding.imageLatest);
+            }
         }
     }
 }
