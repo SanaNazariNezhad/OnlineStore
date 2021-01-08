@@ -23,6 +23,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.maktab.onlinestore.R;
+import org.maktab.onlinestore.data.model.Attributes;
 import org.maktab.onlinestore.data.model.ColorAttribute;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.LayoutBottomSheetFilterBinding;
@@ -44,6 +45,8 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
     private LiveData<List<ColorAttribute>> mColorsLiveData;
     private String mColor;
     private List<ColorAttribute> mColorAttributes;
+    private int mProductId;
+    private LiveData<Product> mProductLiveData;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -51,12 +54,11 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
 
 
         REQUEST_CODE = getTargetRequestCode();
+        mSearchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
         //inflating layout
         if (REQUEST_CODE == 0) {
 
             setLayoutForFilterHome(bottomSheet);
-
-            mSearchViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
 
             mSearchViewModel.fetchColorAttributeAsync();
             mColorAttributes = new ArrayList<>();
@@ -76,6 +78,11 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         }else {
             setLayoutForFilter(bottomSheet);
             //aap bar cancel button clicked
+            String id = mSearchViewModel.getProductIdForFilterFromPreferences();
+            mProductId = Integer.parseInt(id);
+            mSearchViewModel.fetchProductItems(mProductId);
+            mProductLiveData = mSearchViewModel.getLiveDateProduct();
+            observerCategory();
             listenersForFilterCategory();
 
             //hiding app bar at the start
@@ -84,6 +91,22 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         }
 
         return bottomSheet;
+    }
+
+    private void observerCategory() {
+        if (mProductLiveData == null)
+            return;
+        mProductLiveData.observe(this, new Observer<Product>() {
+            @Override
+            public void onChanged(Product product) {
+                List<Attributes> attributesList = product.getAttributes();
+                StringBuilder attribute = new StringBuilder();
+                for (int i = 0; i < attributesList.size(); i++) {
+                    attribute.append(attributesList.get(i).getName());
+                }
+                mFilterCategoryBinding.userName.setText(attribute + "Attributes");
+            }
+        });
     }
 
     private void observer() {

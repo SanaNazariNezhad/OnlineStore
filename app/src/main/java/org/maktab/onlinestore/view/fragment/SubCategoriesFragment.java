@@ -39,6 +39,7 @@ public class SubCategoriesFragment extends VisibleFragment {
     private CategoryViewModel mCategoryViewModel;
     private LiveData<List<ProductCategory>> mCategoryItemsLiveData;
     private LiveData<List<Product>> mProductsLiveData;
+    private int mProductId;
 
     public SubCategoriesFragment() {
         // Required empty public constructor
@@ -76,7 +77,7 @@ public class SubCategoriesFragment extends VisibleFragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                startActivity(SearchActivity.newIntent(getActivity(),query,"category"));
+                startActivity(SearchActivity.newIntent(getActivity(),query,"category",String.valueOf(mProductId)));
                 return true;
             }
 
@@ -142,6 +143,7 @@ public class SubCategoriesFragment extends VisibleFragment {
             public void onChanged(List<Product> productList) {
                 mCategoryViewModel.setProductList(productList);
                 setProductAdapter();
+                mProductId=productList.get(0).getId();
 
             }
         });

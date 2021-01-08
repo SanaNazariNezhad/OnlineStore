@@ -100,6 +100,22 @@ public class SearchViewModel extends AndroidViewModel {
         return QueryPreferences.getFilterColor(getApplication());
     }
 
+    public void setProductIdForFilterInPreferences(String productId) {
+        QueryPreferences.setFilterProductId(getApplication(), productId);
+    }
+
+    public String getProductIdForFilterFromPreferences() {
+        return QueryPreferences.getFilterProductId(getApplication());
+    }
+
+    public void fetchProductItems(int productId){
+        mRepository.fetchProductItemAsync(productId);
+    }
+
+    public LiveData<Product> getLiveDateProduct(){
+        return mRepository.getProductLiveData();
+    }
+
     public void setSort(int sortId){
         mRepository.setSort(sortId);
     }
