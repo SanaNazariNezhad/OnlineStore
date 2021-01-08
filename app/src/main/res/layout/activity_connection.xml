@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/connection_layout"
-        tools:context=".ConnectionActivity">
+        tools:context=".view.activity.ConnectionActivity">
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_connection"

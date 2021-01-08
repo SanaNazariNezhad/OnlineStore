@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 
-import org.maktab.onlinestore.ConnectionActivity;
+import org.maktab.onlinestore.view.activity.ConnectionActivity;
 import org.maktab.onlinestore.data.repository.SplashDBRepository;
 
 public class ConnectionReceiver extends BroadcastReceiver {

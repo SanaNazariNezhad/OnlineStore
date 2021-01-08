@@ -1,4 +1,4 @@
-package org.maktab.onlinestore;
+package org.maktab.onlinestore.view.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -10,16 +10,14 @@ import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Gravity;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.snackbar.Snackbar;
 
+import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.databinding.ActivityConnectionBinding;
 import org.maktab.onlinestore.receiver.ConnectionReceiver;
-import org.maktab.onlinestore.view.activity.HomeActivity;
 import org.maktab.onlinestore.viewmodel.SplashViewModel;
 
 public class ConnectionActivity extends AppCompatActivity {
