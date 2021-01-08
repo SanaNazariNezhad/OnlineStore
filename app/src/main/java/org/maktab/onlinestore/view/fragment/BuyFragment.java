@@ -109,6 +109,12 @@ public class BuyFragment extends Fragment {
                 startActivityForResult(LocationActivity.newIntent(getActivity()), REQUEST_CODE_LOCATION);
             }
         });
+        mBuyBinding.buttonContinueBuying.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mCartViewModel.onclickBuy();
+            }
+        });
     }
 
     private void initView() {

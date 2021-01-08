@@ -10,16 +10,26 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/splash"
+        android:background="@android:color/darker_gray"
         android:id="@+id/splash_layout"
         tools:context=".view.activity.SplashActivity">
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyle"
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_splash_screen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            app:lottie_fileName="online-shopping-mobile-shopping.json"
+            app:lottie_loop="true" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/lottie_progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="85dp"
+            android:background="@color/white"
             android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_marginBottom="75dp"
-            android:layout_height="wrap_content" />
+            app:lottie_fileName="dropping.json"
+            app:lottie_loop="true" />
+
     </RelativeLayout>
 </layout>
