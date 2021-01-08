@@ -8,8 +8,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
@@ -25,7 +23,6 @@ import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.models.SlideModel;
 
 import org.maktab.onlinestore.R;
-import org.maktab.onlinestore.utilities.QueryPreferences;
 import org.maktab.onlinestore.view.activity.ProductDetailActivity;
 import org.maktab.onlinestore.view.activity.SearchActivity;
 import org.maktab.onlinestore.adapter.HighestScoreProductAdapter;
@@ -35,6 +32,7 @@ import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.FragmentHomePageBinding;
 import org.maktab.onlinestore.viewmodel.ProductViewModel;
 import org.maktab.onlinestore.viewmodel.SettingViewModel;
+import org.maktab.onlinestore.viewmodel.SplashViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,6 +43,7 @@ public class HomePageFragment extends Fragment {
     private MostVisitedProductAdapter mMostVisitedProductAdapter;
     private LatestProductAdapter mLatestProductAdapter;
     private ProductViewModel mProductViewModel;
+    private SplashViewModel mSplashViewModel;
     private SettingViewModel mSettingViewModel;
     private LiveData<List<Product>> mMostVisitedProductItemsLiveData;
     private LiveData<List<Product>> mLatestProductItemsLiveData;
@@ -78,8 +77,6 @@ public class HomePageFragment extends Fragment {
         setHasOptionsMenu(true);
         mSpecialProducts = new ArrayList<>();
         mSlideModels = new ArrayList<>();
-        getProductsFromProductViewModel();
-        setObserver();
     }
 
     @Override
@@ -93,6 +90,7 @@ public class HomePageFragment extends Fragment {
                 false);
 
         initView();
+        getProductsFromProductViewModel();
         return mHomePageBinding.getRoot();
     }
 
@@ -166,70 +164,16 @@ public class HomePageFragment extends Fragment {
 
     private void getProductsFromProductViewModel() {
         mProductViewModel = new ViewModelProvider(this).get(ProductViewModel.class);
+        mSplashViewModel = new ViewModelProvider(this).get(SplashViewModel.class);
         mSettingViewModel = new ViewModelProvider(this).get(SettingViewModel.class);
-        mProductViewModel.fetchMostVisitedProductItems();
-        mProductViewModel.fetchLatestProductItems();
-        mProductViewModel.fetchHighestScoreProductItems();
-        mMostVisitedProductItemsLiveData = mProductViewModel.getLiveDateMostVisitedProducts();
-        mLatestProductItemsLiveData = mProductViewModel.getLiveDateLatestProducts();
-        mHighestScoreProductItemsLiveData = mProductViewModel.getLiveDateHighestScoreProducts();
+        mProductViewModel.setProductListMostVisited(mSplashViewModel.getMostVisitedProduct());
+        setAdapterMostVisited();
+        mProductViewModel.setProductListLatest(mSplashViewModel.getLatestProduct());
+        setAdapterLatest();
+        mProductViewModel.setProductListHighestScore(mSplashViewModel.getHighestScoreProduct());
+        setAdapterHighestScore();
+        showSlideImage(mSplashViewModel.getSpecialProduct());
 
-        for (int i = 1; i < 4; i++) {
-            mProductViewModel.fetchSpecialProductItems(String.valueOf(119), i + "");
-            if (i == 1)
-                mSpecialProductsLiveData1 = mProductViewModel.getLiveDataSpecialProduct1();
-            else if (i==2)
-                mSpecialProductsLiveData2 = mProductViewModel.getLiveDataSpecialProduct2();
-            else if (i==3)
-                mSpecialProductsLiveData3 = mProductViewModel.getLiveDataSpecialProduct3();
-        }
-
-    }
-
-    private void setObserver() {
-        mMostVisitedProductItemsLiveData.observe(this, new Observer<List<Product>>() {
-            @Override
-            public void onChanged(List<Product> products) {
-                mProductViewModel.setProductListMostVisited(products);
-                setAdapterMostVisited();
-            }
-        });
-        mLatestProductItemsLiveData.observe(this, new Observer<List<Product>>() {
-            @Override
-            public void onChanged(List<Product> products) {
-                mProductViewModel.setProductListLatest(products);
-                setAdapterLatest();
-            }
-        });
-        mHighestScoreProductItemsLiveData.observe(this, new Observer<List<Product>>() {
-            @Override
-            public void onChanged(List<Product> products) {
-                mProductViewModel.setProductListHighestScore(products);
-                setAdapterHighestScore();
-            }
-        });
-        mSpecialProductsLiveData1.observe(this, new Observer<List<Product>>() {
-            @Override
-            public void onChanged(List<Product> productList) {
-                mSpecialProducts.addAll(productList);
-
-            }
-        });
-        mSpecialProductsLiveData2.observe(this, new Observer<List<Product>>() {
-            @Override
-            public void onChanged(List<Product> productList) {
-                mSpecialProducts.addAll(productList);
-
-            }
-        });
-        mSpecialProductsLiveData3.observe(this, new Observer<List<Product>>() {
-            @Override
-            public void onChanged(List<Product> productList) {
-                mSpecialProducts.addAll(productList);
-                showSlideImage(mSpecialProducts);
-
-            }
-        });
     }
 
     private void showSlideImage(List<Product> products) {

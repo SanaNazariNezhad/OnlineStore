@@ -37,7 +37,6 @@ public class OnlineStoreRepository {
     private final APIService mAPIServiceSalesReport;
     private final APIService mAPIServiceCustomer;
     private final APIService mAPIServiceComment;
-    private final APIService mAPIServiceColor;
     private MutableLiveData<List<Product>> mProductItemsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mProductWithParentIdLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mMostVisitedProductsLiveData = new MutableLiveData<>();
@@ -155,9 +154,6 @@ public class OnlineStoreRepository {
 
         Retrofit retrofitComment = RetrofitInstanceComments.getInstance().getRetrofit();
         mAPIServiceComment = retrofitComment.create(APIService.class);
-
-        Retrofit retrofitColor = RetrofitInstanceColor.getInstance().getRetrofit();
-        mAPIServiceColor = retrofitColor.create(APIService.class);
     }
 
     //this method must run on background thread.

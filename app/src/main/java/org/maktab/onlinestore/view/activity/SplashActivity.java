@@ -2,27 +2,43 @@ package org.maktab.onlinestore.view.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.maktab.onlinestore.R;
+import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.ActivitySplashBinding;
+import org.maktab.onlinestore.viewmodel.ProductViewModel;
+import org.maktab.onlinestore.viewmodel.SplashViewModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SplashActivity extends AppCompatActivity {
 
     private ActivitySplashBinding mSplashBinding;
+    private ProductViewModel mProductViewModel;
+    private SplashViewModel mSplashViewModel;
+    private LiveData<List<Product>> mMostVisitedProductItemsLiveData;
+    private LiveData<List<Product>> mLatestProductItemsLiveData;
+    private LiveData<List<Product>> mHighestScoreProductItemsLiveData;
+    private LiveData<List<Product>> mSpecialProductsLiveData1;
+    private LiveData<List<Product>> mSpecialProductsLiveData2;
+    private LiveData<List<Product>> mSpecialProductsLiveData3;
+    private List<Product> mSpecialProducts;
+    private boolean mFlagMostVisit,mFlagLatest,mFlagHighest,mFlagSpecial;
 
     private Context mContext = this;
 
@@ -33,10 +49,16 @@ public class SplashActivity extends AppCompatActivity {
         mSplashBinding = DataBindingUtil.setContentView(this,R.layout.activity_splash);
 
         getSupportActionBar().hide();
+        mSpecialProducts = new ArrayList<>();
+        mFlagMostVisit = false;
+        mFlagLatest = false;
+        mFlagHighest = false;
+        mFlagSpecial = false;
 
         LottieAnimationView lottieAnimationView = findViewById(R.id.lottie_splash_screen);
         LottieAnimationView lottieAnimationProgressBar= findViewById(R.id.lottie_progressBar);
         //request from server using retrofit. [play animation]
+        getProductsFromProductViewModel();
         lottieAnimationView.playAnimation();
         lottieAnimationProgressBar.playAnimation();
 
@@ -61,11 +83,91 @@ public class SplashActivity extends AppCompatActivity {
                     view.setLayoutParams(params);
                     snackbar.show();
                 } else {
-                    startActivity(HomeActivity.newIntent(SplashActivity.this));
-                    finish();
+                    setObserver();
                 }
             }
-        }, 10000);
+        }, 2000);
+    }
+
+    private void getProductsFromProductViewModel() {
+        mProductViewModel = new ViewModelProvider(this).get(ProductViewModel.class);
+        mSplashViewModel = new ViewModelProvider(this).get(SplashViewModel.class);
+        mProductViewModel.fetchMostVisitedProductItems();
+        mProductViewModel.fetchLatestProductItems();
+        mProductViewModel.fetchHighestScoreProductItems();
+        mMostVisitedProductItemsLiveData = mProductViewModel.getLiveDateMostVisitedProducts();
+        mLatestProductItemsLiveData = mProductViewModel.getLiveDateLatestProducts();
+        mHighestScoreProductItemsLiveData = mProductViewModel.getLiveDateHighestScoreProducts();
+
+        for (int i = 1; i < 4; i++) {
+            mProductViewModel.fetchSpecialProductItems(String.valueOf(119), i + "");
+            if (i == 1)
+                mSpecialProductsLiveData1 = mProductViewModel.getLiveDataSpecialProduct1();
+            else if (i==2)
+                mSpecialProductsLiveData2 = mProductViewModel.getLiveDataSpecialProduct2();
+            else if (i==3)
+                mSpecialProductsLiveData3 = mProductViewModel.getLiveDataSpecialProduct3();
+        }
+
+    }
+
+    private void setObserver() {
+        mMostVisitedProductItemsLiveData.observe(this, new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> products) {
+                mSplashViewModel.setMostVisitedProduct(products);
+                mFlagMostVisit = true;
+                startHomeActivity();
+            }
+        });
+        mLatestProductItemsLiveData.observe(this, new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> products) {
+                mSplashViewModel.setLatestProduct(products);
+                mFlagLatest = true;
+                startHomeActivity();
+            }
+        });
+        mHighestScoreProductItemsLiveData.observe(this, new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> products) {
+                mSplashViewModel.setHighestScoreProduct(products);
+                mFlagHighest = true;
+                startHomeActivity();
+            }
+        });
+        mSpecialProductsLiveData1.observe(this, new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> productList) {
+                mSpecialProducts.addAll(productList);
+
+            }
+        });
+        mSpecialProductsLiveData2.observe(this, new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> productList) {
+                mSpecialProducts.addAll(productList);
+
+            }
+        });
+        mSpecialProductsLiveData3.observe(this, new Observer<List<Product>>() {
+            @Override
+            public void onChanged(List<Product> productList) {
+                mSpecialProducts.addAll(productList);
+                mSplashViewModel.setSpecialProduct(mSpecialProducts);
+                mFlagSpecial = true;
+                startHomeActivity();
+
+            }
+        });
+    }
+
+    private void startHomeActivity() {
+        if (!mFlagSpecial || !mFlagLatest || !mFlagMostVisit || !mFlagHighest )
+            return;
+
+        startActivity(HomeActivity.newIntent(SplashActivity.this));
+        finish();
     }
 
     private boolean isOnline() {
