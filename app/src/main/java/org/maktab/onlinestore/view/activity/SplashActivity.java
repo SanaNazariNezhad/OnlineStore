@@ -59,6 +59,7 @@ public class SplashActivity extends AppCompatActivity {
         LottieAnimationView lottieAnimationProgressBar= findViewById(R.id.lottie_progressBar);
         //request from server using retrofit. [play animation]
         getProductsFromProductViewModel();
+        mSplashViewModel.setInConnectionActivity(false);
         lottieAnimationView.playAnimation();
         lottieAnimationProgressBar.playAnimation();
 
@@ -82,8 +83,10 @@ public class SplashActivity extends AppCompatActivity {
                     params.gravity = Gravity.TOP;
                     view.setLayoutParams(params);
                     snackbar.show();
+                    mSplashViewModel.setWiFiEnable(false);
                 } else {
                     setObserver();
+                    mSplashViewModel.setWiFiEnable(true);
                 }
             }
         }, 2000);

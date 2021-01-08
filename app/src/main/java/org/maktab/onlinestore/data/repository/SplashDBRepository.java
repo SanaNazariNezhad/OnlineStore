@@ -16,6 +16,8 @@ public class SplashDBRepository {
     private List<Product> mLatestProduct;
     private List<Product> mHighestScoreProduct;
     private List<Product> mSpecialProduct;
+    private boolean isWiFiEnable;
+    private boolean isInConnectionActivity;
 
     public static SplashDBRepository getInstance(Context context) {
         if (sInstance == null)
@@ -30,6 +32,23 @@ public class SplashDBRepository {
         mLatestProduct = new ArrayList<>();
         mHighestScoreProduct = new ArrayList<>();
         mSpecialProduct = new ArrayList<>();
+
+    }
+
+    public boolean isInConnectionActivity() {
+        return isInConnectionActivity;
+    }
+
+    public void setInConnectionActivity(boolean inConnectionActivity) {
+        isInConnectionActivity = inConnectionActivity;
+    }
+
+    public boolean isWiFiEnable() {
+        return isWiFiEnable;
+    }
+
+    public void setWiFiEnable(boolean wiFiEnable) {
+        isWiFiEnable = wiFiEnable;
     }
 
     public List<Product> getMostVisitedProduct() {

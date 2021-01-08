@@ -52,4 +52,20 @@ public class SplashViewModel extends AndroidViewModel {
     public void setSpecialProduct(List<Product> specialProduct) {
         mRepositorySplash.setSpecialProduct(specialProduct);
     }
+
+    public boolean isWiFiEnable() {
+        return mRepositorySplash.isWiFiEnable();
+    }
+
+    public void setWiFiEnable(boolean wiFiEnable) {
+        mRepositorySplash.setWiFiEnable(wiFiEnable);
+    }
+
+    public boolean isInConnectionActivity() {
+        return mRepositorySplash.isInConnectionActivity();
+    }
+
+    public void setInConnectionActivity(boolean inConnectionActivity) {
+        mRepositorySplash.setInConnectionActivity(inConnectionActivity);
+    }
 }

@@ -3,8 +3,10 @@ package org.maktab.onlinestore.view;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -28,7 +31,9 @@ import org.maktab.onlinestore.data.model.ColorAttribute;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.LayoutBottomSheetFilterBinding;
 import org.maktab.onlinestore.databinding.LayoutBottomSheetFilterCategoryBinding;
+import org.maktab.onlinestore.receiver.ConnectionReceiver;
 import org.maktab.onlinestore.viewmodel.SearchViewModel;
+import org.maktab.onlinestore.viewmodel.SplashViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +42,8 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
 
 
     public static final String EXTRA_FILTER_COLOR = "extra_filter_color";
+    private SplashViewModel mSplashViewModel;
+    private ConnectionReceiver mConnectionReceiver;
     BottomSheetBehavior bottomSheetBehavior;
     LayoutBottomSheetFilterBinding mFilterBinding;
     LayoutBottomSheetFilterCategoryBinding mFilterCategoryBinding;
@@ -376,6 +383,9 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         super.onStart();
 
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        getActivity().registerReceiver(mConnectionReceiver, filter);
     }
 
     private void hideAppBar(View view) {
@@ -405,5 +415,20 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         Intent intent = new Intent();
         intent.putExtra(EXTRA_FILTER_COLOR, color);
         fragment.onActivityResult(requestCode, resultCode, intent);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mConnectionReceiver = new ConnectionReceiver();
+        mSplashViewModel = new ViewModelProvider(this).get(SplashViewModel.class);
+        mSplashViewModel.setInConnectionActivity(false);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        getActivity().unregisterReceiver(mConnectionReceiver);
     }
 }

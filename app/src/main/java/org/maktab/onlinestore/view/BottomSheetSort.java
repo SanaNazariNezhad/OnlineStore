@@ -3,13 +3,16 @@ package org.maktab.onlinestore.view;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -20,12 +23,16 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.databinding.LayoutBottomSheetSortBinding;
+import org.maktab.onlinestore.receiver.ConnectionReceiver;
 import org.maktab.onlinestore.viewmodel.SearchViewModel;
+import org.maktab.onlinestore.viewmodel.SplashViewModel;
 
 public class BottomSheetSort extends BottomSheetDialogFragment {
 
 
     public static final String EXTRA_SORT_ID = "extra_sort_id";
+    private SplashViewModel mSplashViewModel;
+    private ConnectionReceiver mConnectionReceiver;
     BottomSheetBehavior bottomSheetBehavior;
     public static final int THE_NEWEST = 0;
     public static final int PRICES_HIGH_TO_LOW = 1;
@@ -169,6 +176,9 @@ public class BottomSheetSort extends BottomSheetDialogFragment {
         super.onStart();
 
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+        getActivity().registerReceiver(mConnectionReceiver, filter);
     }
 
     private void hideAppBar(View view) {
@@ -198,5 +208,20 @@ public class BottomSheetSort extends BottomSheetDialogFragment {
         intent.putExtra(EXTRA_SORT_ID, sortId);
 
         fragment.onActivityResult(requestCode, resultCode, intent);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        getActivity().unregisterReceiver(mConnectionReceiver);
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mConnectionReceiver = new ConnectionReceiver();
+        mSplashViewModel = new ViewModelProvider(this).get(SplashViewModel.class);
+        mSplashViewModel.setInConnectionActivity(false);
     }
 }

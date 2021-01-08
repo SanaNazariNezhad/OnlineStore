@@ -5,11 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,11 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
-
 import com.denzcoskun.imageslider.constants.ScaleTypes;
 import com.denzcoskun.imageslider.interfaces.ItemClickListener;
 import com.denzcoskun.imageslider.models.SlideModel;
-
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.view.activity.ProductDetailActivity;
 import org.maktab.onlinestore.view.activity.SearchActivity;
@@ -33,7 +28,6 @@ import org.maktab.onlinestore.databinding.FragmentHomePageBinding;
 import org.maktab.onlinestore.viewmodel.ProductViewModel;
 import org.maktab.onlinestore.viewmodel.SettingViewModel;
 import org.maktab.onlinestore.viewmodel.SplashViewModel;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,13 +39,7 @@ public class HomePageFragment extends Fragment {
     private ProductViewModel mProductViewModel;
     private SplashViewModel mSplashViewModel;
     private SettingViewModel mSettingViewModel;
-    private LiveData<List<Product>> mMostVisitedProductItemsLiveData;
-    private LiveData<List<Product>> mLatestProductItemsLiveData;
-    private LiveData<List<Product>> mHighestScoreProductItemsLiveData;
     private FragmentHomePageBinding mHomePageBinding;
-    private LiveData<List<Product>> mSpecialProductsLiveData1;
-    private LiveData<List<Product>> mSpecialProductsLiveData2;
-    private LiveData<List<Product>> mSpecialProductsLiveData3;
     private List<Product> mSpecialProducts;
     List<SlideModel> mSlideModels;
     private Menu mMenu;
