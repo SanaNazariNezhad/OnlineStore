@@ -13,6 +13,7 @@ import org.maktab.onlinestore.data.repository.OnlineStoreRepository;
 import org.maktab.onlinestore.utilities.QueryPreferences;
 import org.maktab.onlinestore.view.activity.ProductDetailActivity;
 import org.maktab.onlinestore.view.activity.SubCategoriesActivity;
+import org.maktab.onlinestore.worker.PollWorker;
 
 import java.util.List;
 
@@ -78,5 +79,17 @@ public class CategoryViewModel extends AndroidViewModel {
 
     public String getQueryFromPreferences() {
         return QueryPreferences.getSearchQuery(getApplication());
+    }
+
+    public boolean isTaskScheduled() {
+        return PollWorker.isWorkEnqueued(getApplication());
+    }
+
+    public long getNotificationTime() {
+        return QueryPreferences.getNotificationTime(getApplication());
+    }
+
+    public void setNotificationTime(long notificationTime) {
+        QueryPreferences.setNotificationTime(getApplication(), notificationTime);
     }
 }

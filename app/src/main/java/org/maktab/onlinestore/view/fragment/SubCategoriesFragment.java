@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -40,6 +41,8 @@ public class SubCategoriesFragment extends VisibleFragment {
     private LiveData<List<ProductCategory>> mCategoryItemsLiveData;
     private LiveData<List<Product>> mProductsLiveData;
     private int mProductId;
+    private Menu mMenu;
+    private MenuItem mSearchMenuItem;
 
     public SubCategoriesFragment() {
         // Required empty public constructor
@@ -68,9 +71,29 @@ public class SubCategoriesFragment extends VisibleFragment {
 
         inflater.inflate(R.menu.home, menu);
 
-        MenuItem searchMenuItem = menu.findItem(R.id.menu_item_search_home);
-        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        mSearchMenuItem = menu.findItem(R.id.menu_item_search_home);
+        SearchView searchView = (SearchView) mSearchMenuItem.getActionView();
         setSearchViewListeners(searchView);
+        mMenu = menu;
+        checkNotificationTime(menu);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        checkNotificationTime(mMenu);
+    }
+
+    private void checkNotificationTime(@NonNull Menu menu) {
+        MenuItem togglePollingItem = menu.findItem(R.id.menu_item_poll_toggling);
+        if (mCategoryViewModel.isTaskScheduled()) {
+            togglePollingItem.setIcon(R.drawable.ic_notifications_off);
+        } else {
+            togglePollingItem.setIcon(R.drawable.ic_notifications_active);
+        }
+        if (mCategoryViewModel.getNotificationTime() == 0){
+            mCategoryViewModel.setNotificationTime(3);
+        }
     }
 
     private void setSearchViewListeners(SearchView searchView) {
@@ -123,10 +146,12 @@ public class SubCategoriesFragment extends VisibleFragment {
                 if (categories.size() != 0) {
                     mCategoryViewModel.setCategoryList(categories);
                     setSubCategoryAdapter();
+                    mSearchMenuItem.setVisible(false);
                 } else {
                     mCategoryViewModel.fetchProductItemsWithParentId(String.valueOf(mParentId));
                     mProductsLiveData = mCategoryViewModel.getLiveDataProductWithParentId();
                     setObserverForProduct();
+                    mSearchMenuItem.setVisible(true);
                 }
             }
         });
