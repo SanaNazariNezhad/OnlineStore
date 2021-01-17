@@ -41,6 +41,7 @@ public class BuyFragment extends Fragment {
     private BuyProductAdapter mBuyProductAdapter;
     private List<Product> mProductList;
     private String mCode = "";
+    boolean flagCheck = false;
 
     public BuyFragment() {
         // Required empty public constructor
@@ -88,20 +89,24 @@ public class BuyFragment extends Fragment {
         mBuyBinding.totalPrice.setText(String.valueOf(totalPrice));
     }
 
-    public void codeObserver(){
+    public void codeObserver() {
         mCouponsLiveData.observe(this, new Observer<List<Coupons>>() {
             @Override
             public void onChanged(List<Coupons> coupons) {
+                boolean flag = false;
                 for (int i = 0; i < coupons.size(); i++) {
                     if (mBuyBinding.editTextCode.getText().toString().equals(coupons.get(i).getCode())) {
-                        applyCode(coupons.get(i).getAmount());
                         mCode = coupons.get(i).getCode();
-                        return;
+                        applyCode(coupons.get(i).getAmount());
+                        flag = true;
                     }
                 }
+                if (!flag) {
                     mBuyBinding.textViewCheckCode.setText(R.string.discount_code_is_wrong);
                     mBuyBinding.textViewCheckCode.setTextColor(getResources().getColor(R.color.warning));
+                    mCode = "";
                     setTotalPrice();
+                }
             }
         });
     }
@@ -109,17 +114,20 @@ public class BuyFragment extends Fragment {
     private void applyCode(String amount) {
         String[] codeAmountArray = amount.split("\\.");
         String codeAmount = codeAmountArray[0];
+
         if (Integer.parseInt(mBuyBinding.totalPrice.getText().toString()) > Integer.parseInt(codeAmount)) {
             double newPrice = Integer.parseInt(mBuyBinding.totalPrice.getText().toString()) - Integer.parseInt(codeAmount);
             mBuyBinding.totalPrice.setText(String.valueOf(newPrice).split("\\.")[0]);
             String discountCodeReport = getString(
                     R.string.discount_code_is_correct,
                     codeAmount);
+            flagCheck = true;
             mBuyBinding.textViewCheckCode.setText(discountCodeReport);
             mBuyBinding.textViewCheckCode.setTextColor(getResources().getColor(R.color.teal_200));
-        }else {
+        } else if (!flagCheck){
             mBuyBinding.textViewCheckCode.setText(R.string.discount_code_is_correct_but_higher);
             mBuyBinding.textViewCheckCode.setTextColor(getResources().getColor(R.color.purple_500));
+            flagCheck = false;
         }
 
     }
@@ -167,21 +175,21 @@ public class BuyFragment extends Fragment {
         mBuyBinding.buttonCheckCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mBuyBinding.textViewCheckCode.getText().toString().isEmpty()) {
-                    mCartViewModel.fetchCoupons();
-                    mCouponsLiveData = mCartViewModel.getLiveDataCoupons();
-                    codeObserver();
-                }else if (!mBuyBinding.editTextCode.getText().toString().equals(mCode)){
-                    mCartViewModel.fetchCoupons();
-                    mCouponsLiveData = mCartViewModel.getLiveDataCoupons();
-                    codeObserver();
+                if (mBuyBinding.editTextCode.getText().toString().isEmpty()){
+                    Toast.makeText(getContext(),R.string.enter_code,Toast.LENGTH_SHORT).show();
+                    mBuyBinding.textViewCheckCode.setText("");
+                    setTotalPrice();
                 }
-                else if (!mBuyBinding.editTextCode.getText().toString().equals(mCode)) {
+                else if (mBuyBinding.editTextCode.getText().toString().equals(mCode)) {
                     Toast toast = Toast.makeText(getContext(), R.string.discount_code_is_applied_once,
                             Toast.LENGTH_LONG);
                     TextView textView = (TextView) toast.getView().findViewById(android.R.id.message);
                     textView.setTextColor(getResources().getColor(R.color.warning));
                     toast.show();
+                }else if (!mBuyBinding.editTextCode.getText().toString().equals(mCode)){
+                    mCartViewModel.fetchCoupons();
+                    mCouponsLiveData = mCartViewModel.getLiveDataCoupons();
+                    codeObserver();
                 }
             }
         });
@@ -204,7 +212,7 @@ public class BuyFragment extends Fragment {
     private void setLocation() {
         if (mSettingViewModel.getSelectedAddress() != null) {
             String[] name = mSettingViewModel.getSelectedAddress().getAddressName().split("\n");
-            mBuyBinding.textViewAddressName.setText(getString(R.string.address,name[0],name[1]));
+            mBuyBinding.textViewAddressName.setText(getString(R.string.address, name[0], name[1]));
         }
     }
 }
