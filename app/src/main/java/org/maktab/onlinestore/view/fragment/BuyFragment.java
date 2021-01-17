@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.BuyProductAdapter;
@@ -112,14 +113,28 @@ public class BuyFragment extends Fragment {
         mBuyBinding.buttonContinueBuying.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mCartViewModel.onclickBuy();
+                if (mSettingViewModel.getSelectedAddress() == null)
+                    Toast.makeText(getContext(),"Enter your address, please.",Toast.LENGTH_SHORT).show();
+                else
+                    mCartViewModel.onclickBuy();
+            }
+        });
+        mBuyBinding.buttonCheckCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setLocation();
+    }
+
     private void initView() {
         setLocation();
-
         mBuyBinding.recyclerCart.setLayoutManager(new LinearLayoutManager(getContext()));
         mSettingViewModel.setContext(getActivity());
         mBuyBinding.setSettingViewModel(mSettingViewModel);
@@ -127,7 +142,9 @@ public class BuyFragment extends Fragment {
     }
 
     private void setLocation() {
-        String[] name = mSettingViewModel.getSelectedAddress().getAddressName().split("\n");
-        mBuyBinding.textViewAddressName.setText(name[0] + "\t" + name[1]);
+        if (mSettingViewModel.getSelectedAddress() != null) {
+            String[] name = mSettingViewModel.getSelectedAddress().getAddressName().split("\n");
+            mBuyBinding.textViewAddressName.setText(name[0] + "\t" + name[1]);
+        }
     }
 }

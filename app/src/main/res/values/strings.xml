@@ -75,5 +75,7 @@
     <string name="delete_comment_title">Delete Comment:</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="buy">Buy</string>
+    <string name="check">check</string>
 
 </resources>
