@@ -158,7 +158,7 @@ public class OnlineStoreRepository {
 
     //this method must run on background thread.
     public List<SalesReport> fetchSalesReport() {
-        Call<List<SalesReport>> call = mAPIServiceSalesReport.sales(NetworkParams.getTotalItemsSalesProducts());
+        Call<List<SalesReport>> call = mAPIServiceSalesReport.sales(NetworkParams.getMainAddress());
         try {
             Response<List<SalesReport>> response = call.execute();
             return response.body();
@@ -478,7 +478,7 @@ public class OnlineStoreRepository {
 
     public void fetchCreateCustomerAsync(Customer customer) {
         Call<Customer> call =
-                mAPIServiceCustomer.customer(customer,NetworkParams.getTotalItemsSalesProducts());
+                mAPIServiceCustomer.customer(customer,NetworkParams.getMainAddress());
 
         call.enqueue(new Callback<Customer>() {
             @Override

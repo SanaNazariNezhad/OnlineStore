@@ -121,8 +121,8 @@ public class NetworkParams {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
         products.put(SEARCH, query);
-        products.put(ORDERBY, PRICE);
-        products.put(ORDER, ASC);
+        products.put("orderby", "price");
+        products.put("order", "asc");
 
         return products;
     }
@@ -131,8 +131,8 @@ public class NetworkParams {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
         products.put(SEARCH, query);
-        products.put(ORDERBY, PRICE);
-        products.put(ORDER, DESC);
+        products.put("orderby", "price");
+        products.put("order", "desc");
 
         return products;
     }
@@ -141,15 +141,8 @@ public class NetworkParams {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
         products.put(SEARCH, query);
-        products.put(ORDERBY, TOTAL_SALES);
-        products.put(ORDER, DESC);
-
-        return products;
-    }
-
-    public static Map<String, String> getTotalItemsSalesProducts() {
-        Map<String, String> products = new HashMap<>();
-        products.putAll(BASE_OPTIONS);
+        products.put("orderby", "slug");
+        products.put("order", "desc");
 
         return products;
     }
@@ -176,14 +169,5 @@ public class NetworkParams {
         products.put(FORCE, TRUE);
 
         return products;
-    }
-
-
-    public static Uri getPhotoPageUri(Images images) {
-        Uri uri = Uri.parse(images.getSrc())
-                .buildUpon()
-                .build();
-
-        return uri;
     }
 }
