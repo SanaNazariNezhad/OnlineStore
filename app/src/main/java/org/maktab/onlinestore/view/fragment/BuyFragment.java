@@ -40,6 +40,7 @@ public class BuyFragment extends Fragment {
     private LiveData<List<Coupons>> mCouponsLiveData;
     private BuyProductAdapter mBuyProductAdapter;
     private List<Product> mProductList;
+    private String mCode = "";
 
     public BuyFragment() {
         // Required empty public constructor
@@ -94,10 +95,11 @@ public class BuyFragment extends Fragment {
                 for (int i = 0; i < coupons.size(); i++) {
                     if (mBuyBinding.editTextCode.getText().toString().equals(coupons.get(i).getCode())) {
                         applyCode(coupons.get(i).getAmount());
+                        mCode = coupons.get(i).getCode();
                         return;
                     }
                 }
-                    mBuyBinding.textViewCheckCode.setText("The discount code is wrong");
+                    mBuyBinding.textViewCheckCode.setText(R.string.discount_code_is_wrong);
                     mBuyBinding.textViewCheckCode.setTextColor(getResources().getColor(R.color.warning));
                     setTotalPrice();
             }
@@ -110,10 +112,16 @@ public class BuyFragment extends Fragment {
         if (Integer.parseInt(mBuyBinding.totalPrice.getText().toString()) > Integer.parseInt(codeAmount)) {
             double newPrice = Integer.parseInt(mBuyBinding.totalPrice.getText().toString()) - Integer.parseInt(codeAmount);
             mBuyBinding.totalPrice.setText(String.valueOf(newPrice).split("\\.")[0]);
+            String discountCodeReport = getString(
+                    R.string.discount_code_is_correct,
+                    codeAmount);
+            mBuyBinding.textViewCheckCode.setText(discountCodeReport);
+            mBuyBinding.textViewCheckCode.setTextColor(getResources().getColor(R.color.teal_200));
+        }else {
+            mBuyBinding.textViewCheckCode.setText(R.string.discount_code_is_correct_but_higher);
+            mBuyBinding.textViewCheckCode.setTextColor(getResources().getColor(R.color.purple_500));
         }
-        mBuyBinding.textViewCheckCode.setText("Discount code in the amount of" + " " +
-                codeAmount + " Tomans was applied.");
-        mBuyBinding.textViewCheckCode.setTextColor(getResources().getColor(R.color.teal_200));
+
     }
 
     @Override
@@ -151,7 +159,7 @@ public class BuyFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (mSettingViewModel.getSelectedAddress() == null)
-                    Toast.makeText(getContext(), "Enter your address, please.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.enter_address, Toast.LENGTH_SHORT).show();
                 else
                     mCartViewModel.onclickBuy();
             }
@@ -163,9 +171,14 @@ public class BuyFragment extends Fragment {
                     mCartViewModel.fetchCoupons();
                     mCouponsLiveData = mCartViewModel.getLiveDataCoupons();
                     codeObserver();
+                }else if (!mBuyBinding.editTextCode.getText().toString().equals(mCode)){
+                    mCartViewModel.fetchCoupons();
+                    mCouponsLiveData = mCartViewModel.getLiveDataCoupons();
+                    codeObserver();
                 }
-                else {
-                    Toast toast = Toast.makeText(getContext(), "The discount code is applied once!", Toast.LENGTH_LONG);
+                else if (!mBuyBinding.editTextCode.getText().toString().equals(mCode)) {
+                    Toast toast = Toast.makeText(getContext(), R.string.discount_code_is_applied_once,
+                            Toast.LENGTH_LONG);
                     TextView textView = (TextView) toast.getView().findViewById(android.R.id.message);
                     textView.setTextColor(getResources().getColor(R.color.warning));
                     toast.show();
@@ -191,7 +204,7 @@ public class BuyFragment extends Fragment {
     private void setLocation() {
         if (mSettingViewModel.getSelectedAddress() != null) {
             String[] name = mSettingViewModel.getSelectedAddress().getAddressName().split("\n");
-            mBuyBinding.textViewAddressName.setText(name[0] + "\t" + name[1]);
+            mBuyBinding.textViewAddressName.setText(getString(R.string.address,name[0],name[1]));
         }
     }
 }
