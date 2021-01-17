@@ -70,7 +70,7 @@ public class ProductDetailAdapter extends RecyclerView.Adapter<ProductDetailAdap
             Glide.with(mDetailBinding.getRoot())
                     .load(image.getSrc())
                     .centerCrop()
-                    .placeholder(R.mipmap.ic_launcher)
+                    .placeholder(R.drawable.ic_image)
                     .into(mDetailBinding.imageDetail);
         }
     }

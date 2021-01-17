@@ -102,13 +102,13 @@ public class LatestProductAdapter extends RecyclerView.Adapter<LatestProductAdap
                 Glide.with(mItemLatestBinding.getRoot())
                         .load(R.drawable.ic_image)
                         .centerCrop()
-                        .placeholder(R.mipmap.ic_launcher)
+                        .placeholder(R.drawable.ic_image)
                         .into(mItemLatestBinding.imageLatest);
             }else {
                 Glide.with(mItemLatestBinding.getRoot())
                         .load(product.getImages().get(0).getSrc())
                         .centerCrop()
-                        .placeholder(R.mipmap.ic_launcher)
+                        .placeholder(R.drawable.ic_image)
                         .into(mItemLatestBinding.imageLatest);
             }
         }

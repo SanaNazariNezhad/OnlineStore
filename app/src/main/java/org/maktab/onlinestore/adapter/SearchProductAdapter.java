@@ -75,7 +75,7 @@ public class SearchProductAdapter extends RecyclerView.Adapter<SearchProductAdap
                 Glide.with(mItemSearchBinding.getRoot())
                         .load(product.getImages().get(0).getSrc())
                         .centerCrop()
-                        .placeholder(R.mipmap.ic_launcher)
+                        .placeholder(R.drawable.ic_image)
                         .into(mItemSearchBinding.imageSearchProduct);
             }
 

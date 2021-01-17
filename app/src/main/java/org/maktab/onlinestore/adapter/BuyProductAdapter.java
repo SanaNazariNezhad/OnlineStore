@@ -89,7 +89,7 @@ public class BuyProductAdapter extends RecyclerView.Adapter<BuyProductAdapter.Pr
             Glide.with(mItemBuyBinding.getRoot())
                     .load(product.getImages().get(0).getSrc())
                     .centerCrop()
-                    .placeholder(R.mipmap.ic_launcher)
+                    .placeholder(R.drawable.ic_image)
                     .into(mItemBuyBinding.imageCartProduct);
         }
     }

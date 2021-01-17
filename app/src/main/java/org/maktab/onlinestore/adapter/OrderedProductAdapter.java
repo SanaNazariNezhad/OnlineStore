@@ -90,7 +90,7 @@ public class OrderedProductAdapter extends RecyclerView.Adapter<OrderedProductAd
             Glide.with(mItemCartBinding.getRoot())
                     .load(product.getImages().get(0).getSrc())
                     .centerCrop()
-                    .placeholder(R.mipmap.ic_launcher)
+                    .placeholder(R.drawable.ic_image)
                     .into(mItemCartBinding.imageCartProduct);
         }
     }

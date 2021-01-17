@@ -75,7 +75,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             Glide.with(mItemCategoryBinding.getRoot())
                     .load(category.getImage())
                     .centerCrop()
-                    .placeholder(R.mipmap.ic_launcher)
+                    .placeholder(R.drawable.ic_image)
                     .into(mItemCategoryBinding.imageCategory);
         }
     }
