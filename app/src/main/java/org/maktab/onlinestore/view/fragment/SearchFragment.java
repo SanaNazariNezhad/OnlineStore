@@ -20,8 +20,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
-import android.widget.Toast;
-
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.SearchProductAdapter;
 import org.maktab.onlinestore.data.model.Product;
@@ -29,7 +27,6 @@ import org.maktab.onlinestore.databinding.FragmentSearchBinding;
 import org.maktab.onlinestore.view.BottomSheetFilter;
 import org.maktab.onlinestore.view.BottomSheetSort;
 import org.maktab.onlinestore.viewmodel.SearchViewModel;
-
 import java.util.List;
 
 public class SearchFragment extends VisibleFragment {
@@ -47,6 +44,7 @@ public class SearchFragment extends VisibleFragment {
     private String mQuery;
     private String mRequestCode;
     private FragmentSearchBinding mFragmentSearchBinding;
+    private LiveData<List<Product>> mLiveDataFilterSearchProducts;
     private LiveData<List<Product>> mLiveDataSearchProducts;
     private LiveData<List<Product>> mLiveDataSortedLowToHighSearchProducts;
     private LiveData<List<Product>> mLiveDataSortedHighToLowSearchProducts;
@@ -149,8 +147,6 @@ public class SearchFragment extends VisibleFragment {
                 bottomSheetSort.show(
                         getActivity().getSupportFragmentManager(),
                         TAG_BOTTOM_SHEET_SORT);
-//                BottomSheetSort bottomSheetSort = new BottomSheetSort();
-//                bottomSheetSort.show(getActivity().getSupportFragmentManager(), bottomSheetSort.getTag());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -163,13 +159,17 @@ public class SearchFragment extends VisibleFragment {
             return;
 
         if (requestCode == REQUEST_CODE_FILTER) {
-            Toast.makeText(getContext(), "filter", Toast.LENGTH_SHORT).show();
-            String color = data.getStringExtra(BottomSheetFilter.EXTRA_FILTER_COLOR);
-            mSearchViewModel.fetchSearchItemsAsync(mQuery + " " + color);
+            String colorId = data.getStringExtra(BottomSheetFilter.EXTRA_FILTER_COLOR);
+            if (colorId.equalsIgnoreCase("")){
+                mSearchViewModel.fetchSearchItemsAsync(mQuery);
+                mLiveDataFilterSearchProducts = mSearchViewModel.getSearchItemsLiveData();
+            }else {
+                mSearchViewModel.fetchFilterSearchItemsAsync(mQuery, colorId);
+                mLiveDataFilterSearchProducts = mSearchViewModel.getFilterSearchItemsLiveData();
+            }
             mSearchViewModel.setQueryInPreferences(mQuery);
             observers();
         } else if (requestCode == REQUEST_CODE_SORT) {
-            Toast.makeText(getContext(), "Sort", Toast.LENGTH_SHORT).show();
             checkSort(data.getIntExtra(BottomSheetSort.EXTRA_SORT_ID, 4));
         }
 
@@ -231,16 +231,23 @@ public class SearchFragment extends VisibleFragment {
             @Override
             public void onChanged(List<Product> productList) {
                 mSearchViewModel.setSearchProduct(productList);
-                Toast.makeText(getContext(), "Sort Newest", Toast.LENGTH_SHORT).show();
                 setSearchAdapter();
             }
         });
+        if (mLiveDataFilterSearchProducts != null){
+            mLiveDataFilterSearchProducts.observe(this, new Observer<List<Product>>() {
+                @Override
+                public void onChanged(List<Product> productList) {
+                    mSearchViewModel.setSearchProduct(productList);
+                    setSearchAdapter();
+                }
+            });
+        }
 
         mLiveDataSortedLowToHighSearchProducts.observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> productList) {
                 mSearchViewModel.setSearchProduct(productList);
-                Toast.makeText(getContext(), "Sort Low to High", Toast.LENGTH_SHORT).show();
                 setSearchAdapter();
             }
         });
@@ -249,7 +256,6 @@ public class SearchFragment extends VisibleFragment {
             @Override
             public void onChanged(List<Product> productList) {
                 mSearchViewModel.setSearchProduct(productList);
-                Toast.makeText(getContext(), "Sort High to Low", Toast.LENGTH_SHORT).show();
                 setSearchAdapter();
             }
         });
@@ -257,7 +263,6 @@ public class SearchFragment extends VisibleFragment {
         mLiveDataTotalSalesSearchProducts.observe(this, new Observer<List<Product>>() {
             @Override
             public void onChanged(List<Product> productList) {
-                Toast.makeText(getContext(), "Sort Top Seller", Toast.LENGTH_SHORT).show();
                 mSearchViewModel.setSearchProduct(productList);
                 setSearchAdapter();
             }

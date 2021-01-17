@@ -44,6 +44,7 @@ public class OnlineStoreRepository {
     private MutableLiveData<List<Product>> mHighestScoreProductsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<ProductCategory>> mCategoryItemsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mSearchProductsLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<Product>> mFilterSearchProductsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mSortedLowToHighSearchProductsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mSortedHighToLowSearchProductsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mSortedTotalSalesSearchProductsLiveData = new MutableLiveData<>();
@@ -74,6 +75,10 @@ public class OnlineStoreRepository {
 
     public MutableLiveData<List<Product>> getSearchProductsLiveData() {
         return mSearchProductsLiveData;
+    }
+
+    public MutableLiveData<List<Product>> getFilterSearchProductsLiveData() {
+        return mFilterSearchProductsLiveData;
     }
 
     public MutableLiveData<List<Product>> getProductWithParentIdLiveData() {
@@ -391,6 +396,25 @@ public class OnlineStoreRepository {
                 List<Product> items = response.body();
 
                 mSearchProductsLiveData.postValue(items);
+            }
+
+            @Override
+            public void onFailure(Call<List<Product>> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        });
+    }
+
+    public void fetchFilterSearchItemsAsync(String query,String colorId) {
+        Call<List<Product>> call =
+                mAPIServiceProduct.products(NetworkParams.getFilterSearchProducts(query,colorId));
+
+        call.enqueue(new Callback<List<Product>>() {
+            @Override
+            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                List<Product> items = response.body();
+
+                mFilterSearchProductsLiveData.postValue(items);
             }
 
             @Override

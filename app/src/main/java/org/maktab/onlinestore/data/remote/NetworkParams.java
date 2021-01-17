@@ -117,6 +117,16 @@ public class NetworkParams {
         return products;
     }
 
+    public static Map<String, String> getFilterSearchProducts(String query,String colorId) {
+        Map<String, String> products = new HashMap<>();
+        products.putAll(BASE_OPTIONS);
+        products.put(SEARCH, query);
+        products.put("attribute", "pa_color");
+        products.put("attribute_term", colorId);
+
+        return products;
+    }
+
     public static Map<String, String> getSortedLowToHighSearchProducts(String query) {
         Map<String, String> products = new HashMap<>();
         products.putAll(BASE_OPTIONS);
