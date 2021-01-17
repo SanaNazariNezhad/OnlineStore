@@ -3,6 +3,7 @@ package org.maktab.onlinestore.data.remote.retrofit;
 import org.maktab.onlinestore.data.model.ColorAttribute;
 import org.maktab.onlinestore.data.model.Comment;
 import org.maktab.onlinestore.data.model.Customer;
+import org.maktab.onlinestore.data.model.Coupons;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.model.ProductCategory;
 import org.maktab.onlinestore.data.model.SalesReport;
@@ -17,7 +18,6 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
-import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -67,5 +67,9 @@ public interface APIService {
     Call<Comment> addComment(@Field("product_id") int product_id,@Field("review") String review,
                              @Field("reviewer") String reviewer,@Field("reviewer_email") String reviewer_email,
                              @Field("rating") int rating,@QueryMap Map<String, String> options);
+
+    @GET("coupons")
+    Call<List<Coupons>> coupons(@QueryMap Map<String, String> options);
+
 
 }

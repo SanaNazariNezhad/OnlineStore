@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import org.maktab.onlinestore.data.model.ColorAttribute;
 import org.maktab.onlinestore.data.model.Comment;
+import org.maktab.onlinestore.data.model.Coupons;
 import org.maktab.onlinestore.data.model.Customer;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.model.ProductCategory;
@@ -14,6 +15,7 @@ import org.maktab.onlinestore.data.remote.retrofit.APIService;
 import org.maktab.onlinestore.data.remote.NetworkParams;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceColor;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceComments;
+import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceCoupons;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceListOfProduct;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceCategory;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceProduct;
@@ -37,6 +39,7 @@ public class OnlineStoreRepository {
     private final APIService mAPIServiceSalesReport;
     private final APIService mAPIServiceCustomer;
     private final APIService mAPIServiceComment;
+    private final APIService mAPIServiceCoupons;
     private MutableLiveData<List<Product>> mProductItemsLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mProductWithParentIdLiveData = new MutableLiveData<>();
     private MutableLiveData<List<Product>> mMostVisitedProductsLiveData = new MutableLiveData<>();
@@ -59,6 +62,7 @@ public class OnlineStoreRepository {
     private MutableLiveData<Comment> mLiveDataOneComment = new MutableLiveData<>();
     private MutableLiveData<Comment> mLiveDataPUTComment = new MutableLiveData<>();
     private MutableLiveData<Comment> mLiveDataDeleteComment = new MutableLiveData<>();
+    private MutableLiveData<List<Coupons>> mLiveDataCoupons = new MutableLiveData<>();
     private static int mSort;
 
     public MutableLiveData<Comment> getLiveDataOneComment() {
@@ -141,6 +145,10 @@ public class OnlineStoreRepository {
         return mLiveDataComment;
     }
 
+    public MutableLiveData<List<Coupons>> getLiveDataCoupons() {
+        return mLiveDataCoupons;
+    }
+
     public OnlineStoreRepository() {
         Retrofit retrofitListOfProduct = RetrofitInstanceListOfProduct.getInstance().getRetrofit();
         mAPIServiceListOfProduct = retrofitListOfProduct.create(APIService.class);
@@ -159,6 +167,9 @@ public class OnlineStoreRepository {
 
         Retrofit retrofitComment = RetrofitInstanceComments.getInstance().getRetrofit();
         mAPIServiceComment = retrofitComment.create(APIService.class);
+
+        Retrofit retrofitCoupons = RetrofitInstanceCoupons.getInstance().getRetrofit();
+        mAPIServiceCoupons = retrofitCoupons.create(APIService.class);
     }
 
     //this method must run on background thread.
@@ -614,6 +625,25 @@ public class OnlineStoreRepository {
 
             @Override
             public void onFailure(Call<Comment> call, Throwable t) {
+                Log.e(TAG, t.getMessage(), t);
+            }
+        });
+    }
+
+    public void fetchCouponsAsync() {
+        Call<List<Coupons>> call =
+                mAPIServiceCoupons.coupons(NetworkParams.getMainAddress());
+
+        call.enqueue(new Callback<List<Coupons>>() {
+            @Override
+            public void onResponse(Call<List<Coupons>> call, Response<List<Coupons>> response) {
+                List<Coupons> items = response.body();
+
+                mLiveDataCoupons.postValue(items);
+            }
+
+            @Override
+            public void onFailure(Call<List<Coupons>> call, Throwable t) {
                 Log.e(TAG, t.getMessage(), t);
             }
         });

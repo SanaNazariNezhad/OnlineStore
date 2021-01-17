@@ -38,14 +38,16 @@
         <activity android:name=".view.activity.NotificationActivity" />
         <activity
             android:name=".view.activity.CartActivity"
-            android:configChanges="orientation" />
-        <activity android:name=".view.activity.SearchActivity" />
-        <activity android:name=".view.activity.SplashActivity">
+            android:configChanges="orientation" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".view.activity.SearchActivity" />
+        <activity android:name=".view.activity.SplashActivity">
+
         </activity>
         <activity android:name=".view.activity.SubCategoriesActivity" />
         <activity android:name=".view.activity.ProductDetailActivity" />

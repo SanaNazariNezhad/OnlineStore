@@ -15,6 +15,7 @@ import org.maktab.onlinestore.adapter.OrderedProductAdapter;
 import org.maktab.onlinestore.data.model.BillingAddress;
 import org.maktab.onlinestore.data.model.Cart;
 import org.maktab.onlinestore.data.model.Comment;
+import org.maktab.onlinestore.data.model.Coupons;
 import org.maktab.onlinestore.data.model.Customer;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.model.ShippingAddress;
@@ -233,5 +234,13 @@ public class CartViewModel extends AndroidViewModel {
 
     public MutableLiveData<Comment> getLiveDataOneComment() {
         return mStoreRepository.getLiveDataOneComment();
+    }
+
+    public void fetchCoupons() {
+        mStoreRepository.fetchCouponsAsync();
+    }
+
+    public LiveData<List<Coupons>> getLiveDataCoupons() {
+        return mStoreRepository.getLiveDataCoupons();
     }
 }

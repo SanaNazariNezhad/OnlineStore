@@ -2,6 +2,7 @@ package org.maktab.onlinestore.view.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -15,10 +16,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.BuyProductAdapter;
+import org.maktab.onlinestore.data.model.Coupons;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.FragmentBuyBinding;
 import org.maktab.onlinestore.view.activity.LocationActivity;
@@ -34,6 +37,7 @@ public class BuyFragment extends Fragment {
     private SettingViewModel mSettingViewModel;
     private CartViewModel mCartViewModel;
     private LiveData<Product> mProductLiveData;
+    private LiveData<List<Coupons>> mCouponsLiveData;
     private BuyProductAdapter mBuyProductAdapter;
     private List<Product> mProductList;
 
@@ -65,18 +69,51 @@ public class BuyFragment extends Fragment {
             public void onChanged(Product product) {
                 mProductList.add(product);
                 mCartViewModel.setProductList(mProductList);
-                mBuyProductAdapter = new BuyProductAdapter(getActivity(),getActivity(), mCartViewModel);
+                mBuyProductAdapter = new BuyProductAdapter(getActivity(), getActivity(), mCartViewModel);
                 mBuyBinding.recyclerCart.setAdapter(mBuyProductAdapter);
-                int totalPrice = 0;
-                for (int i = 0; i < mProductList.size(); i++) {
-                    int price = Integer.parseInt(mProductList.get(i).getPrice());
-                    int count = mCartViewModel.getCart(mProductList.get(i).getId()).getProduct_count();
-                    totalPrice += (price * count);
-                }
-                mBuyBinding.totalPrice.setText(String.valueOf(totalPrice));
+                setTotalPrice();
 
             }
         });
+    }
+
+    private void setTotalPrice() {
+        int totalPrice = 0;
+        for (int i = 0; i < mProductList.size(); i++) {
+            int price = Integer.parseInt(mProductList.get(i).getPrice());
+            int count = mCartViewModel.getCart(mProductList.get(i).getId()).getProduct_count();
+            totalPrice += (price * count);
+        }
+        mBuyBinding.totalPrice.setText(String.valueOf(totalPrice));
+    }
+
+    public void codeObserver(){
+        mCouponsLiveData.observe(this, new Observer<List<Coupons>>() {
+            @Override
+            public void onChanged(List<Coupons> coupons) {
+                for (int i = 0; i < coupons.size(); i++) {
+                    if (mBuyBinding.editTextCode.getText().toString().equals(coupons.get(i).getCode())) {
+                        applyCode(coupons.get(i).getAmount());
+                        return;
+                    }
+                }
+                    mBuyBinding.textViewCheckCode.setText("The discount code is wrong");
+                    mBuyBinding.textViewCheckCode.setTextColor(getResources().getColor(R.color.warning));
+                    setTotalPrice();
+            }
+        });
+    }
+
+    private void applyCode(String amount) {
+        String[] codeAmountArray = amount.split("\\.");
+        String codeAmount = codeAmountArray[0];
+        if (Integer.parseInt(mBuyBinding.totalPrice.getText().toString()) > Integer.parseInt(codeAmount)) {
+            double newPrice = Integer.parseInt(mBuyBinding.totalPrice.getText().toString()) - Integer.parseInt(codeAmount);
+            mBuyBinding.totalPrice.setText(String.valueOf(newPrice).split("\\.")[0]);
+        }
+        mBuyBinding.textViewCheckCode.setText("Discount code in the amount of" + " " +
+                codeAmount + " Tomans was applied.");
+        mBuyBinding.textViewCheckCode.setTextColor(getResources().getColor(R.color.teal_200));
     }
 
     @Override
@@ -84,7 +121,7 @@ public class BuyFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != Activity.RESULT_OK || data == null)
             return;
-        if (requestCode == REQUEST_CODE_LOCATION){
+        if (requestCode == REQUEST_CODE_LOCATION) {
             setLocation();
         }
     }
@@ -114,7 +151,7 @@ public class BuyFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (mSettingViewModel.getSelectedAddress() == null)
-                    Toast.makeText(getContext(),"Enter your address, please.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Enter your address, please.", Toast.LENGTH_SHORT).show();
                 else
                     mCartViewModel.onclickBuy();
             }
@@ -122,7 +159,17 @@ public class BuyFragment extends Fragment {
         mBuyBinding.buttonCheckCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (mBuyBinding.textViewCheckCode.getText().toString().isEmpty()) {
+                    mCartViewModel.fetchCoupons();
+                    mCouponsLiveData = mCartViewModel.getLiveDataCoupons();
+                    codeObserver();
+                }
+                else {
+                    Toast toast = Toast.makeText(getContext(), "The discount code is applied once!", Toast.LENGTH_LONG);
+                    TextView textView = (TextView) toast.getView().findViewById(android.R.id.message);
+                    textView.setTextColor(getResources().getColor(R.color.warning));
+                    toast.show();
+                }
             }
         });
     }

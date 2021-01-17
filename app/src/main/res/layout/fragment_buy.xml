@@ -111,6 +111,19 @@
                         app:layout_constraintStart_toEndOf="@id/text_view_code"
                         app:layout_constraintTop_toBottomOf="@id/text_view_code" />
 
+                    <TextView
+                        android:id="@+id/text_view_check_code"
+                        style="@style/TextAppearance.AppCompat.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:gravity="center"
+                        android:maxLines="2"
+                        android:textStyle="italic"
+                        app:layout_constraintTop_toBottomOf="@id/editText_code"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+
                     <Button
                         android:id="@+id/button_check_code"
                         android:layout_width="wrap_content"
