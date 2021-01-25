@@ -36,7 +36,7 @@ public class ServicesUtils {
     public static void pollAndShowNotification(Context context, String tag) {
 
         SplashDBRepository repository = SplashDBRepository.getInstance(context);
-       Product product = repository.getLatestProduct().get(0);
+       Product product = repository.getMostVisitedProduct().get(0);
 
 
         if (product == null) {
@@ -44,8 +44,7 @@ public class ServicesUtils {
             return;
         }
 
-        int productId = product.getId();
-        String serverId = String.valueOf(productId);
+        String serverId = String.valueOf(product.getId());
 //        String serverId = "3";
         String lastSavedId = QueryPreferences.getNumberOfProduct(context);
         if (!serverId.equals(lastSavedId)) {
@@ -60,7 +59,6 @@ public class ServicesUtils {
     }
 
     private static void sendNotificationEvent(Context context,Product product) {
-        int productId = product.getId();
         URL url;
         Bitmap image = null;
         try {
@@ -77,7 +75,7 @@ public class ServicesUtils {
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 context,
                 0,
-                ProductDetailActivity.newIntent(context,productId),
+                ProductDetailActivity.newIntent(context,product.getId()),
                 0);
 
         String channelId = context.getResources().getString(R.string.channel_id);
