@@ -38,8 +38,7 @@
     <string name="channel_description">This is notification channel for onlineStore</string>
     <string name="start_polling">Start polling</string>
     <string name="stop_polling">Stop polling</string>
-    <string name="new_product_title">New Product</string>
-    <string name="new_product_text">You have new product in OnlineStore.</string>
+    <string name="new_product_title">The OnlineStore has a new product: \n</string>
     <string name="notification">Notification</string>
     <string name="location">Location</string>
     <string name="off">Off</string>

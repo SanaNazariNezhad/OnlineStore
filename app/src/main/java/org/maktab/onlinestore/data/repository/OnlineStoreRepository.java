@@ -37,7 +37,6 @@ public class OnlineStoreRepository {
     private final APIService mAPIServiceListOfProduct;
     private final APIService mAPIServiceProduct;
     private final APIService mAPIServiceCategory;
-    private final APIService mAPIServiceSalesReport;
     private final APIService mAPIServiceCustomer;
     private final APIService mAPIServiceComment;
     private final APIService mAPIServiceCoupons;
@@ -66,16 +65,16 @@ public class OnlineStoreRepository {
     private MutableLiveData<List<Coupons>> mLiveDataCoupons = new MutableLiveData<>();
     private static int mSort;
 
-    public MutableLiveData<Comment> getLiveDataOneComment() {
-        return mLiveDataOneComment;
-    }
-
     public int getSort() {
         return mSort;
     }
 
     public void setSort(int sort) {
         mSort = sort;
+    }
+
+    public MutableLiveData<Comment> getLiveDataOneComment() {
+        return mLiveDataOneComment;
     }
 
     public MutableLiveData<List<Product>> getSearchProductsLiveData() {
@@ -160,9 +159,6 @@ public class OnlineStoreRepository {
         Retrofit retrofitProduct = RetrofitInstanceProduct.getInstance().getRetrofit();
         mAPIServiceProduct = retrofitProduct.create(APIService.class);
 
-        Retrofit retrofitSalesReport = RetrofitInstanceSales.getInstance().getRetrofit();
-        mAPIServiceSalesReport = retrofitSalesReport.create(APIService.class);
-
         Retrofit retrofitCustomer = RetrofitInstanceCustomer.getInstance().getRetrofit();
         mAPIServiceCustomer = retrofitCustomer.create(APIService.class);
 
@@ -171,18 +167,6 @@ public class OnlineStoreRepository {
 
         Retrofit retrofitCoupons = RetrofitInstanceCoupons.getInstance().getRetrofit();
         mAPIServiceCoupons = retrofitCoupons.create(APIService.class);
-    }
-
-    //this method must run on background thread.
-    public List<SalesReport> fetchSalesReport() {
-        Call<List<SalesReport>> call = mAPIServiceSalesReport.sales(NetworkParams.getMainAddress());
-        try {
-            Response<List<SalesReport>> response = call.execute();
-            return response.body();
-        } catch (IOException e) {
-            Log.e(TAG, e.getMessage(), e);
-            return null;
-        }
     }
 
     //this method can be run in any thread.
