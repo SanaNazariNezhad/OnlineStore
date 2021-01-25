@@ -36,7 +36,7 @@ public class ServicesUtils {
     public static void pollAndShowNotification(Context context, String tag) {
 
         SplashDBRepository repository = SplashDBRepository.getInstance(context);
-       Product product = repository.getHighestScoreProduct().get(0);
+       Product product = repository.getLatestProduct().get(0);
 
 
         if (product == null) {
