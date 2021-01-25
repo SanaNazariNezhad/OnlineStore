@@ -58,6 +58,8 @@ public class ServicesUtils {
         QueryPreferences.setNumberOfProduct(context, serverId);
     }
 
+    //TODO: check action of notification
+
     private static void sendNotificationEvent(Context context,Product product) {
         URL url;
         Bitmap image = null;
