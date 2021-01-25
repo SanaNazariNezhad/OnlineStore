@@ -16,6 +16,7 @@ import org.maktab.onlinestore.data.remote.NetworkParams;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceColor;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceComments;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceCoupons;
+import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceCustomer;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceListOfProduct;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceCategory;
 import org.maktab.onlinestore.data.remote.retrofit.RetrofitInstanceProduct;
@@ -162,7 +163,7 @@ public class OnlineStoreRepository {
         Retrofit retrofitSalesReport = RetrofitInstanceSales.getInstance().getRetrofit();
         mAPIServiceSalesReport = retrofitSalesReport.create(APIService.class);
 
-        Retrofit retrofitCustomer = RetrofitInstanceSales.getInstance().getRetrofit();
+        Retrofit retrofitCustomer = RetrofitInstanceCustomer.getInstance().getRetrofit();
         mAPIServiceCustomer = retrofitCustomer.create(APIService.class);
 
         Retrofit retrofitComment = RetrofitInstanceComments.getInstance().getRetrofit();
@@ -227,6 +228,7 @@ public class OnlineStoreRepository {
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 Log.e(TAG, t.getMessage(), t);
+                fetchMostVisitedProductItemsAsync();
             }
         });
     }
@@ -250,6 +252,7 @@ public class OnlineStoreRepository {
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 Log.e(TAG, t.getMessage(), t);
+                fetchLatestProductItemsAsync();
             }
         });
     }
@@ -273,6 +276,7 @@ public class OnlineStoreRepository {
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 Log.e(TAG, t.getMessage(), t);
+                fetchHighestScoreProductItemsAsync();
             }
         });
     }
@@ -511,9 +515,10 @@ public class OnlineStoreRepository {
         });
     }
 
-    public void fetchCreateCustomerAsync(Customer customer) {
+    public void postCreateCustomerAsync(Customer customer) {
         Call<Customer> call =
-                mAPIServiceCustomer.customer(customer,NetworkParams.getMainAddress());
+                mAPIServiceCustomer.customer(customer.getEmail(),customer.getFirst_name(),
+                        customer.getLast_name(),customer.getUsername(),NetworkParams.getMainAddress());
 
         call.enqueue(new Callback<Customer>() {
             @Override
@@ -530,7 +535,7 @@ public class OnlineStoreRepository {
         });
     }
 
-    public void fetchAddCommentAsync(Comment comment) {
+    public void postCommentAsync(Comment comment) {
         Call<Comment> call =
                 mAPIServiceComment.addComment(comment.getProduct_id(),comment.getReview()
                         ,comment.getReviewer(),comment.getReviewer_email(),comment.getRating(),

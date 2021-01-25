@@ -22,6 +22,7 @@ import android.widget.Toast;
 import org.maktab.onlinestore.R;
 import org.maktab.onlinestore.adapter.BuyProductAdapter;
 import org.maktab.onlinestore.data.model.Coupons;
+import org.maktab.onlinestore.data.model.Customer;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.databinding.FragmentBuyBinding;
 import org.maktab.onlinestore.view.activity.LocationActivity;
@@ -38,6 +39,7 @@ public class BuyFragment extends Fragment {
     private CartViewModel mCartViewModel;
     private LiveData<Product> mProductLiveData;
     private LiveData<List<Coupons>> mCouponsLiveData;
+    private LiveData<Customer> mCustomerLiveData;
     private BuyProductAdapter mBuyProductAdapter;
     private List<Product> mProductList;
     private String mCode = "";
@@ -168,8 +170,12 @@ public class BuyFragment extends Fragment {
             public void onClick(View view) {
                 if (mSettingViewModel.getSelectedAddress() == null)
                     Toast.makeText(getContext(), R.string.enter_address, Toast.LENGTH_SHORT).show();
-                else
+                else {
                     mCartViewModel.onclickBuy();
+                    mCustomerLiveData = mCartViewModel.getLiveDateCustomer();
+                    observerCustomer();
+                    Toast.makeText(getActivity(),"in else",Toast.LENGTH_SHORT).show();
+                }
             }
         });
         mBuyBinding.buttonCheckCode.setOnClickListener(new View.OnClickListener() {
@@ -193,6 +199,15 @@ public class BuyFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void observerCustomer() {
+       mCustomerLiveData.observe(this, new Observer<Customer>() {
+           @Override
+           public void onChanged(Customer customer) {
+               Toast.makeText(getActivity(),customer.getFirst_name(),Toast.LENGTH_SHORT).show();
+           }
+       });
     }
 
     @Override

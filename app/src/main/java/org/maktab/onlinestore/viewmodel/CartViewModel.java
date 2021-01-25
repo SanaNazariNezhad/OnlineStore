@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 import org.maktab.onlinestore.adapter.OrderedProductAdapter;
 import org.maktab.onlinestore.data.model.BillingAddress;
@@ -26,12 +25,7 @@ import org.maktab.onlinestore.databinding.FragmentEditCommentBinding;
 import org.maktab.onlinestore.view.activity.BuyActivity;
 import org.maktab.onlinestore.view.activity.CartActivity;
 import org.maktab.onlinestore.view.activity.ProductDetailActivity;
-import org.maktab.onlinestore.view.fragment.AddCommentFragment;
-import org.maktab.onlinestore.view.fragment.BuyFragment;
-import org.maktab.onlinestore.view.fragment.CartFragment;
-import org.maktab.onlinestore.view.fragment.ProductDetailFragment;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -179,26 +173,25 @@ public class CartViewModel extends AndroidViewModel {
     }
 
     public void onclickBuy () {
-        Random random = new Random();
-        BillingAddress[] billingAddresses = new BillingAddress[1];
-        billingAddresses[0] = new BillingAddress("sana","nazari","maktab",
+        BillingAddress billingAddresses = new BillingAddress("sana","nazari","maktab",
                 "rodaki","andishe","kermanshah","west","6714844718",
-                "iran","sana.nazari@gmail.com","9187287311");
+                "iran","sana.n@gmail.com","9187287311");
 
-        ShippingAddress[] shippingAddresses = new ShippingAddress[1];
-        shippingAddresses[0] = new ShippingAddress("sana","nazari","maktab",
+        ShippingAddress shippingAddresses = new ShippingAddress("sana","nazari","maktab",
                 "rodaki","andishe","kermanshah","west","6714844718",
                 "iran");
-        Customer customer = new Customer(random.nextInt(),new Date().toString(),
-                "Sana.nazari@gmail.com","sana","nazari","sana.nazari",
-                "1234",0,"",0,0,"",
-                null,null);
 
-        mStoreRepository.fetchCreateCustomerAsync(customer);
+        Customer customer = new Customer("Sana.n@gmail.com","sana",
+                "nazari","sana.nazari",
+                billingAddresses,shippingAddresses);
+
+        mStoreRepository.postCreateCustomerAsync(customer);
     }
 
+
+
     public void onClickAddComment(Comment comment){
-        mStoreRepository.fetchAddCommentAsync(comment);
+        mStoreRepository.postCommentAsync(comment);
     }
 
     public void fetchOneComment(int commentId){

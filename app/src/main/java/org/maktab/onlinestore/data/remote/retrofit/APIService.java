@@ -1,5 +1,6 @@
 package org.maktab.onlinestore.data.remote.retrofit;
 
+import org.maktab.onlinestore.data.model.BillingAddress;
 import org.maktab.onlinestore.data.model.ColorAttribute;
 import org.maktab.onlinestore.data.model.Comment;
 import org.maktab.onlinestore.data.model.Customer;
@@ -7,7 +8,9 @@ import org.maktab.onlinestore.data.model.Coupons;
 import org.maktab.onlinestore.data.model.Product;
 import org.maktab.onlinestore.data.model.ProductCategory;
 import org.maktab.onlinestore.data.model.SalesReport;
+import org.maktab.onlinestore.data.model.ShippingAddress;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +21,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
@@ -33,9 +37,6 @@ public interface APIService {
 
     @GET("products/{id}")
     Call<Product> getProduct(@Path("id") int id,@QueryMap Map<String, String> options);
-
-    @GET("reports/sales/top_sellers")
-    Call<List<Product>> topSellers(@QueryMap Map<String, String> options);
 
     @GET("reports/sales")
     Call<List<SalesReport>> sales(@QueryMap Map<String, String> options);
@@ -58,10 +59,16 @@ public interface APIService {
     Call<Comment> deleteCommentWithId(@Path("id") int id,@QueryMap Map<String, String> options);
 
 
+   /* @POST("/customers")
+    @Headers({ "Content-Type: application/json"})
+    Call<Customer> customer(@Body Customer customer,@QueryMap Map<String, String> options);
+*/
     @FormUrlEncoded
     @POST("customers")
-    Call<Customer> customer(@Body Customer customer,@QueryMap Map<String, String> options);
-
+    Call<Customer> customer(@Field("email") String email,
+                            @Field("first_name") String first_name, @Field("last_name") String last_name,
+                            @Field("username") String username,
+                            @QueryMap Map<String, String> options);
     @FormUrlEncoded
     @POST("products/reviews")
     Call<Comment> addComment(@Field("product_id") int product_id,@Field("review") String review,
