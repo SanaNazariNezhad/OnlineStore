@@ -78,6 +78,7 @@ public class HomePageFragment extends Fragment {
                 false);
 
         initView();
+        setViewModel();
         getProductsFromProductViewModel();
         return mHomePageBinding.getRoot();
     }
@@ -100,6 +101,13 @@ public class HomePageFragment extends Fragment {
     public void onPause() {
         super.onPause();
         checkNotificationTime(mMenu);
+        getProductsFromProductViewModel();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getProductsFromProductViewModel();
     }
 
     private void checkNotificationTime(@NonNull Menu menu) {
@@ -151,9 +159,6 @@ public class HomePageFragment extends Fragment {
     }
 
     private void getProductsFromProductViewModel() {
-        mProductViewModel = new ViewModelProvider(this).get(ProductViewModel.class);
-        mSplashViewModel = new ViewModelProvider(this).get(SplashViewModel.class);
-        mSettingViewModel = new ViewModelProvider(this).get(SettingViewModel.class);
         mProductViewModel.setProductListMostVisited(mSplashViewModel.getMostVisitedProduct());
         setAdapterMostVisited();
         mProductViewModel.setProductListLatest(mSplashViewModel.getLatestProduct());
@@ -162,6 +167,12 @@ public class HomePageFragment extends Fragment {
         setAdapterHighestScore();
         showSlideImage(mSplashViewModel.getSpecialProduct());
 
+    }
+
+    private void setViewModel() {
+        mProductViewModel = new ViewModelProvider(this).get(ProductViewModel.class);
+        mSplashViewModel = new ViewModelProvider(this).get(SplashViewModel.class);
+        mSettingViewModel = new ViewModelProvider(this).get(SettingViewModel.class);
     }
 
     private void showSlideImage(List<Product> products) {
