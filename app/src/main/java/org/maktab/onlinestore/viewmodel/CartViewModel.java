@@ -170,13 +170,13 @@ public class CartViewModel extends AndroidViewModel {
     public void onclickBuy () {
         BillingAddress billingAddresses = new BillingAddress("sana","nazari","maktab",
                 "rodaki","andishe","kermanshah","west","6714844718",
-                "iran","sana.n@gmail.com","9187287311");
+                "iran","S.kf@gmail.com","9187287311");
 
         ShippingAddress shippingAddresses = new ShippingAddress("sana","nazari","maktab",
                 "rodaki","andishe","kermanshah","west","6714844718",
                 "iran");
 
-        Customer customer = new Customer("Sana.n@gmail.com","sana",
+        Customer customer = new Customer("S.kf@gmail.com","sana",
                 "nazari","sana.nazari",
                 billingAddresses,shippingAddresses);
 

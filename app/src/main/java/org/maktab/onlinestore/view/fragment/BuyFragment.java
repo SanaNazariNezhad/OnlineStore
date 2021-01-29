@@ -205,7 +205,8 @@ public class BuyFragment extends Fragment {
        mCustomerLiveData.observe(this, new Observer<Customer>() {
            @Override
            public void onChanged(Customer customer) {
-               Toast.makeText(getActivity(),customer.getFirst_name(),Toast.LENGTH_SHORT).show();
+               if (customer != null)
+                   Toast.makeText(getActivity(),customer.getFirst_name().toString(),Toast.LENGTH_SHORT).show();
            }
        });
     }

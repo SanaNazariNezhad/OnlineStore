@@ -188,7 +188,7 @@ public class OnlineStoreRepository {
             //this run on main thread
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.e(TAG, t.getMessage(), t);
+                Log.i("abcd", t.getMessage().toString());
             }
         });
     }
@@ -404,9 +404,9 @@ public class OnlineStoreRepository {
         });
     }
 
-    public void fetchFilterSearchItemsAsync(String query,String colorId) {
+    public void fetchFilterSearchItemsAsync(String query, String colorId) {
         Call<List<Product>> call =
-                mAPIServiceProduct.products(NetworkParams.getFilterSearchProducts(query,colorId));
+                mAPIServiceProduct.products(NetworkParams.getFilterSearchProducts(query, colorId));
 
         call.enqueue(new Callback<List<Product>>() {
             @Override
@@ -501,28 +501,30 @@ public class OnlineStoreRepository {
 
     public void postCreateCustomerAsync(Customer customer) {
         Call<Customer> call =
-                mAPIServiceCustomer.customer(customer.getEmail(),customer.getFirst_name(),
-                        customer.getLast_name(),customer.getUsername(),NetworkParams.getMainAddress());
+                mAPIServiceCustomer.customer(customer.getEmail(), customer.getFirst_name(),
+                        customer.getLast_name(), customer.getUsername(), NetworkParams.getMainAddress());
+        Log.i("abcde", "before request");
 
         call.enqueue(new Callback<Customer>() {
             @Override
             public void onResponse(Call<Customer> call, Response<Customer> response) {
                 Customer items = response.body();
 
+                Log.i("abcde", items.getEmail().toString());
                 mCustomerLiveData.postValue(items);
             }
 
             @Override
             public void onFailure(Call<Customer> call, Throwable t) {
-                Log.e(TAG, t.getMessage(), t);
+                Log.i("abcde", t.getMessage().toString());
             }
         });
     }
 
     public void postCommentAsync(Comment comment) {
         Call<Comment> call =
-                mAPIServiceComment.addComment(comment.getProduct_id(),comment.getReview()
-                        ,comment.getReviewer(),comment.getReviewer_email(),comment.getRating(),
+                mAPIServiceComment.addComment(comment.getProduct_id(), comment.getReview()
+                        , comment.getReviewer(), comment.getReviewer_email(), comment.getRating(),
                         NetworkParams.getMainAddress());
 
         call.enqueue(new Callback<Comment>() {
@@ -562,7 +564,7 @@ public class OnlineStoreRepository {
 
     public void fetchOneCommentAsync(int commentId) {
         Call<Comment> call =
-                mAPIServiceComment.getCommentWithId(commentId,NetworkParams.getMainAddress());
+                mAPIServiceComment.getCommentWithId(commentId, NetworkParams.getMainAddress());
 
         call.enqueue(new Callback<Comment>() {
             @Override
@@ -581,7 +583,7 @@ public class OnlineStoreRepository {
 
     public void fetchPUTCommentAsync(Comment comment) {
         Call<Comment> call =
-                mAPIServiceComment.putCommentWithId(comment,comment.getId(),
+                mAPIServiceComment.putCommentWithId(comment, comment.getId(),
                         NetworkParams.getMainAddress());
 
         call.enqueue(new Callback<Comment>() {

@@ -39,10 +39,10 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
         Fragment fragment = fragmentManager.findFragmentById(R.id.fragment_container);
 
         //create an add fragment transaction for CrimeDetailFragment
-        if (fragment == null) {
+        {
             fragmentManager
                     .beginTransaction()
-                    .add(R.id.fragment_container, createFragment())
+                    .replace(R.id.fragment_container, createFragment())
                     .commit();
         }
     }
