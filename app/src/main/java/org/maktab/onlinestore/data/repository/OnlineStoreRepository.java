@@ -32,7 +32,7 @@ import retrofit2.Retrofit;
 
 public class OnlineStoreRepository {
 
-    private static final String TAG = "PhotoRepository";
+    private static final String TAG = "OnlineStoreRepository";
 
     private final APIService mAPIServiceListOfProduct;
     private final APIService mAPIServiceProduct;
