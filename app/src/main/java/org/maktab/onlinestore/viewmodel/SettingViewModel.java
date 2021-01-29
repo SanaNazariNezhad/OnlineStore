@@ -197,10 +197,6 @@ public class SettingViewModel extends AndroidViewModel {
         return mRepository.getAddressWithId(addressId);
     }
 
-    public AddressAdapter getAddressAdapter() {
-        return mAddressAdapter;
-    }
-
     public void setAddressAdapter(AddressAdapter addressAdapter) {
         mAddressAdapter = addressAdapter;
     }

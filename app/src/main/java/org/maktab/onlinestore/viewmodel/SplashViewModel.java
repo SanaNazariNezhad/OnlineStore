@@ -61,10 +61,6 @@ public class SplashViewModel extends AndroidViewModel {
         mRepositorySplash.setWiFiEnable(wiFiEnable);
     }
 
-    public boolean isInConnectionActivity() {
-        return mRepositorySplash.isInConnectionActivity();
-    }
-
     public void setInConnectionActivity(boolean inConnectionActivity) {
         mRepositorySplash.setInConnectionActivity(inConnectionActivity);
     }

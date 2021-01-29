@@ -39,14 +39,13 @@ public class CartViewModel extends AndroidViewModel {
     private OrderedProductAdapter mOrderedProductAdapter;
     private FragmentCartBinding mFragmentCartBinding;
     private FragmentEditCommentBinding mEditCommentBinding;
+    private Context mContext;
+    private MutableLiveData<Integer> mLiveDataRate = new MutableLiveData<>();
+
 
     public void setEditCommentBinding(FragmentEditCommentBinding editCommentBinding) {
         mEditCommentBinding = editCommentBinding;
     }
-
-    private Context mContext;
-    private MutableLiveData<Integer> mLiveDataRate = new MutableLiveData<>();
-
 
     public CartViewModel(@NonNull Application application) {
         super(application);
@@ -140,10 +139,6 @@ public class CartViewModel extends AndroidViewModel {
 
     public void setOrderedProductAdapter(OrderedProductAdapter orderedProductAdapter) {
         mOrderedProductAdapter = orderedProductAdapter;
-    }
-
-    public OrderedProductAdapter getOrderedProductAdapter() {
-        return mOrderedProductAdapter;
     }
 
     public void setFragmentCartBinding(FragmentCartBinding fragmentCartBinding) {

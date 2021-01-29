@@ -39,8 +39,6 @@ public class MapFragment extends SupportMapFragment {
 
     public static final String TAG = "LocatrFragment";
     private static final int REQUEST_CODE_PERMISSION_LOCATION = 0;
-    private static final int NUMBER_OF_IMAGES = 3;
-
     private SettingViewModel mSettingViewModel;
     private GoogleMap mMap;
     private MarkerOptions mMarkerOptions;
