@@ -134,10 +134,6 @@ public class BottomSheetFilter extends BottomSheetDialogFragment {
         setColorDrawable(3, mFilterBinding.color4);
         setColorDrawable(4, mFilterBinding.color5);
         setColorDrawable(5, mFilterBinding.color6);
-        Toast.makeText(getContext(), mColorAttributes.get(0).getId() + "  " +
-                mColorAttributes.get(1).getId() + "  " + mColorAttributes.get(2).getId() + "  " +
-                mColorAttributes.get(3).getId() + "  " + mColorAttributes.get(4).getId() + "  " +
-                mColorAttributes.get(5).getId(), Toast.LENGTH_SHORT).show();
     }
 
     private void setColorDrawable(int i, ImageView p) {
