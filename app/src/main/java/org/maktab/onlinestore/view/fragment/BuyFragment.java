@@ -165,7 +165,8 @@ public class BuyFragment extends Fragment {
                 startActivityForResult(LocationActivity.newIntent(getActivity()), REQUEST_CODE_LOCATION);
             }
         });
-        mBuyBinding.buttonContinueBuying.setOnClickListener(new View.OnClickListener() {
+
+        /*mBuyBinding.buttonContinueBuying.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mSettingViewModel.getSelectedAddress() == null)
@@ -177,7 +178,8 @@ public class BuyFragment extends Fragment {
                     Toast.makeText(getActivity(),"in else",Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
+
         mBuyBinding.buttonCheckCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
